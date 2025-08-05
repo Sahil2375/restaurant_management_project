@@ -1,9 +1,11 @@
+/* Basic reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Body styling */
 body {
     font-family: 'Segoe UI', Verdana, Geneva, Tahoma, sans-serif;
     background-color: #fafafa;
@@ -11,9 +13,10 @@ body {
     line-height: 1.6;
 }
 
+/* Header */
 header {
-    background-color: #ff6347; /* tomato color */
-    color: white;
+    background-color: #ff6347;
+    color: #fff;
     text-align: center;
     padding: 40px 20px;
 }
@@ -27,6 +30,7 @@ header p {
     margin-top: 10px;
 }
 
+/* Menu Section */
 .menu-section {
     background-color: #fff;
     padding: 30px;
@@ -35,38 +39,15 @@ header p {
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     text-align: center;
-    transition: transform 0.3s ease;
 }
 
-.menu-section:hover {
-    transform: scale(1.02);
-}
-
+/* Footer */
 footer {
     background-color: #333;
-    color: white;
+    color: #fff;
     text-align: center;
     padding: 15px;
     position: fixed;
     bottom: 0;
     width: 100%;
-}
-
-a, button {
-    transition: color 0.3s ease, background-color 0.3s ease;
-}
-
-a:hover, button:hover {
-    color: #ff6347;
-}
-
-@media (max-width: 768px) {
-    header h1 {
-        font-size: 2rem;
-    }
-    .menu-section {
-        padding: 20px;
-        margin: 10px;
-        max-width: 90%;
-    }
 }
