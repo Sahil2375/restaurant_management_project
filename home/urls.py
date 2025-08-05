@@ -10,4 +10,4 @@ urlpatterns = [
     path('', include('home.urls')),
 ]
 
-handler404 = 'restaurant_management.urls.custom_404_view'
+handler404 = 'home.urls.custom_404_view'
