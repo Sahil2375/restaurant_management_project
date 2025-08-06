@@ -7,4 +7,3 @@ from django.conf import settings
 def homepage_view(request):
     restaurant = Restaurant.objects.first()   # Fetch the first restaurant.
     return render(request, 'Homepage.html', {'restaurant_name': restaurant.name if restaurant else 'Restaurant'})
-    return render(request, 'Homepage.html', {'restaurant_name': settings.RESTAURANT_NAME})
