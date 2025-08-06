@@ -4,4 +4,5 @@ from .models import Restaurant
 # Create your views here.
 
 def homepage(request):
-    
+    restaurant = Restaurant.objects.first()  # Fetch the first restaurant
+    return render(request, 'index.html', {'restaurant_name': restaurant.name if restaurant else 'Restaurant'})
