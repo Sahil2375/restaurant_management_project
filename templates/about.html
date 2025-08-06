@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>About My Awesome Restaurant</title>
+        <link rel="stylesheet" href="{% static 'styles.css' %}"
+    </head>
+    <body>
+        <header>
+            <h1>About My Awesome Restaurant</h1>
+            <nav>
+                <a href="{% url 'homepage' %}">Home</a>
+            </nav>
+        </header>
+
+        <div class="container">
+            <p>My Awesome restaurant is dedicated to serving delicious meals made from the freshest ingredients.
+                Our mission is to provide a warm and welcoming environment for our guests.
+            </p>
+            <img src="{% static 'images/restaurant.jpg' %}" alt="Restaurant Image" style="max-width:100%; border-radius:8px;">
+        </div>
+
+        <footer>
+            &copy; 2025 My Awesome Restaurant. All rights reserved.
+        </footer>
+    </body>
+</html>
