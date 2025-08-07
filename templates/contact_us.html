@@ -1,0 +1,16 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Contact Us</title>
+        <link rel="stylesheet" href="{% static 'styles.css %}">
+    </head>
+    <body>
+        <h1>Contact Us</h1>
+        <div class="contact-box">
+            <p><strong>Phone:</strong> {{ contact.phone }}</p>
+            <p><strong>Email:</strong> {{ contact.email }}</p>
+            <p><strong>Address:</strong> {{ contact.address }}</p>
+        </div>
+    </body>
+</html>
