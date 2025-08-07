@@ -9,7 +9,23 @@ def homepage(request):
     restaurant = Restaurant.objects.first()  # Fetch the first restaurant
     return render(request, 'index.html', {'restaurant_name': restaurant.name if restaurant else 'Restaurant'})
 
-def 
+def menu_list_view(request):
+    # harcoded list of menu items
+    menu_items = [
+        {'name': 'Margherita Pizza', 'price': 300},
+        {'name': 'Paneer Tikka', 'price': 250},
+        {'name': 'Veg Biryani', 'price': 200},
+        {'name': 'Masala Dosa', 'price': 100},
+    ]
+    return render(request, 'menu_list.html', {'menu_items': menu_items})
+
+def contact_us_view(request):
+    contact_info = {
+        'phone': '+91-9987545643',
+        'email': 'my@resto.com',
+        'address': '540 Main Street, Mumbai, Maharashtra, India'
+    }
+    return render(request, 'contact_us.html', {'contact': contact_info})
 
 def homepage_view(request):
     phone_number = settings.RESTAURANT_PHONE
