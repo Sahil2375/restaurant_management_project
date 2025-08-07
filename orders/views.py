@@ -37,6 +37,7 @@ def homepage_views(request):
     context = {
         'restaurant_name': 'Tasty Bites',
         'welcome_message': 'Welcome To Tasty Bites! Experience delicious food and warm hospitality',
+        'current_year': datetime.now().year
     }
     return render(request, 'Home.html', context)
 
