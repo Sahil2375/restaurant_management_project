@@ -29,4 +29,9 @@ def contact_us_view(request):
 
 def homepage_view(request):
     phone_number = settings.RESTAURANT_PHONE
-    return render(request, 'home.html', {'phone': phone_number})
+
+    context = {
+        'restaurant_name': 'Tasty Bites',
+        'welcome_message': 'Welcome To Tasty Bites! Experience delicious food and warm hospitality',
+    }
+    return render(request, 'home.html', context, {'phone': phone_number})
