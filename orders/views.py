@@ -38,3 +38,6 @@ def homepage_views(request):
         'welcome_message': 'Welcome To Tasty Bites! Experience delicious food and warm hospitality',
     }
     return render(request, 'Home.html', context)
+
+def reservations_view(request):
+    return render(request, 'reservations.html')
