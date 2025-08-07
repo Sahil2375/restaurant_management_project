@@ -34,3 +34,11 @@ class ItemView(APIView):
             {'name': 'Masala dosa', 'price': 100},
         ]
         return render(request, 'menu_list.html', {'menu_items': menu_items})
+
+    def contact_us_view(request):
+        contact_info = {
+            'phone': '+91-9987545643',
+            'email': 'my@resto.com',
+            'address': '540, Main Street, Mumbai, Maharashtra, India'
+        }
+        return render(request, 'contact_us.html', {'contact': contact_info})
