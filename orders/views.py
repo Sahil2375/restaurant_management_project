@@ -3,6 +3,7 @@ from .models import Restaurant
 from datetime import datetime
 
 from django.conf import settings
+from django.http import HttpResponseServerError
 
 # Create your views here.
 
@@ -34,6 +35,28 @@ def homepage_view(request):
     return render(request, 'home.html', {'phone': phone_number})
 
 def homepage_views(request):
+    """
+    Display the homepage with the restaurant name.
+
+    This view fetches the restaurant name from the database and renders it on the homepage.
+    If a database error or any unexpected issue occurs, it handles the error gratefully
+    and returns an error page or message.
+    """
+    try:
+        # Assume there is only one Restaurant entry.
+        restaurant = Restaurant.objects.first()
+        restaurant_name = restaurant.name if restaurant else "Our Restaurant"
+
+        return render(request, 'Home,html', {'restaurant_name': restaurant_name})
+
+    except Expection as e:
+        # Log the error if needed (e.g., using logging module)
+        # import logging
+        # logger = logging.getLogger(__name__)
+        # logger.error("Error loading homepage: %s", e)
+
+        return HttpResponseServerError("An unexpected error occured. Please try again later.")
+    
     context = {
         'restaurant_name': 'Tasty Bites',
         'welcome_message': 'Welcome To Tasty Bites! Experience delicious food and warm hospitality',
