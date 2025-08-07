@@ -24,21 +24,3 @@ class ItemView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def menu_list_view(request):
-        # Hardcoded list of menu items
-        menu_items = [
-            {'name': 'Margherita pizza', 'price': 300},
-            {'name': 'Paneer Tikka', 'price': 250},
-            {'name': 'Veg Biryani', 'price': 200},
-            {'name': 'Masala dosa', 'price': 100},
-        ]
-        return render(request, 'menu_list.html', {'menu_items': menu_items})
-
-    def contact_us_view(request):
-        contact_info = {
-            'phone': '+91-9987545643',
-            'email': 'my@resto.com',
-            'address': '540, Main Street, Mumbai, Maharashtra, India'
-        }
-        return render(request, 'contact_us.html', {'contact': contact_info})
