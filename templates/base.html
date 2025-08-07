@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}Restaurant{% endblock %}</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                background-color: #f8f8f8;
+                padding-bottom: 60; /* Space for footer */
+            }
+
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #343a40;
+                color: white;
+                text-align: center;
+                padding: 10px 0;
+                font-size: 14px;
+            }
+        </style>
+    </head>
+    <body>
+        {% block content %}
+        <!-- Page specific content goes here -->
+        {% endblock %}
+
+        <footer>
+            &copy; {{ current_year }} Tasty Bites. All rights reserved.
+        </footer>
+    </body>
+</html>
