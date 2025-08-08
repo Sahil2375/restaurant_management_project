@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Restaurant
 from datetime import datetime
+import requests
 
 from django.conf import settings
 from django.http import HttpResponseServerError
@@ -8,8 +9,15 @@ from django.http import HttpResponseServerError
 # Create your views here.
 
 def homepage(request):
-    restaurant = Restaurant.objects.first()  # Fetch the first restaurant
-    return render(request, 'index.html', {'restaurant_name': restaurant.name if restaurant else 'Restaurant'})
+    # Homepage view that fetches menu items from the API and renders them.
+    try:
+        # Example API call (adjust URL to your setup)
+        response = requests.get('http://localhost:8000/api/menu/')
+        menu_items = response.json() if response.status_code == 200 else []
+    except Exception:
+        menu_items = []
+
+    return render(request, 'homepage.html', {'menu_items': menu_items})
 
 def menu_list_view(request):
     # harcoded list of menu items
