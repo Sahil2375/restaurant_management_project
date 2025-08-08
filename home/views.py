@@ -6,6 +6,11 @@ from .models import Restaurant
 
 # Create your views here.
 
+def homepage1(request):
+    return render(request, 'homepage1.html', {
+        'current_year' : datetime.now().year
+    })
+    
 def homepage(request):
     restaurant = Restaurant.objects.first()   # Fetch the first restaurant.
     restaurant_name = restaurant.name if restaurant else "Default Restaurant"
