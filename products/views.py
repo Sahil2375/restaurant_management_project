@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import api_view
 
 from .models import Item
 from .serializers import ItemSerializer
@@ -24,3 +25,28 @@ class ItemView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def menu_list(request):
+    """
+    Api endpoint to retrieve the restaurant's menu.
+    Currently returns hardcoded data for simplicity
+    """
+    menu = [
+        {
+            "name": "Margherita Pizza",
+            "description": "Classic pizza with tomato sauce, mozzarella, and fresh basil.",
+            "price": 9.99
+        },
+        {
+            "name": "Paneer Tikka",
+            "description": "Classic panner with spicicy tikki",
+            "price": 6.5
+        },
+        {
+            "name": "Veg Biryani",
+            "description": "Classic biryani with good quality basmati rice",
+            "price": 8.2
+        }
+    ]
+    return Response(menu)
