@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Menu, Order
+from .models import Menu, Order, UserProfile
 
 # Register your models here.
 
@@ -15,3 +15,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ('status', 'created_at')
     search_fields = ('customer__username')
     filter_horizontal = ('order_items',) # For ManyToManyField Selection
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'phone_number')
