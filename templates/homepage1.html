@@ -3,3 +3,41 @@
     <head>
         <title>Restaurant Homepage</title>
         <style>
+            /* Basic styling for the search bar */
+            .search-container {
+                text-align: center;
+                margin-top: 30px;
+            }
+            .search-input {
+                width: 300px;
+                padding: 8px;
+                font-size: 16px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+            }
+            .search-button {
+                padding: 8px 15px;
+                font-size: 16px;
+                border: none;
+                background-color: #4CAF50;
+                color: white;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            .search-button:hover {
+                background-color: #45a049;
+            }
+        </style>
+    </head>
+    <body>
+
+        <h1 style="text-align:center;">Welcome To Our Restaurant</h1>
+
+        <div class="search-container">
+            <form method="GET" action="#">
+                <input type="text" name="q" class="search-input" placeholder="Search menu items...">
+                <button type="submit" class="search-button">Search</button>
+            </form>
+        </div>
+    </body>
+</html>
