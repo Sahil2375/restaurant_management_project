@@ -1,7 +1,8 @@
+{% extends "base.html" %}
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Restaurant Homepage</title>
+        {% block title %}<title>Restaurant Homepage</title>{% endblock %}
         <style>
             /* Basic styling for the search bar */
             .search-container {
@@ -32,6 +33,7 @@
     <body>
 
         <h1 style="text-align:center;">Welcome To Our Restaurant</h1>
+        <p style="text-align:center;">Enjoy our freshy prepared meals!</p>
 
         <div class="search-container">
             <form method="GET" action="#">
