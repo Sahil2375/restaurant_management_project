@@ -35,3 +35,11 @@ class Order(models.Model):
         # Recalculate the total amount from order items.
         self.total_amount = sum(item.price for item in self.order_items.all())
         self.save()
+
+class UserProfile(models.Model):
+    # Extended home profile for storing additional information beyond Django's built-in User model.
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+
+    def __str__(self):
+        return self.user.get_full_name() or self.user.username
