@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
+from django.conf import settings
 
 from .models import Item
 from .serializers import ItemSerializer
@@ -50,3 +51,10 @@ def menu_list(request):
         }
     ]
     return Response(menu)
+
+def homepage(request):
+    # Display the homepage with the restaurant name.
+    context = {
+        'restaurant_name' = settings.RESTAURANT_NAME
+    }
+    return render(request, 'homepage.html', context)
