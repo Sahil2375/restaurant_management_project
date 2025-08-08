@@ -1,0 +1,23 @@
+{% extends "base.html %}
+
+{% block title %}Customer Feedback{% endblock %}
+
+{% block content %}
+<h2 style="text-align:center;">Leave Your Feedback</h2>
+
+<div style="max-width:500px; margin:auto;">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" style="
+            background-color:#4CAF50;
+            color:white;
+            padding:10px 20px;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;">
+            Submit
+        </button>
+    </form>
+</div>
+{% endblock %}
