@@ -11,6 +11,29 @@
                 margin: 0;
                 padding: 0;
             }
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+            input {
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            button {
+                background: #27ae60;
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            button:hover {
+                background: #219150;
+            }
 
             .logo {
                 width: 200px;
@@ -33,5 +56,12 @@
         <div class="welcome-text">
             <h1>Welcome to {{ restaurant_name }}</h1>
         </div>
+
+        <h2>Contact Us</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Send</button>
+        </form>
     </body>
 </html>
