@@ -7,7 +7,7 @@ class Menu(models.Model):
     # Menu model representing a dish.
     name = models.CharField(max_length=100)
     description = models.TestField()
-    price = models.DecimalField(max_digits=8, decimal_places=2)
+    price = models.DecimalField(max_digits=8, decimal_places=2) # e.g. 9999.99 max
 
     def __str__(self):
         return self.name
