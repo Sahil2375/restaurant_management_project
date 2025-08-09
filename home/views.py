@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import FeedbackForm
+from .forms import FeedbackForm, ContactForm
 from datetime import datetime
 from .models import MenuItem
 
@@ -13,9 +13,15 @@ def homepage1(request):
     })
     
 def homepage(request):
-    restaurant = Restaurant.objects.first()   # Fetch the first restaurant.
-    restaurant_name = restaurant.name if restaurant else "Default Restaurant"
-    return render(request, 'index.html', {'restaurant_name': restaurant.name})
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('homepage')  # Redirect after successful submission.
+
+        else:
+            form = ContactForm()
+        return render(request, 'home.html', {'form': form})
 
 def feedback_view(request):
     if request.method == 'POST':
