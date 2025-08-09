@@ -1,5 +1,5 @@
 from django import forms
-from .models import Feedback
+from .models import Feedback, ContactMessage
 
 class FeedbackForm(forms.ModelForm):
     class Meta:
@@ -15,3 +15,8 @@ class FeedbackForm(forms.ModelForm):
         labels = {
             'comments' : 'Your Feedback'
         }
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = ContactMessage
+        fields = ['name', 'email']
