@@ -18,3 +18,12 @@ class RestaurantLocation(models.Model):
 
     def __str__(self):
         return f"{self.address}, {self.city}, {self.state} - {self.zip_code}"
+
+class ContactMessage(models.Model):
+    # Stores contact form submissions.
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.email})"
