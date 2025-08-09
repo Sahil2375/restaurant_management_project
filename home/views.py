@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import FeedbackForm
 from datetime import datetime
+from .models import MenuItem
 
 from .models import Restaurant
 
@@ -30,3 +31,8 @@ def feedback_view(request):
             'form': form,
             'current_year': datetime.now().year
         })
+
+def menu_view(request):
+    # Display all menu items on the menu page.
+    items = MenuItem.objects.all()
+    return render(request, 'menu.html', {'items': items})
