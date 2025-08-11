@@ -60,6 +60,11 @@
 
         {% if restaurant %}
             <p><strong>Address:</strong> {{ restaurant.address }}</p>
+            {% if restaurant.phone_number %}
+                <p><strong>Phone:</strong> {{ restaurant.phone_number }}</p>
+            {% else %}
+                <p>Phone number not available</p>
+            {% endif %}
         {% else %}
             <p>Address information is not available.</p>
         {% endif %}
