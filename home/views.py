@@ -14,6 +14,17 @@ def homepage1(request):
     return render(request, 'homepage1.html', {'restaurant' : restaurant})
     
 def homepage(request):
+    query = request.GET.get('q', '')  # Get search term from URL
+    if query:
+        menu_items = MenuItem.objects.filter(name__icontains=query)  # Case-insensitive match
+    else:
+        menu_items = MenuItem.objects.all()
+
+    return render(request, 'homepage.html', {
+        'menu_items': menu_items,
+        'query': query
+    })
+    
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
