@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.conf import settings
 from .forms import FeedbackForm, ContactForm
 from datetime import datetime
 from .models import MenuItem, RestaurantInfo
@@ -41,3 +43,23 @@ def menu_view(request):
     # Display all menu items on the menu page.
     menu_items = MenuItem.objects.all()
     return render(request, 'menu.html', {'menu_items': menu_items})
+
+def contact_view(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            contact = form.save()
+
+            # Send email to restaurnat
+            subject = f"New contact submission from {contact.name}"
+            message = f"Name: {contact.name}\nEmail: {contact.email}\n\nMessage:\n{contact.message}"
+            from_email = settings.DEFAULT_FROM_EMAIL
+            recipient_list = [settings.EMAIL_HOST_USER]  # Restaurant email
+
+            send_mail(subject, message, from_email, recipient_list)
+
+            return render(request, 'contact_success.html')
+
+    else:
+        form = ContactForm()
+    return render(request, 'contact.html', {'form': form})
