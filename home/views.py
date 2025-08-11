@@ -17,11 +17,11 @@ def homepage(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('homepage')  # Redirect after successful submission.
+            return redirect(request, 'contact_success.html')  # Redirect after successful submission.
 
         else:
             form = ContactForm()
-        return render(request, 'home.html', {'form': form})
+        return render(request, 'contact.html', {'form': form})
 
 def feedback_view(request):
     if request.method == 'POST':
