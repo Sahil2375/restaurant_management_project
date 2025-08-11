@@ -3,6 +3,27 @@
     <head>
         <title>{{ restaurant.name }}</title>
         <style>
+            .hours-box {
+                border: 2px solid #444;
+                padding: 15px;
+                width: 300px;
+                background-color: #f8f8f8;
+                border-radius: 8px;
+            }
+            .hours-box h2 {
+                margin-top:0;
+                text-align: center;
+            }
+            .hours-box ul {
+                list-style: none;
+                padding: 0;
+            }
+            .hours-box li {
+                display: flex;
+                justify-content: space-between;
+                border-bottom: 1px dotted #ccc;
+                padding: 5px 0;
+            }
             body { 
                 font-family: Arial, sans-serif; 
                 background-color: #fafafa; 
@@ -44,6 +65,19 @@
         {% endif %}
 
         {% if menu_items %}
+
+        {% if restaurant.opening_hours %}
+            <div class="hours-box">
+                <h2>Opening Hours</h2>
+                <ul>
+                    {% for day, hours in restaurant.opening_hours.items %}
+                        <li><span>{{ day }}</span> <span>{{ hours }}</span></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <p>Opening hours not available.</p>
+        {% endif %}
         <div class="menu-container">
             {% for item in menu_items %}
             <div class="menu-item">
