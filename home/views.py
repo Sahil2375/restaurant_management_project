@@ -1,16 +1,15 @@
 from django.shortcuts import render, redirect
 from .forms import FeedbackForm, ContactForm
 from datetime import datetime
-from .models import MenuItem
+from .models import MenuItem, RestaurantInfo
 
 from .models import Restaurant
 
 # Create your views here.
 
 def homepage1(request):
-    return render(request, 'homepage1.html', {
-        'current_year' : datetime.now().year
-    })
+    restaurant = RestaurantInfo.objects.first()  # Assuming only one entry
+    return render(request, 'homepage1.html', {'restaurant' : restaurant})
     
 def homepage(request):
     if request.method == "POST":
