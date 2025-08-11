@@ -60,6 +60,11 @@
     </head>
     <body>
 
+        <!-- Cart Counr -->
+        <div style="float: right;">
+            Cart: {{ cart_count }} items
+        </div>
+
         <h1>Our Menu</h1>
 
         <!-- Search Bar -->
@@ -100,7 +105,8 @@
             <div class="menu-item">
                 <h3>{{ item.name }}</h3>
                 <p>{{ item.description }}</p>
-                <p class="price">${{ item.price }}</p>
+                <p><strong>${{ item.price }}</strong></p>
+                <a href="{% url 'add_to_cart' item.id %}">Add to cart</a>
             </div>
             {% endfor %}
         </div>
