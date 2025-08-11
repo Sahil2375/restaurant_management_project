@@ -17,7 +17,7 @@ class MenuItem(models.Model):
 
     # NEW FIELD FOR IMAGE UPLOAD
     image = models.ImageField(
-        upload_to='menu_images/',  # Folder inside MEDIA_ROOT
+        upload_to='menu_images/',  # Folder inside MEDIA_ROOT/menu_images/
         blank=True,
         null=True,
         help_text='Upload an image of the menu items'
