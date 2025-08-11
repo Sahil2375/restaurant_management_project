@@ -18,5 +18,9 @@ class FeedbackForm(forms.ModelForm):
 
 class ContactForm(forms.ModelForm):
     class Meta:
-        model = ContactMessage
+        model = ContactSubmission
         fields = ['name', 'email']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Your Name'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Your Email'})
+        }
