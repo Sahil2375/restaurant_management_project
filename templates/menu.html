@@ -50,6 +50,9 @@
                 <h3>{{ item.name }}</h3>
                 <p>{{ item.description }}</p>
                 <p class="price">${{ item.price }}</p>
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}" width="200">
+                {% endif %}
             </div>
             {% empty %}
             <p>No menu items available yet.</p>
