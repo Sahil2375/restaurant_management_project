@@ -40,5 +40,5 @@ def feedback_view(request):
 
 def menu_view(request):
     # Display all menu items on the menu page.
-    items = MenuItem.objects.all()
-    return render(request, 'menu.html', {'items': items})
+    menu_items = MenuItem.objects.all()
+    return render(request, 'menu.html', {'menu_items': menu_items})
