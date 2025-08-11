@@ -20,9 +20,14 @@ def homepage(request):
     else:
         menu_items = MenuItem.objects.all()
 
+    # Get cart count fron sessions
+    cart = request.session.get('cart', [])
+    cart_count = len(cart)
+
     return render(request, 'homepage.html', {
         'menu_items': menu_items,
-        'query': query
+        'query': query,
+        'cart_count': cart_count
     })
     
     if request.method == "POST":
