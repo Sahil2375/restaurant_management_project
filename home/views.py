@@ -12,6 +12,13 @@ from .models import Restaurant
 def homepage1(request):
     restaurant = RestaurantInfo.objects.first()  # Assuming only one entry
     return render(request, 'homepage1.html', {'restaurant' : restaurant})
+
+def add_to_cart(request, item_id):
+    cart = request.session.get('cart', [])
+    if item_id not in cart:
+        cart.append(item_id)
+        request.session['cart'] = cart
+    return redirect('homepage')
     
 def homepage(request):
     query = request.GET.get('q', '')  # Get search term from URL
