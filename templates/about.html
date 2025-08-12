@@ -2,12 +2,33 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>About My Awesome Restaurant</title>
-        <link rel="stylesheet" href="{% static 'styles.css' %}"
+        <title>About Us - {{ restaurant_name }}</title>
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 40px;
+                line-height: 1.6;
+                background-color: #fafafa;
+            }
+            h1 {
+                color: #333;
+            }
+            p {
+                max-width: 700px;
+            }
+        </style>
     </head>
     <body>
         <header>
-            <h1>About My Awesome Restaurant</h1>
+            <h1>About {{ restaurant_name }}</h1>
+
+            <h2>Our History</h2>
+            <p>{{ history }}</p>
+
+            <h2>Our Mission</h2>
+            <p>{{ mission }}</p>
+            
             <nav>
                 <a href="{% url 'homepage' %}">Home</a>
             </nav>
