@@ -46,10 +46,15 @@
                     <input type="email" id="email" name="email" placeholder="Your email">
                 </div>
 
-                <div class="form-field">
-                    <label for="message">Message</label>
-                    <textarea type="message" name="message" placeholder="Write your messager..."></textarea>
-                </div>
+                {% for message in messages %}
+                    <p class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</p>
+                {% endfor %}
+
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Send</button>
+                </form>
 
                 <button type="submit">Send</button>
             </form>
