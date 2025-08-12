@@ -1,5 +1,3 @@
-{% load static %}
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -48,10 +46,11 @@
         </style>
     </head>
     <body>
-
         <!-- Logo prominently at the top -->
-        <img src="{% static 'images/logo.png' %}" alt="Restaurant Logo" class="logo">
-
+        {% if restaurant.logo %}
+            <img src="{{ restaurant.logo.url }}" alt="{{ restaurant.name }} Logo" style="max-width:200px;">
+        {% endif %}
+        
         <!-- Welcome text -->
         <div class="welcome-text">
             <h1>Welcome to {{ restaurant_name }}</h1>
