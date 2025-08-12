@@ -9,6 +9,16 @@
                 margin: 0;
                 padding: 0;
             }
+            .phone {
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: #2c3e50;
+                background: #f1c40f;
+                padding: 8px 12px;
+                border-radius: 5px;
+                display: inline-block;
+                margin-top: 10px;
+            }
             label {
                 display: block;
                 margin-bottom: 5px;
@@ -53,7 +63,12 @@
         
         <!-- Welcome text -->
         <div class="welcome-text">
-            <h1>Welcome to {{ restaurant_name }}</h1>
+            <h1>Welcome to {{ restaurant.name }}</h1>
+
+            {% if restaurant.phone %}
+                <div class="phone">Call Us: {{ restaurant.phone }}</div>
+            {% endif %}
+
         </div>
 
         <h2>Contact Us</h2>
