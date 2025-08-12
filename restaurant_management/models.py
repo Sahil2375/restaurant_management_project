@@ -34,3 +34,11 @@ class RestaurantInfo(models.Model):
 
     def __str__(self):
         return self.name
+
+class Restaurant(models.Model):
+    name = models.CharField(max_length=100)
+    logo = models.ImageField(upload_to='restaurant_logos/', blank=True, null=True)
+    # We can add other fields like address, phone etc.
+
+    def __str__(self):
+        return self.name
