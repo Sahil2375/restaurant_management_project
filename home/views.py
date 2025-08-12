@@ -86,3 +86,12 @@ def contact_view(request):
     else:
         form = ContactForm()
     return render(request, 'contact.html', {'form': form})
+
+def about(request):
+    # Display information about the restaurant, such as history and mission.
+    context = {
+        "restaurant_name": "Tasty Bites",
+        "history": "Founded in 1998, Tasty Bites strats as a small family-run cafe and has grown into a beloved dining spotfor locals and tourist.",
+        "mission": "To serve fresh, high-quality food with exceptional service, creating memorable dining experiences for all guests."
+    }
+    return render(request, "about.html", context)
