@@ -16,12 +16,13 @@ class FeedbackForm(forms.ModelForm):
             'comments' : 'Your Feedback'
         }
 
-class ContactForm(forms.ModelForm):
-    class Meta:
-        model = ContactSubmission
-        fields = ['name', 'email']
-        widgets = {
-            'name': forms.TextInput(attrs={'placeholder': 'Your Name'}),
-            'email': forms.EmailInput(attrs={'placeholder': 'Your Email'}),
-            'message': forms.Textarea(attrs={'placeholder': 'Your Message'})
-        }
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=100, required=True)
+    email = forms.EmailField(required=True) # Validates email format automatically.
+    message = forms.CharField(widget=forms.Textarea, required=True) # Required message
+
+    def clean_message(self):
+        message = self.cleaned_data.get('message', '').strip()
+        if len(message) < 10:
+            raise forms.ValidationError("Your message must be at least 10 characters long.")
+        return message
