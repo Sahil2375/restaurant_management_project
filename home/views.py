@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.conf import settings
+from django.contrib import messages
 from .forms import FeedbackForm, ContactForm
 from datetime import datetime
-from .models import MenuItem, RestaurantInfo
 
-from .models import Restaurant
+from .models import MenuItem, RestaurantInfo, Restaurant
 
 # Create your views here.
 
@@ -95,3 +95,17 @@ def about(request):
         "mission": "To serve fresh, high-quality food with exceptional service, creating memorable dining experiences for all guests."
     }
     return render(request, "about.html", context)
+
+def contact(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # Normally, save to DB or send an email.
+            messages.success(request, "Your message has been sent successfully!")
+            form = ContactForm() # Reset form after success
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = ContactForm()
+
+    return render(request, "contact.html", {"form": form})
