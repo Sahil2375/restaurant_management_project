@@ -1,6 +1,14 @@
 from django.urls import path
-from .views import *
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    
+    # Homepage
+    path('', your_home_view, name='home'),
+
+    # Login route using Django's built-in LoginView
+    path(
+        'login/',
+        auth_views.LoginView.as_view(template_name='home.html'),
+        name='login'
+    ),
 ]
