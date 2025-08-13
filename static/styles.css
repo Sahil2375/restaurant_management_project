@@ -148,3 +148,34 @@ li {
 .food-gallery img:hover {
     transform: scale(1.05);
 }
+
+.order-now-section {
+    text-align: center;
+    padding: 40px 20px;
+    background: #fffaf0;
+    border-radius: 10px;
+    margin: 30px auto;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+}
+
+.order-now-section h2 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.order-now-btn {
+    display: inline-block;
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    color: white;
+    background-color: #e74c3c;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.order-now-btn:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
