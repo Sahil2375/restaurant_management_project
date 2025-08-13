@@ -71,6 +71,13 @@
 
         </div>
 
+        {% block content %}
+        <div class="welcome-section">
+            <h1 class="welcome-title">Welcome to Tasty Bites</h1>
+            <p class="welcome-tagline">Serving delicious meals with a touch of love since 1998.</p>
+        </div>
+        {% endblock %}
+
         <h2>Contact Us</h2>
         <form method="post">
             {% csrf_token %}
