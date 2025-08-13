@@ -235,3 +235,37 @@ input[type="password"] {
     margin-bottom: 15px;
     border-radius: 5px;
 }
+
+.confirmation-container {
+    text-align: center;
+    padding: 40px 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: 50px auto;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+}
+
+.confirmation-container h1 {
+    color: #27ae60;
+    margin-bottom: 10px;
+}
+
+.confirmation-container p {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.home-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #3498db;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.home-btn:hover {
+    background: #2890b9;
+}
