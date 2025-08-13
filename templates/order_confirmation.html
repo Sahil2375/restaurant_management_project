@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="confirmation-container">
+    <h1>Thank You for your Order!</h1>
+    <p>Your order has been placed successfully.</p>
+    <p><strong>Oredr Number:</strong> #{{ order_number }}</p>
+    <a href="/" class="home-btn">Back to Home</a>
+</div>
+{% endblock %}
