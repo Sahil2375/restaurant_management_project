@@ -23,6 +23,15 @@
         </style>
     </head>
     <body>
+        <header>
+            <!-- Header here -->
+        </header>
+
+        <main>
+            {% include "partials/breadcrumb.html" %}
+            {% block content %}{% endblock %}
+        </main>
+        
         {% block content %}
         <!-- Page specific content goes here -->
         {% endblock %}
