@@ -59,3 +59,22 @@ li {
 .breadcrumb-item.active {
     color: #555;
 }
+
+.policy-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.policy-container h1,
+.policy-container h3 {
+    color: #2c3e50;
+}
+
+.policy-container p {
+    color: #555;
+    line-height: 1.6;
+}
