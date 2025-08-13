@@ -83,6 +83,21 @@
         </div>
         {% endblock %}
 
+        {% block content %}
+        <div class="hero-section">
+            <div class="hero-text">
+                <h1>Welcome to Tasty Bites</h1>
+                <p>Delicious meals made with Love, served fresh every day.</p>
+            </div>
+        </div>
+
+        <div class="food-gallery">
+            <img src="{% static 'images/food1.jpg' %}" alt="Tasty Pizza">
+            <img src="{% static 'images/food2.jpg' %}" alt="Fresh Salad">
+            <img src="{% static 'images/food3.jpg' %}" alt="Juicy Burger">
+        </div>
+        {% endblock %}
+
         <h2>Contact Us</h2>
         <form method="post">
             {% csrf_token %}
