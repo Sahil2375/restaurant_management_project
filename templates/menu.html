@@ -4,6 +4,14 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Our Menu</title>
+        <ul>
+            {% for item in menu_items %}
+            <li>
+                {{ item.name }} - ${{ item.price }}
+                <a href="{% url 'add_to_cart' item.id %}">Add to Cart</a>
+            </li>
+            {% endfor %}
+        </ul>
         <style>
             body {
                 font-family: Arial, sans-serif;
