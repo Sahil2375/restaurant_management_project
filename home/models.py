@@ -4,11 +4,12 @@ from django.db import models
 
 class Feedback(models.Model):
     "Stores customer feedback"
-    comments = models.TextField(help_text="Customer feedback comments.")
+    name = models.CharField(max_length=100)
+    feedback = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Feedback #{self.id} - {self.created_at.strftime('%Y-%m-%d')}"
+        return f"{self.name} - {self.created_at.strftime('%Y-%m-%d')}"
 
 class MenuItem(models.Model):
     name = models.CharField(max_length=100)
