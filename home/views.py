@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
@@ -15,11 +15,26 @@ def homepage1(request):
     return render(request, 'homepage1.html', {'restaurant_info': restaurant_info}, {'specials': specials})
 
 def add_to_cart(request, item_id):
+    item = get_object_or_404(MenuItem, id=item_id)
+
+    cart = request.session.get('cart', {})
+
+    if str(item_id) in cart:
+        cart[str(item_id)]['quantity'] += 1
+    else:
+        cart[str(item_id)] = {
+            'name': item.name,
+            'price': float(item.price),
+            'quantity': 1
+        }
+        
+    request.session['cart'] = cart
+    return redirect('view_cart')
+
+def view_cart(request):
     cart = request.session.get('cart', [])
-    if item_id not in cart:
-        cart.append(item_id)
-        request.session['cart'] = cart
-    return redirect('homepage')
+    total = sum(item['price'] * item['quantity'] for item in cart.values())
+    return render(request, 'cart.html', {'cart': cart, 'total': total})
     
 def homepage(request):
     query = request.GET.get('q', '')  # Get search term from URL
