@@ -4,6 +4,13 @@
     <head>
         <title>About Us - {{ restaurant_name }}</title>
         <link rel="stylesheet" href="{% static 'styles.css' %}">
+        
+        <p>{{ restaurant.description }}</p>
+
+        {% if restaurant.image %}
+            <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}" style="max-width:400px;">
+        {% endif %}
+
         <style>
             body {
                 font-family: Arial, sans-serif;
