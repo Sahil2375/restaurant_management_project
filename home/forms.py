@@ -4,18 +4,11 @@ from .models import Feedback, ContactMessage
 class FeedbackForm(forms.ModelForm):
     class Meta:
         model = Feedback
-        fields = ['comments']
+        fields = ['name', 'feedback']
         widgets = {
-            'comments' : forms.Textarea(attrs={
-                'rows' : 4,
-                'placeholder' : 'Write your feedback here...',
-                'class' : 'feedback-textarea'
-            })
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Name'}),
+            'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your Feedback'}),
         }
-        labels = {
-            'comments' : 'Your Feedback'
-        }
-
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=100, required=True)
     email = forms.EmailField(required=True) # Validates email format automatically.
