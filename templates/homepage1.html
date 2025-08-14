@@ -1,6 +1,21 @@
 {% extends "base.html" %}
 
 {% block title %}<title>Restaurant Homepage</title>{% endblock %}
+<h1>Welcome to our Restaurant</h1>
+
+<h2>Today's Special</h2>
+{% if specials %}
+    <ul>
+        {% for special in specials %}
+            <li>
+                <h3>{{ special.item_name }} - ${{ special.price }}</h3>
+                <p>{{ special.description }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No specials available today.</p>
+{% endif %}
 <style>
     /* Basic styling for the search bar */
     .search-container {
