@@ -57,10 +57,7 @@ def feedback_view(request):
         else:
             form = FeedbackForm()
 
-        return render(request, 'feedback.html', {
-            'form': form,
-            'current_year': datetime.now().year
-        })
+        return render(request, 'feedback.html', {'form': form})
 
 def menu_view(request):
     # Display all menu items on the menu page.
