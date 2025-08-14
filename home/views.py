@@ -11,7 +11,7 @@ from .models import MenuItem, RestaurantInfo, Restaurant
 
 def homepage1(request):
     restaurant = RestaurantInfo.objects.first()  # Assuming only one entry
-    return render(request, 'homepage1.html', {'restaurant' : restaurant})
+    return render(request, 'homepage1.html', {'restaurant_info' : restaurant_info})
 
 def add_to_cart(request, item_id):
     cart = request.session.get('cart', [])
