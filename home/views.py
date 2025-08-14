@@ -5,13 +5,14 @@ from django.contrib import messages
 from .forms import FeedbackForm, ContactForm
 from datetime import datetime
 
-from .models import MenuItem, RestaurantInfo, Restaurant
+from .models import MenuItem, RestaurantInfo, Restaurant, TodaysSpecial
 
 # Create your views here.
 
 def homepage1(request):
     restaurant = RestaurantInfo.objects.first()  # Assuming only one entry
-    return render(request, 'homepage1.html', {'restaurant_info' : restaurant_info})
+    specials = TodaysSpecial.objects.all()
+    return render(request, 'homepage1.html', {'restaurant_info': restaurant_info}, {'specials': specials})
 
 def add_to_cart(request, item_id):
     cart = request.session.get('cart', [])
