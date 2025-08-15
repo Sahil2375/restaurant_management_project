@@ -5,11 +5,11 @@ from django.db import models
 class Feedback(models.Model):
     "Stores customer feedback"
     name = models.CharField(max_length=100)
-    feedback = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    feedback_text = models.TextField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.name} - {self.created_at.strftime('%Y-%m-%d')}"
+        return f"Feedback from {self.name}"
 
 class MenuItem(models.Model):
     name = models.CharField(max_length=100)
