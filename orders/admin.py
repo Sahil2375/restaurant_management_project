@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Menu, Order, UserProfile, MenuItem
+from .models import Menu, Order, UserProfile, MenuItem, Special
 
 # Register your models here.
 
@@ -24,3 +24,7 @@ class UserProfileAdmin(admin.ModelAdmin):
 class MenuItemAdmin(admin.ModelAdmin):
     list_display = ('name', 'price')
     search_fields = ('name',)
+
+@admin.register(Special)
+class SpecialAdmin(admin.ModelAdmin):
+    list_display = ('item_name', 'price')
