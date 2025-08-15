@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import RestaurantInfo, MenuItem
+from .models import RestaurantInfo, MenuItem, Feedback
 
 # Register your models here.
 
@@ -10,3 +10,7 @@ class RestaurantInfoAdmin(admin.ModelAdmin):
 @admin.register(MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):
     list_display = ('name', 'price')
+
+@admin.register(Feedback)
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ('name', 'feedback_text', 'submitted_at')
