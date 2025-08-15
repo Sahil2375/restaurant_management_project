@@ -11,7 +11,7 @@ from .models import MenuItem, RestaurantInfo, Restaurant, TodaysSpecial
 
 def homepage1(request):
     restaurant = RestaurantInfo.objects.first()  # Assuming only one entry
-    specials = TodaysSpecial.objects.all()
+    specials = Special.objects.all()
     return render(request, 'homepage1.html', {'restaurant_info': restaurant_info}, {'specials': specials})
 
 def add_to_cart(request, item_id):
