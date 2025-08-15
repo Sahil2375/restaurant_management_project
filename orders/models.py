@@ -52,3 +52,9 @@ class Special(models.Model):
 
     def __str__(self):
         return self.item_name
+
+class RestaurantInfo(models.Model):
+    opening_hours = models.CharField(max_length=225, help_text="e.g. Mon-Fri: 9am-10pm, Sat-Sun: 10am-11pm")
+
+    def __str__(self):
+        return "Restaurant Info"
