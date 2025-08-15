@@ -44,11 +44,11 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.get_full_name() or self.user.username
 
-class TodaysSpecial(models.Model):
+class Special(models.Model):
     item_name = models.CharField(max_length=100)
     description = models.TextField()
     price = models.DecimalField(max_digits=6, decimal_places=2)  # e.g. 9999.99
-    created_at = models.DateTimeField(auto_now_add=True)  # Optional
+    # created_at = models.DateTimeField(auto_now_add=True)  # Optional
 
     def __str__(self):
         return self.item_name
