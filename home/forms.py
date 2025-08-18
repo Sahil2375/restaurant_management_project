@@ -15,8 +15,8 @@ class ContactForm(forms.Form):
     email = forms.EmailField(required=True) # Validates email format automatically.
     message = forms.CharField(widget=forms.Textarea, required=True) # Required message
 
-    def clean_message(self):
-        message = self.cleaned_data.get('message', '').strip()
-        if len(message) < 10:
-            raise forms.ValidationError("Your message must be at least 10 characters long.")
-        return message
+    # def clean_message(self):
+    #     message = self.cleaned_data.get('message', '').strip()
+    #     if len(message) < 10:
+    #         raise forms.ValidationError("Your message must be at least 10 characters long.")
+    #     return message
