@@ -113,11 +113,13 @@ def contact(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
-            # Normally, save to DB or send an email.
-            messages.success(request, "Your message has been sent successfully!")
-            form = ContactForm() # Reset form after success
-        else:
-            messages.error(request, "Please correct the errors below.")
+            # Process data (e.g., save or send email).
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+
+            # You can save or send email here
+            return render(request, "contact_success.html", {"name": name})
     else:
         form = ContactForm()
 
