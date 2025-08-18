@@ -1,16 +1,19 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html>
     <head>
         <title>Contact Us</title>
-        <link rel="stylesheet" href="{% static 'styles.css %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/contact.css %}">
     </head>
     <body>
-        <h1>Contact Us</h1>
-        <div class="contact-box">
-            <p><strong>Phone:</strong> {{ restaurant.phone_number }}</p>
-            <p><strong>Email:</strong> {{ restaurant.email }}</p>
-            <p><strong>Address:</strong> {{ restaurant.address }}</p>
+        <div class="container">
+            <h1>Contact Us</h1>
+            <div class="contact-info">
+                <p><strong>Phone:</strong> {{ restaurant.phone_number }}</p>
+                <p><strong>Email:</strong> {{ restaurant.email }}</p>
+                <p><strong>Address:</strong> {{ restaurant.address }}</p>
+            </div>
         </div>
     </body>
 </html>
