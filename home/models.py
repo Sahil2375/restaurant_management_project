@@ -38,7 +38,7 @@ class ContactSubmission(models.Model):
 
 class RestaurantInfo(models.Model):
     name = models.CharField(max_length=100)
-    address = ,odels.TextField()
+    address = models.TextField()
     opening_hours = models.JSONField(default=dict)  # e.g. {"Mon": "9am - 10pm", ...}
     phone_number = models.CharField(max_length=20, blank=True)  # New field
     
