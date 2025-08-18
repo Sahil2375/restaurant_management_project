@@ -9,6 +9,13 @@
     <body>
         <div class="container">
             <h1>Contact Us</h1>
+
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Send</button>
+            </form>
+            
             <div class="contact-info">
                 <p><strong>Phone:</strong> {{ restaurant.phone_number }}</p>
                 <p><strong>Email:</strong> {{ restaurant.email }}</p>
