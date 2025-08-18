@@ -122,3 +122,7 @@ def contact(request):
         form = ContactForm()
 
     return render(request, "contact.html", {"form": form})
+
+def contact_us(request):
+    restaurant = Restaurant.objects.first()  # Assuming only one restaurant
+    return render(request, "contact_us.html", {"restaurant": restaurant})
