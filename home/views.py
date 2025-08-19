@@ -84,21 +84,27 @@ def contact_view(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            contact = form.save()
-
-            # Send email to restaurnat
-            subject = f"New contact submission from {contact.name}"
-            message = f"Name: {contact.name}\nEmail: {contact.email}\n\nMessage:\n{contact.message}"
-            from_email = settings.DEFAULT_FROM_EMAIL
-            recipient_list = [settings.EMAIL_HOST_USER]  # Restaurant email
-
-            send_mail(subject, message, from_email, recipient_list)
-
-            return render(request, 'contact_success.html')
-
+            form.save()  # or handle sending email, saving to DB, etc.
+            messages.success(request, "Thank You, your message has been sent!")
+            return redirect("contact") # stay on the contact page
     else:
         form = ContactForm()
-    return render(request, 'contact.html', {'form': form})
+
+    return render(request, "contact.html", {"form": form})
+
+    #         # Send email to restaurnat
+    #         subject = f"New contact submission from {contact.name}"
+    #         message = f"Name: {contact.name}\nEmail: {contact.email}\n\nMessage:\n{contact.message}"
+    #         from_email = settings.DEFAULT_FROM_EMAIL
+    #         recipient_list = [settings.EMAIL_HOST_USER]  # Restaurant email
+
+    #         send_mail(subject, message, from_email, recipient_list)
+
+    #         return render(request, 'contact_success.html')
+
+    # else:
+    #     form = ContactForm()
+    # return render(request, 'contact.html', {'form': form})
 
 def about(request):
     # Display information about the restaurant, such as history and mission.
