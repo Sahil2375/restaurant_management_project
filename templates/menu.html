@@ -1,3 +1,4 @@
+{% load menu_extras %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -9,6 +10,9 @@
             <li>
                 {{ item.name }} - ${{ item.price }}
                 <a href="{% url 'add_to_cart' item.id %}">Add to Cart</a>
+            </li>
+            <li>
+                {{ item|availability }}
             </li>
             {% endfor %}
         </ul>
