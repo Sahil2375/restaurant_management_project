@@ -7,7 +7,10 @@
         <title>Our Menu</title>
         <ul>
             {% for item in page_obj %}
-            <li>{{ item.name }} - {{ item.price}}</li>
+            <li>
+                <img src="{{ item.image.url }}" alt="Delicious {{ item.name }} from our menu" width="200">
+                <p>{{ item.name }} - {{ item.price}}</p>
+            </li>
             {% endfor %}
 
             {% for item in menu_items %}
