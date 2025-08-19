@@ -44,3 +44,11 @@ class RestaurantInfo(models.Model):
     
     def __str__(self):
         return self.name
+
+class Chef(models.Model):
+    name = models.CharField(max_length=100)
+    bio = models.TextField()
+    image = models.ImageField(upload_to="chefs/")
+
+    def __str__(self):
+        return self.name
