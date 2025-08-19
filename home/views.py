@@ -6,7 +6,7 @@ from django.contrib import messages
 from .forms import FeedbackForm, ContactForm
 from datetime import datetime
 
-from .models import MenuItem, RestaurantInfo, Restaurant, TodaysSpecial
+from .models import MenuItem, RestaurantInfo, Restaurant, TodaysSpecial, Chef
 
 # Create your views here.
 
@@ -140,3 +140,7 @@ def contact(request):
 def contact_us(request):
     restaurant = Restaurant.objects.first()  # Assuming only one restaurant
     return render(request, "contact_us.html", {"restaurant": restaurant})
+
+def chef_view(request):
+    chef = Chef.objects.first() # assuming only one main chef
+    return render(request, "chef.html", {"chef": chef})
