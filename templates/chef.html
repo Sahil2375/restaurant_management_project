@@ -1,0 +1,21 @@
+{% losd static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>About the Chef</title>
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+    </head>
+    <body>
+        <h1>Meet our Chef</h1>
+
+        {% if chef %}
+        <div class="chef-profile">
+            <img src="{{ chef.image.url }}" alt="Photo of Chef {{ chef.name }}" width="300">
+            <h2>{{ chef.name }}</h2>
+            <p>{{ chef.bio }}</p>
+        </div>
+        {% else %}
+        <p>Chef imformation will be available soon.</p>
+        {% endif %}
+    </body>
+</html>
