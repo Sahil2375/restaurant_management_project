@@ -6,6 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Our Menu</title>
         <ul>
+            {% for item in page_obj %}
+            <li>{{ item.name }} - {{ item.price}}</li>
+            {% endfor %}
+
             {% for item in menu_items %}
             <li>
                 {{ item.name }} - ${{ item.price }}
@@ -16,50 +20,24 @@
             </li>
             {% endfor %}
         </ul>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background: #fafafa;
-                padding: 20px;
-            }
-            h1 {
-                text-align: center;
-                color: #d35400;
-            }
-            .menu-container {
-                display: flex;
-                flex_wrap: wrap;
-                gap: 20px;
-            }
-            .menu-item {
-                border: 1px solid #ddd;
-                width: 250px;
-                text-align: center;
-                border-radius: 10px;
-                padding: 15px;
-            }
-            .menu-item h3 {
-                margin: 0;
-                color: #333;
-            }
-            .menu-item p {
-                font-size: 14px;
-                color: #555;
-            }
-            .menu-item img {
-                max-width: 100%;
-                height: auto;
-                border-radius: 8px;
-            }
-            .price {
-                font-weight: bold;
-                color: #27ae60;
-            }
-        </style>
     </head>
     <body>
 
         <h1>Our Menu</h1>
+
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+            <a href="?page=1">First</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+            {% endif %}
+        </div>
 
         <div class="menu-container">
             {% for item in menu-items %}
@@ -70,7 +48,6 @@
                 <h2>{{ item.name }}</h2>
                 <p>{{ item.description }}</p>
                 <p><strong>${{ item.price }}</strong></p>
-                <a href="{% url 'add_to_cart' item.id %}" class="add-cart-btn">Add to Cart</a>
             </div>
             {% empty %}
             <p>No menu items available yet.</p>
