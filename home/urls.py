@@ -10,7 +10,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
     path('', views.homepage, name='homepage1'),
-    path('reservations/', views.reservations, name='reseravtions')
+    path('reservations/', views.reservations, name='reseravtions'),
+    path('about/', views.about_us, name='about_us'),
 ]
 
 handler404 = 'home.urls.custom_404_view'
