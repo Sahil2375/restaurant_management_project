@@ -33,6 +33,18 @@
                 padding: 10px;
                 font-size: 14px;
             }
+            .breadcrumb {
+                font-size: 14px;
+                margin: 10px 20px;
+                color: #666;
+            }
+            .breadcrumb a {
+                text-decoration: none;
+                color: #333;
+            }
+            .breadcrumb a:hover {
+                text-decoration: underline;
+            }
         </style>
     </head>
     <body>
@@ -42,6 +54,11 @@
             <a href="{% url 'reservations' %}">Reservations</a>
             <a href="{% url 'about_us' %}">About Us</a>
         </nav>
+
+        <!-- Breadcrumb section -->
+        <div class="breadcrumb">
+            {% block breadcrumb %}{% endblock %}
+        </div>
 
         <!-- Page content -->
         <main>
