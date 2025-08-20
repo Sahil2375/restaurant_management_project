@@ -23,6 +23,11 @@ def homepage1(request):
         "Sunday": "Closed",
     }
 
+    context = {
+        "opening_hours": opening_hours,
+        "page_title": "Welcome to Tasty Bites Restaurant - Best Dining in Mumbai",
+    }
+
     if request.method == 'POST':
         form = SubscriberForm(request.POST)
         if form.is_valid():
@@ -36,7 +41,7 @@ def homepage1(request):
         'specials': specials, 
         "opening_hours": opening_hours,
         "current_year": datetime.now().year
-    })
+    }, context)
 
 def reservations(request):
     return render(request, "reservations.html", {
