@@ -1,132 +1,134 @@
 {% extends "base.html" %}
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Restaurant Homepage</title>
-        <style>
-            .opening-hours {
-                margin: 20px auto;
-                padding: 15px;
-                max-width: 400px;
-                background: #f9f9f9;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                font-family: Arial, sans-serif;
-            }
 
-            .opening-hours h2 {
-                text-align: center;
-                margin-bottom: 10px;
-                color: #333;
-            }
+{%block title %}Home - Restaurant{% endblock %}
 
-            .opening-hours ul {
-                list-style: none;
-                padding: 0;
-            }
+{% block breadcrumb %}
+    Home
+{% endblock %}
 
-            .opening-hours li {
-                display: flex;
-                justify-content: space-between;
-                padding: 5px 0;
-                border-bottom: 1px dashed #ccc;
-            }
+{% block content %}
+<style>
+    .opening-hours {
+        margin: 20px auto;
+        padding: 15px;
+        max-width: 400px;
+        background: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-family: Arial, sans-serif;
+    }
 
-            .opening-hours li:last-child {
-                border-bottom: none;
-            }
-    </head>
-    <body>
-        <!-- Logo prominently at the top -->
-        {% if restaurant.logo %}
-            <img src="{{ restaurant.logo.url }}" alt="{{ restaurant.name }} Logo" style="max-width:200px;">
-        {% endif %}
+    .opening-hours h2 {
+        text-align: center;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .opening-hours ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .opening-hours li {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+        border-bottom: 1px dashed #ccc;
+    }
+
+    .opening-hours li:last-child {
+        border-bottom: none;
+    }
+
+    <!-- Logo prominently at the top -->
+    {% if restaurant.logo %}
+        <img src="{{ restaurant.logo.url }}" alt="{{ restaurant.name }} Logo" style="max-width:200px;">
+    {% endif %}
         
-        <!-- Welcome text -->
-        <div class="welcome-text">
-            <h1>Welcome to {{ restaurant.name }}</h1>
+    <!-- Welcome text -->
+    <div class="welcome-text">
+        <h1>Welcome to {{ restaurant.name }}</h1>
 
-            {% if restaurant.phone %}
-                <div class="phone">Call Us: {{ restaurant.phone }}</div>
-            {% endif %}
+        {% if restaurant.phone %}
+            <div class="phone">Call Us: {{ restaurant.phone }}</div>
+        {% endif %}
+    </div>
+
+    <div class="opening-hours">
+        <h2>Opening Hours</h2>
+        <ul>
+            {% for day, hours in opening_hours.items %}
+            <li>
+                <strong>{{ day }}</strong>
+                <span>{{ hours }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% block content %}
+    <div class="welcome-section">
+        <h1 class="welcome-title">Welcome to Tasty Bites</h1>
+        <p class="welcome-tagline">Serving delicious meals with a touch of love since 1998.</p>
+    </div>
+
+    <div class="datetime-section">
+        <h2>Welcome to Tasty Bites</h2>
+        <p>Current Date & Time: <strong>{{ current_datetime|friendly_datetime }}</strong></p>
+    </div>
+    {% endblock %}
+
+    {% block content %}
+    <div class="hero-section">
+        <div class="hero-text">
+            <h1>Welcome to Tasty Bites</h1>
+            <p>Delicious meals made with Love, served fresh every day.</p>
         </div>
+    </div>
 
-        <div class="opening-hours">
-            <h2>Opening Hours</h2>
-            <ul>
-                {% for day, hours in opening_hours.items %}
-                <li>
-                    <strong>{{ day }}</strong>
-                    <span>{{ hours }}</span>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
+    <div class="food-gallery">
+        <img src="{% static 'images/food1.jpg' %}" alt="Tasty Pizza">
+        <img src="{% static 'images/food2.jpg' %}" alt="Fresh Salad">
+        <img src="{% static 'images/food3.jpg' %}" alt="Juicy Burger">
+    </div>
+    {% endblock %}
 
-        {% block content %}
-        <div class="welcome-section">
-            <h1 class="welcome-title">Welcome to Tasty Bites</h1>
-            <p class="welcome-tagline">Serving delicious meals with a touch of love since 1998.</p>
-        </div>
+    {% block content %}
+    <div class="order-now-section">
+        <h2>Craving Something Delicious</h2>
+        <a href="{% url 'place_order' %}" class="order-now-btn">Order Now</a>
+    </div>
+    {% endblock %}
 
-        <div class="datetime-section">
-            <h2>Welcome to Tasty Bites</h2>
-            <p>Current Date & Time: <strong>{{ current_datetime|friendly_datetime }}</strong></p>
-        </div>
-        {% endblock %}
+    {% block content %}
+    <div class="login-section">
+        <h2>Login to your Account</h2>
 
-        {% block content %}
-        <div class="hero-section">
-            <div class="hero-text">
-                <h1>Welcome to Tasty Bites</h1>
-                <p>Delicious meals made with Love, served fresh every day.</p>
+        {% if form.errors %}
+            <div class="error-message">
+                <p>Invalid Username or Password. Please try again.</p>
             </div>
-        </div>
+        {% endif %}
 
-        <div class="food-gallery">
-            <img src="{% static 'images/food1.jpg' %}" alt="Tasty Pizza">
-            <img src="{% static 'images/food2.jpg' %}" alt="Fresh Salad">
-            <img src="{% static 'images/food3.jpg' %}" alt="Juicy Burger">
-        </div>
-        {% endblock %}
-
-        {% block content %}
-        <div class="order-now-section">
-            <h2>Craving Something Delicious</h2>
-            <a href="{% url 'place_order' %}" class="order-now-btn">Order Now</a>
-        </div>
-        {% endblock %}
-
-        {% block content %}
-        <div class="login-section">
-            <h2>Login to your Account</h2>
-
-            {% if form.errors %}
-                <div class="error-message">
-                    <p>Invalid Username or Password. Please try again.</p>
-                </div>
-            {% endif %}
-
-            <form method="post" action="{% url 'login' %}">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="id_username">Username:</label>
-                    <input type="text" name="username" id="id_username" required>
-                </div>
-                <div class="form-group">
-                    <label for="id_password">Password:</label>
-                    <input type="password" name="password" id="id_password" required>
-                </div>
-                <button type="submit" class="login-btn">Login</button>
-            </form>
-        </div>
-        {% endblock %}
-
-        <h2>Contact Us</h2>
-        <form method="post">
+        <form method="post" action="{% url 'login' %}">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Send</button>
+            <div class="form-group">
+                <label for="id_username">Username:</label>
+                <input type="text" name="username" id="id_username" required>
+            </div>
+            <div class="form-group">
+                <label for="id_password">Password:</label>
+                <input type="password" name="password" id="id_password" required>
+            </div>
+            <button type="submit" class="login-btn">Login</button>
         </form>
-    </body>
-</html>
+    </div>
+    {% endblock %}
+
+    <h2>Contact Us</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Send</button>
+    </form>
+{% endblock %}
