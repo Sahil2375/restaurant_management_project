@@ -12,6 +12,7 @@ urlpatterns = [
     path('', views.homepage, name='homepage1'),
     path('reservations/', views.reservations, name='reseravtions'),
     path('about/', views.about_us, name='about_us'),
+    path('contact/', views.contact, name='contact'),
 ]
 
 handler404 = 'home.urls.custom_404_view'
