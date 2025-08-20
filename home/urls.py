@@ -9,7 +9,8 @@ def custom_404_view(request, exception):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
-    path('', views.homepage, name='homepage'),
+    path('', views.homepage, name='homepage1'),
+    path('reservations/', views.reservations, name='reseravtions')
 ]
 
 handler404 = 'home.urls.custom_404_view'
