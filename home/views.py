@@ -22,6 +22,15 @@ def homepage1(request):
         "Saturday": "10:00 AM - 11:00 PM",
         "Sunday": "Closed",
     }
+
+    if request.method == 'POST':
+        form = SubscriberForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('homepage1')  # Reload page after success
+    else:
+        form = SubscriberForm()
+        
     return render(request, 'homepage1.html', {
         'restaurant_info': restaurant_info,
         'specials': specials, 
