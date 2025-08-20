@@ -39,6 +39,7 @@
     .opening-hours li:last-child {
         border-bottom: none;
     }
+</style>
 
     <!-- Logo prominently at the top -->
     {% if restaurant.logo %}
@@ -65,6 +66,45 @@
             {% endfor %}
         </ul>
     </div>
+
+    <div class="newsletter">
+        <h2>Subscribe to our newsletter</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.email }}
+            <button type="submit">Subscribe</button>
+        </form>
+    </div>
+
+    <style>
+        .newsletter {
+            margin: 20px auto;
+            max-width: 400px;
+            padding: 15px;
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .newsletter input {
+            padding: 8px;
+            width: 70%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .newsletter button {
+            padding: 8px 12px;
+            border: none;
+            background: #333;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .newsletter button:hover {
+            background: #ffcc00;
+            color: #000;
+        }
+    </style>
 
     {% block content %}
     <div class="welcome-section">
