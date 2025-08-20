@@ -3,44 +3,54 @@
     <head>
         <title>{% block title %}Restaurant{% endblock %}</title>
         <style>
-
-            footer {
-                background-color: #333;
-                color: white;
-                text-align: center;
-                padding: 12px 0;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                font-size: 14px;
-            }
-
             body {
-                margin: 0;
-                padding-bottom: 50px; /* space for footer */
                 font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+            nav {
+                background: #333;
+                padding: 10px;
+                text-align: center;
+            }
+            nav a {
+                color: white;
+                text-decoration: none;
+                margin: 0 15px;
+                font-weight: bold;
+            }
+            nav a:hover {
+                color: #ffcc00;
+            }
+            footer {
+                margin-top: auto;
+                background: #333;
+                color: #fff;
+                text-align: center;
+                padding: 10px;
+                font-size: 14px;
             }
         </style>
     </head>
     <body>
-        <header>
-            <!-- Header here -->
-        </header>
+        <!-- Navigation -->
+        <nav>
+            <a href="{% url 'homepage1' %}">Home</a>
+            <a href="{% url 'reservations' %}">Reservations</a>
+        </nav>
 
+        <!-- Page content -->
         <main>
             {% include "partials/breadcrumb.html" %}
             {% block content %}{% endblock %}
         </main>
         
-        {% block content %}
-        <!-- Page specific content goes here -->
-        {% endblock %}
-
+        <!-- Footer -->
         <footer>
-            <p>&copy; {{ current_year }} Tasty Bites. All rights reserved.
-                <a href="{% url 'privacy_policy %}">Privacy Policy</a>
-            </p>
-            <p>Opening Hours: Mon-Fri: 11am - 9pm, Sat-Sun: 10am - 10pm</p>
+            &copy; {{ current_year }} Tasty Bites. All rights reserved.
         </footer>
     </body>
 </html>
