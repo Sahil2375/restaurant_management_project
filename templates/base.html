@@ -50,6 +50,12 @@
     <body>
         <!-- Navigation -->
         <nav>
+            <a href="{% url 'homepage1' %}">
+                <img src="{% static 'images/logo.png' %}"
+                    alt="Tasty Bites Restaurant Logo - Fine Dining in Mumbai"
+                    style="height: 50px;">
+            </a>
+            
             <a href="{% url 'homepage1' %}">Home</a>
             <a href="{% url 'reservations' %}">Reservations</a>
             <a href="{% url 'about_us' %}">About Us</a>
