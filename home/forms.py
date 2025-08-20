@@ -1,5 +1,5 @@
 from django import forms
-from .models import Feedback, ContactMessage
+from .models import Feedback, ContactMessage, Subscriber
 
 class FeedbackForm(forms.ModelForm):
     class Meta:
@@ -15,8 +15,13 @@ class ContactForm(forms.Form):
     email = forms.EmailField(required=True) # Validates email format automatically.
     message = forms.CharField(widget=forms.Textarea, required=True) # Required message
 
-    # def clean_message(self):
-    #     message = self.cleaned_data.get('message', '').strip()
-    #     if len(message) < 10:
-    #         raise forms.ValidationError("Your message must be at least 10 characters long.")
-    #     return message
+class SubscriberForm(forms.ModelForm):
+    class Meta:
+        model = Subscriber
+        fields = ['email']
+        widgets = {
+            'email': forms.EmailInput(attrs={
+                'placeholder': 'Enter your email',
+                'class': 'email-input'
+            })
+        }
