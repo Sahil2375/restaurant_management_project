@@ -34,6 +34,11 @@ def reservations(request):
         "current_year": datetime.now().year
     })
 
+def about_us(request):
+    return render(request, "about_us.html", {
+        "current_year": datetime.now().year
+    })
+
 def add_to_cart(request, item_id):
     item = get_object_or_404(MenuItem, id=item_id)
 
