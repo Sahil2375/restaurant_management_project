@@ -2,58 +2,38 @@
 <html>
     <head>
         <title>Restaurant Homepage</title>
-        <!-- <style>
-            body {
+        <style>
+            .opening-hours {
+                margin: 20px auto;
+                padding: 15px;
+                max-width: 400px;
+                background: #f9f9f9;
+                border: 1px solid #ddd;
+                border-radius: 8px;
                 font-family: Arial, sans-serif;
+            }
+
+            .opening-hours h2 {
                 text-align: center;
-                margin: 0;
+                margin-bottom: 10px;
+                color: #333;
+            }
+
+            .opening-hours ul {
+                list-style: none;
                 padding: 0;
             }
-            .phone {
-                font-size: 1.2rem;
-                font-weight: bold;
-                color: #2c3e50;
-                background: #f1c40f;
-                padding: 8px 12px;
-                border-radius: 5px;
-                display: inline-block;
-                margin-top: 10px;
-            }
-            label {
-                display: block;
-                margin-bottom: 5px;
-                font-weight: bold;
-            }
-            input {
-                width: 100%;
-                padding: 8px;
-                margin-bottom: 10px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-            }
-            button {
-                background: #27ae60;
-                color: white;
-                border: none;
-                padding: 10px 15px;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-            button:hover {
-                background: #219150;
+
+            .opening-hours li {
+                display: flex;
+                justify-content: space-between;
+                padding: 5px 0;
+                border-bottom: 1px dashed #ccc;
             }
 
-            .logo {
-                width: 200px;
-                height: auto;
-                margin-top: 30px;
+            .opening-hours li:last-child {
+                border-bottom: none;
             }
-
-            .welcome-text {
-                font-size: 24px;
-                margin-top: 20px;
-            }
-        </style> --> -->
     </head>
     <body>
         <!-- Logo prominently at the top -->
@@ -68,7 +48,18 @@
             {% if restaurant.phone %}
                 <div class="phone">Call Us: {{ restaurant.phone }}</div>
             {% endif %}
+        </div>
 
+        <div class="opening-hours">
+            <h2>Opening Hours</h2>
+            <ul>
+                {% for day, hours in opening_hours.items %}
+                <li>
+                    <strong>{{ day }}</strong>
+                    <span>{{ hours }}</span>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
 
         {% block content %}
