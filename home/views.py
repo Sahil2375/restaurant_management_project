@@ -22,10 +22,17 @@ def homepage1(request):
         "Saturday": "10:00 AM - 11:00 PM",
         "Sunday": "Closed",
     }
-    return render(request, 'homepage1.html', {'restaurant_info': restaurant_info}, {'specials': specials}, {"opening_hours": opening_hours})
+    return render(request, 'homepage1.html', {
+        'restaurant_info': restaurant_info,
+        'specials': specials, 
+        "opening_hours": opening_hours,
+        "current_year": datetime.now().year
+    })
 
 def reservations(request):
-    return render(request, "reservations.html")
+    return render(request, "reservations.html", {
+        "current_year": datetime.now().year
+    })
 
 def add_to_cart(request, item_id):
     item = get_object_or_404(MenuItem, id=item_id)
