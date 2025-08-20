@@ -136,20 +136,6 @@ def contact_view(request):
 
     return render(request, "contact.html", {"form": form})
 
-    #         # Send email to restaurnat
-    #         subject = f"New contact submission from {contact.name}"
-    #         message = f"Name: {contact.name}\nEmail: {contact.email}\n\nMessage:\n{contact.message}"
-    #         from_email = settings.DEFAULT_FROM_EMAIL
-    #         recipient_list = [settings.EMAIL_HOST_USER]  # Restaurant email
-
-    #         send_mail(subject, message, from_email, recipient_list)
-
-    #         return render(request, 'contact_success.html')
-
-    # else:
-    #     form = ContactForm()
-    # return render(request, 'contact.html', {'form': form})
-
 def about(request):
     # Display information about the restaurant, such as history and mission.
     context = {
@@ -160,20 +146,20 @@ def about(request):
     return render(request, "about.html", context)
 
 def contact(request):
-    if request.method == "POST":
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            # Process data (e.g., save or send email).
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            message = form.cleaned_data['message']
+    # if request.method == "POST":
+    #     form = ContactForm(request.POST)
+    #     if form.is_valid():
+    #         # Process data (e.g., save or send email).
+    #         name = form.cleaned_data['name']
+    #         email = form.cleaned_data['email']
+    #         message = form.cleaned_data['message']
 
-            # You can save or send email here
-            return render(request, "contact_success.html", {"name": name})
-    else:
-        form = ContactForm()
+    #         # You can save or send email here
+    #         return render(request, "contact_success.html", {"name": name})
+    # else:
+    #     form = ContactForm()
 
-    return render(request, "contact.html", {"form": form})
+    return render(request, "contact.html")
 
 def contact_us(request):
     restaurant = Restaurant.objects.first()  # Assuming only one restaurant
