@@ -1,12 +1,21 @@
 {% extends "base.html" %}
 
+{% block title %}About Us - Restaurant{% endblock %}
+
 {% block content %}
-<div class="container">
     <h1>About Us</h1>
+    <p>
+        Welcome to our restaurant! We are passionate about serving delicious food made with fresh ingredients.
+        Our mission is to create a warm and inviting atmosphere hwere friends and family can come together
+        to enjoy great meals and wonderful memories.
+    </p>
+    <p>
+        This is placeholder text for now - you can update it later with your restaurant's real story,
+        team details, or special values.
+    </p>
 
     <!-- restaurant image with descriptive alt text -->
     <img src="{{ restaurant.image.url }}" alt="Photo of {{ restaurant.name }} restaurant" />
     
     <p>{{ restaurant.description }}</p>
-</div>
 {% endblock %}
