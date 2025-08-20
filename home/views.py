@@ -24,6 +24,9 @@ def homepage1(request):
     }
     return render(request, 'homepage1.html', {'restaurant_info': restaurant_info}, {'specials': specials}, {"opening_hours": opening_hours})
 
+def reservations(request):
+    return render(request, "reservations.html")
+
 def add_to_cart(request, item_id):
     item = get_object_or_404(MenuItem, id=item_id)
 
