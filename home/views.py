@@ -13,7 +13,16 @@ from .models import MenuItem, RestaurantInfo, Restaurant, TodaysSpecial, Chef
 def homepage1(request):
     restaurant = RestaurantInfo.objects.first()  # Assuming only one entry
     specials = Special.objects.all()
-    return render(request, 'homepage1.html', {'restaurant_info': restaurant_info}, {'specials': specials})
+    opening_hours = {
+        "Monday": "9:00 AM - 10:00 PM",
+        "Tuesday": "9:00 AM - 10:00 PM",
+        "Wednesday": "9:00 AM - 10:00 PM",
+        "Thrusday": "9:00 AM - 10:00 PM",
+        "Friday": "9:00 AM - 11:00 PM",
+        "Saturday": "10:00 AM - 11:00 PM",
+        "Sunday": "Closed",
+    }
+    return render(request, 'homepage1.html', {'restaurant_info': restaurant_info}, {'specials': specials}, {"opening_hours": opening_hours})
 
 def add_to_cart(request, item_id):
     item = get_object_or_404(MenuItem, id=item_id)
