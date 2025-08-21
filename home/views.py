@@ -168,3 +168,6 @@ def contact_us(request):
 def chef_view(request):
     chef = Chef.objects.first() # assuming only one main chef
     return render(request, "chef.html", {"chef": chef})
+
+def our_story_view(request):
+    return render(request, 'our_story.html')
