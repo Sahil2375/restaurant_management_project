@@ -48,6 +48,10 @@ def reservations(request):
         "current_year": datetime.now().year
     })
 
+def reservations_view(request):
+    return render(request, 'reservations.html')
+
+
 def about_us(request):
     return render(request, "about_us.html", {
         "current_year": datetime.now().year
@@ -154,18 +158,6 @@ def about(request):
     return render(request, "about.html", context)
 
 def contact(request):
-    # if request.method == "POST":
-    #     form = ContactForm(request.POST)
-    #     if form.is_valid():
-    #         # Process data (e.g., save or send email).
-    #         name = form.cleaned_data['name']
-    #         email = form.cleaned_data['email']
-    #         message = form.cleaned_data['message']
-
-    #         # You can save or send email here
-    #         return render(request, "contact_success.html", {"name": name})
-    # else:
-    #     form = ContactForm()
 
     return render(request, "contact.html")
 
