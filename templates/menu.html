@@ -51,15 +51,12 @@
         <div class="menu-container">
             {% for item in menu-items %}
             <div class="menu-item">
-                {% if item.image %}
-                    <img src="{{ item.image.url }}" alt="{{ item.name }}" width="200">
-                {% endif %}
                 <h2>{{ item.name }}</h2>
                 <p>{{ item.description }}</p>
-                <p><strong>${{ item.price }}</strong></p>
+                <span class="price">${{ item.price }}</span>
             </div>
             {% empty %}
-            <p>No menu items available yet.</p>
+            <p>No menu items found.</p>
             {% endfor %}
         </div>
     </body>
