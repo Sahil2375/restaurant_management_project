@@ -9,39 +9,6 @@
 {% endblock %}
 
 {% block content %}
-<style>
-    .opening-hours {
-        margin: 20px auto;
-        padding: 15px;
-        max-width: 400px;
-        background: #f9f9f9;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        font-family: Arial, sans-serif;
-    }
-
-    .opening-hours h2 {
-        text-align: center;
-        margin-bottom: 10px;
-        color: #333;
-    }
-
-    .opening-hours ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    .opening-hours li {
-        display: flex;
-        justify-content: space-between;
-        padding: 5px 0;
-        border-bottom: 1px dashed #ccc;
-    }
-
-    .opening-hours li:last-child {
-        border-bottom: none;
-    }
-</style>
 
     <!-- Logo prominently at the top -->
     {% if restaurant.logo %}
@@ -83,36 +50,6 @@
             <button type="submit">Subscribe</button>
         </form>
     </div>
-
-    <style>
-        .newsletter {
-            margin: 20px auto;
-            max-width: 400px;
-            padding: 15px;
-            background: #f4f4f4;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .newsletter input {
-            padding: 8px;
-            width: 70%;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .newsletter button {
-            padding: 8px 12px;
-            border: none;
-            background: #333;
-            color: #fff;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .newsletter button:hover {
-            background: #ffcc00;
-            color: #000;
-        }
-    </style>
 
     {% block content %}
     <div class="welcome-section">
