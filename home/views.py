@@ -171,3 +171,6 @@ def chef_view(request):
 
 def our_story_view(request):
     return render(request, 'our_story.html')
+
+def privacy_policy_view(request):
+    return render(request, 'privacy_policy.html')
