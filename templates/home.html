@@ -52,6 +52,12 @@
     <div class="welcome-text">
         <h1>Welcome to {{ restaurant.name }}</h1>
 
+        <p>Enjoy our delicious meals!</p>
+
+        <a href="{% url 'reservations' %}">
+            <button>Make a Reservation</button>
+        </a>
+
         {% if restaurant.phone %}
             <div class="phone">Call Us: {{ restaurant.phone }}</div>
         {% endif %}
