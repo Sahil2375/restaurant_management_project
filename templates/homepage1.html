@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}<title>Restaurant Homepage</title>{% endblock %}
+{% block title %}Restaurant Homepage{% endblock %}
 <h1>Welcome to our Restaurant</h1>
+
+<div class="carousel">
+    <div class="slides">
+        <img src="https://source.unsplash.com/800*400/?restaurant" alt="Restaurant Image 1">
+        <img src="https://source.unsplash.com/800*400/?food" alt="Restaurant Image 2">
+        <img src="https://source.unsplash.com/800*400/?dining" alt="Restaurant Image 3">
+    </div>
+</div>
 
 <h2>Today's Special</h2>
 {% if specials %}
@@ -16,32 +24,7 @@
 {% else %}
     <p>No specials available today.</p>
 {% endif %}
-<style>
-    /* Basic styling for the search bar */
-    .search-container {
-        text-align: center;
-        margin-top: 30px;
-    }
-    .search-input {
-        width: 300px;
-        padding: 8px;
-        font-size: 16px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-    }
-    .search-button {
-        padding: 8px 15px;
-        font-size: 16px;
-        border: none;
-        background-color: #4CAF50;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .search-button:hover {
-        background-color: #45a049;
-    }
-</style>
+
 {% block content %}
 <h1 style="text-align:center;">Welcome To Our Restaurant</h1>
 <p style="text-align:center;">Enjoy our freshy prepared meals!</p>
