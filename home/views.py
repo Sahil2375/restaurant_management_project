@@ -115,14 +115,22 @@ def feedback_view(request):
         return render(request, 'feedback.html', {'form': form})
 
 def menu_view(request):
-    menu_items = MenuItem.objects.all().order_by("name")  # fetch all items
 
     # Paginate with 5 items per page (you can change this)
     paginator = Paginator(menu_items, 5)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'menu.html', {'page_obj': page_obj})
+    query = request.GET.get('q')  # Get search term from query params
+    if query:
+        menu_items = MenuItem.objects.filter(name__icontains=query)  # Case-insensitive match
+    else:
+        menu_items = MenuItem.objects.all()
+
+    return render(request, 'menu.html', {
+        'page_obj': page_obj,
+        'menu_items': menu_items, 'query':query
+        })
 
 def contact_view(request):
     if request.method == 'POST':
