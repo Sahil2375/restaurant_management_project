@@ -12,6 +12,7 @@ urlpatterns = [
     path('', views.homepage, name='homepage1'),
     path('', views.home_view, name='home'),
     path('reservations/', views.reservations, name='reseravtions'),
+    path('our_story/', views.our_story_view, name='our_story'),
     path('about/', views.about_us, name='about_us'),
     path('contact/', views.contact, name='contact'),
     path('menu/', views.menu_view, name='menu'),
