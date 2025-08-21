@@ -1,51 +1,9 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>{% block title %}Restaurant{% endblock %}</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-            }
-            nav {
-                background: #333;
-                padding: 10px;
-                text-align: center;
-            }
-            nav a {
-                color: white;
-                text-decoration: none;
-                margin: 0 15px;
-                font-weight: bold;
-            }
-            nav a:hover {
-                color: #ffcc00;
-            }
-            footer {
-                margin-top: auto;
-                background: #333;
-                color: #fff;
-                text-align: center;
-                padding: 10px;
-                font-size: 14px;
-            }
-            .breadcrumb {
-                font-size: 14px;
-                margin: 10px 20px;
-                color: #666;
-            }
-            .breadcrumb a {
-                text-decoration: none;
-                color: #333;
-            }
-            .breadcrumb a:hover {
-                text-decoration: underline;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
     </head>
     <body>
         <!-- Navigation -->
