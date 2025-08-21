@@ -13,11 +13,17 @@
             </li>
             {% endfor %}
 
+            <form method="get" action="">
+                <input type="text" name="q" placeholder="Search Menu..." value="{{ query|default:'' }}">
+                <button type="submit">Search</button>
+            </form>
+
             {% for item in menu_items %}
             <li>
-                {{ item.name }} - ${{ item.price }}
+                <strong>{{ item.name }}</strong> - {{ item.description }} - ${{ item.price }}
                 <a href="{% url 'add_to_cart' item.id %}">Add to Cart</a>
             </li>
+            {% empty %}
             <li>
                 {{ item|availability }}
             </li>
