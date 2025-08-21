@@ -1,41 +1,38 @@
 {% load static %}
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>{% block title %}Restaurant{% endblock %}</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-    </head>
-    <body>
-        <!-- Navigation -->
-        <nav>
-            <a href="{% url 'homepage1' %}">
-                <img src="{% static 'images/logo.png' %}"
-                    alt="Tasty Bites Restaurant Logo - Fine Dining in Mumbai"
-                    style="height: 50px;">
-            </a>
+{% block title %}Restaurant{% endblock %}
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+<body>
+    {% block content %}
+    <!-- Navigation -->
+    <nav>
+        <a href="{% url 'homepage1' %}">
+            <img src="{% static 'images/logo.png' %}"
+                alt="Tasty Bites Restaurant Logo - Fine Dining in Mumbai"
+                style="height: 50px;">
+        </a>
             
-            <a href="{% url 'homepage1' %}">Home</a>
-            <a href="{% url 'reservations' %}">Reservations</a>
-            <a href="{% url 'about_us' %}">About Us</a>
-            <a href="{% url 'contact' %}">Contact</a>
-        </nav>
+        <a href="{% url 'homepage1' %}">Home</a>
+        <a href="{% url 'reservations' %}">Reservations</a>
+        <a href="{% url 'about_us' %}">About Us</a>
+        <a href="{% url 'contact' %}">Contact</a>
+    </nav>
 
-        <!-- Breadcrumb section -->
-        <div class="breadcrumb">
-            {% block breadcrumb %}{% endblock %}
-        </div>
+    <!-- Breadcrumb section -->
+    <div class="breadcrumb">
+        {% block breadcrumb %}{% endblock %}
+    </div>
 
-        <!-- Page content -->
-        <main>
-            {% include "partials/breadcrumb.html" %}
-            {% block content %}{% endblock %}
-        </main>
+    <!-- Page content -->
+    <main>
+        {% include "partials/breadcrumb.html" %}
+        {% block content %}{% endblock %}
+    </main>
+    {% endblock%}
         
-        <!-- Footer -->
-        <footer>
-            &copy; {{ current_year }} Tasty Bites. All rights reserved.
-            <p>&copy; 2025 My Restaurant</p>
-            <a href="{% url 'privacy_policy' %}">Privacy Policy</a>
-        </footer>
-    </body>
-</html>
+    <!-- Footer -->
+    <footer>
+        &copy; {{ current_year }} Tasty Bites. All rights reserved.
+        <p>&copy; 2025 My Restaurant | <a href="{% url 'privacy_policy' %}">Privacy Policy</a></p>
+        <p>Powered by Django</p>
+    </footer>
+</body>
