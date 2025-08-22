@@ -103,3 +103,26 @@ footer .social-links a:hover {
     66% { transform: translateX(-1600px); }
     100% { transform: translateX(0); }
 }
+
+.staff-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.staff-member {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 60px rgba(0,0,0,0.1);
+}
+
+.staff-member img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
