@@ -62,7 +62,7 @@ footer .social-links a:hover {
 }
 
 /* Carousel Styling */
-.corousel {
+.carousel {
     width: 800px;
     margin: 20px auto;
     overflow: hidden;
@@ -70,13 +70,13 @@ footer .social-links a:hover {
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
-.corousel .slides {
+.carousel .slides {
     display: flex;
     width: 2400px; /* images * 800px */
     animation: slide 12s infinite;
 }
 
-.corousel img {
+.carousel img {
     width: 800px;
     height: 400px;
     object-fit: cover;
