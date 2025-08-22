@@ -174,3 +174,6 @@ def our_story_view(request):
 
 def privacy_policy_view(request):
     return render(request, 'privacy_policy.html')
+
+def staff(request):
+    return render(request, 'staff.html')
