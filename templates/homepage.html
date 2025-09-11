@@ -1,79 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <title>{{ restaurant.name }}</title>
-        <style>
-            .search-bar {
-                margin-bottom: 20px;
-            }
-            .hours-box {
-                border: 2px solid #444;
-                padding: 15px;
-                width: 300px;
-                background-color: #f8f8f8;
-                border-radius: 8px;
-            }
-            .hours-box h2 {
-                margin-top:0;
-                text-align: center;
-            }
-            .hours-box ul {
-                list-style: none;
-                padding: 0;
-            }
-            .hours-box li {
-                display: flex;
-                justify-content: space-between;
-                border-bottom: 1px dotted #ccc;
-                padding: 5px 0;
-            }
-            body { 
-                font-family: Arial, sans-serif; 
-                background-color: #fafafa; 
-                margin: 20px; 
-            }
-            h1 { 
-                text-align: center; 
-                color: #333; 
-            }
-            .menu-container {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 20px; 
-            }
-            .menu-item {
-                border: 1px solid #ddd; 
-                padding: 15px;
-                width: 250px;
-                text-align:center;
-                border-radius: 10px; 
-            }
-            .menu-item h3 { 
-                margin-top: 0; 
-                color: #444; 
-            }
-            .price { 
-                color: #e67e22; 
-                font-weight: bold; 
-            }
-        </style>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0>
+        <title>Homepage</title>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
+        <h1>Welcome to my Homepage</h1>
 
-        <!-- Cart Counr -->
-        <div style="float: right;">
-            Cart: {{ cart_count }} items
+        <div class="search-container">
+            <input type="text" placeholder="Type Something...">
+            <button onclick="showSearchMessage()">Search</button>
         </div>
 
-        <h1>Our Menu</h1>
+        <p id="message"></p>
+        <script src="script.js"></script>
+    </body>
+</html>
+
+        <!-- <!-- Cart Counr -->
+        <!-- <!-- <div style="float: right;"> -->
+            <!-- Cart: {{ cart_count }} items -->
+        <!-- </div> -->
+
+        <!-- <h1>Our Menu</h1> --> -->
 
         <!-- Search Bar -->
-        <form method="get" action="" class="search-bar">
+        <!-- <form method="get" action="" class="search-bar">
             <input type="text" name="q" placeholder="Search menu..." value="{{ query }}">
             <button type="submit">Search</button>
-        </form>
+        </form> --> -->
         
-        <h2>Welcome To {{ restaurant.name }}</h2>
+        <!-- <h2>Welcome To {{ restaurant.name }}</h2>
 
         {% if restaurant %}
             <p><strong>Address:</strong> {{ restaurant.address }}</p>
@@ -86,9 +45,9 @@
             <p>Address information is not available.</p>
         {% endif %}
 
-        {% if menu_items %}
+        {% if menu_items %} -->
 
-        {% if restaurant.opening_hours %}
+        <!-- {% if restaurant.opening_hours %}
             <div class="hours-box">
                 <h2>Opening Hours</h2>
                 <ul>
@@ -99,8 +58,8 @@
             </div>
         {% else %}
             <p>Opening hours not available.</p>
-        {% endif %}
-        <div class="menu-container">
+        {% endif %} -->
+        <!-- <div class="menu-container">
             {% for item in menu_items %}
             <div class="menu-item">
                 <h3>{{ item.name }}</h3>
@@ -112,6 +71,6 @@
         </div>
         {% else %}
             <p style="text-align:center;">No menu items available at the moment.</p>
-        {% endif %}
+        {% endif %} -->
     </body>
 </html>

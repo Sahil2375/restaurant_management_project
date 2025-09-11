@@ -37,10 +37,10 @@ class ContactSubmission(models.Model):
         return f"{self.name} - {self.email}"
 
 class RestaurantInfo(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, default="My Restaurant")
     address = models.TextField()
-    opening_hours = models.JSONField(default=dict)  # e.g. {"Mon": "9am - 10pm", ...}
-    phone_number = models.CharField(max_length=20, blank=True)  # New field
+    # opening_hours = models.JSONField(default=dict)  # e.g. {"Mon": "9am - 10pm", ...}
+    # phone_number = models.CharField(max_length=20, blank=True)  # New field
     
     def __str__(self):
         return self.name

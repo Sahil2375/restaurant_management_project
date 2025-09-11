@@ -6,6 +6,8 @@ from django.contrib import messages
 from .forms import FeedbackForm, ContactForm
 from datetime import datetime
 
+from django.http import HttpResponseForbidden
+
 from .models import MenuItem, RestaurantInfo, Restaurant, TodaysSpecial, Chef
 
 # Create your views here.
@@ -177,3 +179,13 @@ def privacy_policy_view(request):
 
 def staff(request):
     return render(request, 'staff.html')
+
+def index(request):
+    restaurant = RestaurantInfo.objects.first()  # fetch first record
+    return render(request, "home/index.html", {"restaurant": restaurant})
+
+def custom_403(request, exception=None):
+    return render(request, '403.html', status=403)
+
+def secret_view(request):
+    return HttpResponseForbidden()
