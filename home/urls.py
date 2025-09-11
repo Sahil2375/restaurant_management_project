@@ -17,6 +17,7 @@ urlpatterns = [
     path('about/', views.about_us, name='about_us'),
     path('contact/', views.contact, name='contact'),
     path('menu/', views.menu_view, name='menu'),
+    path("gallery/", views.gallery, name="gallery"),
 ]
 
 handler404 = 'home.urls.custom_404_view'

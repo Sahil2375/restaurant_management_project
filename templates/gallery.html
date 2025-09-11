@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Restaurant Gallery</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'gallery.css' %}">
+</head>
+<body>
+    <h1>Restaurant Gallery</h1>
+    <div class="gallery">
+        {% for img in images %}
+            <img src="{{ img }}" alt="Restaurant Image">
+        {% endfor %}
+    </div>
+</body>
+</html>

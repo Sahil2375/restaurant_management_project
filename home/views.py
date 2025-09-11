@@ -189,3 +189,12 @@ def custom_403(request, exception=None):
 
 def secret_view(request):
     return HttpResponseForbidden()
+
+def gallery(request):
+    images = [
+        "https://picsum.photos/400/300?random=1",
+        "https://picsum.photos/400/300?random=2",
+        "https://picsum.photos/400/300?random=3",
+        "https://picsum.photos/400/300?random=4",
+    ]
+    return render(request, "home/gallery.html", {"images": images})
