@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Access Denied</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #faf3f3;
+                text-align: center;
+                padding: 50px;
+            }
+            h1 {
+                font-size: 3rem;
+                color: #c0392b;
+            }
+            p {
+                font-size: 1.2rem;
+                color: #555;
+            }
+            a {
+                display: inline-block;
+                margin-top: 20px;
+                padding: 10px 20px;
+                background: #c0392b;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+            }
+            a:hover {
+                background: #a93226;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>403 - Forbidden</h1>
+        <p>Oops! You don't have permission to access this page.</p>
+        <a href="{% url 'index' %}">Go back Home</a>
+    </body>
+</html>
