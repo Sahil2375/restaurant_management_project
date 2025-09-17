@@ -10,11 +10,17 @@ from django.http import HttpResponseForbidden
 
 from .models import MenuItem, RestaurantInfo, Restaurant, TodaysSpecial, Chef
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer
+
 # Create your views here.
 
 def homepage1(request):
     restaurant = RestaurantInfo.objects.first()  # Assuming only one entry
-    specials = Special.objects.all()
+    specials = TodaysSpecial.objects.all()
     opening_hours = {
         "Monday": "9:00 AM - 10:00 PM",
         "Tuesday": "9:00 AM - 10:00 PM",
@@ -26,7 +32,10 @@ def homepage1(request):
     }
 
     context = {
+        "restaurant_info": restaurant,
+        "specials": specials,
         "opening_hours": opening_hours,
+        "current_year": datetime.now().year,
         "page_title": "Welcome to Tasty Bites Restaurant - Best Dining in Mumbai",
     }
 
@@ -98,15 +107,8 @@ def homepage(request):
         'cart_count': cart_count
     })
     
-    if request.method == "POST":
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect(request, 'contact_success.html')  # Redirect after successful submission.
+    return redirect('contact_success')
 
-        else:
-            form = ContactForm()
-        return render(request, 'contact.html', {'form': form})
 
 def feedback_view(request):
     if request.method == 'POST':
@@ -123,15 +125,16 @@ def feedback_view(request):
 def menu_view(request):
 
     # Paginate with 5 items per page (you can change this)
-    paginator = Paginator(menu_items, 5)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
 
     query = request.GET.get('q')  # Get search term from query params
     if query:
         menu_items = MenuItem.objects.filter(name__icontains=query)  # Case-insensitive match
     else:
         menu_items = MenuItem.objects.all()
+
+    paginator = Paginator(menu_items, 5)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
 
     return render(request, 'menu.html', {
         'page_obj': page_obj,
@@ -198,3 +201,22 @@ def gallery(request):
         "https://picsum.photos/400/300?random=4",
     ]
     return render(request, "home/gallery.html", {"images": images})
+
+
+
+class RiderRegisterView(APIView):
+    def post(self, request):
+        serializer = RiderRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            rider = serializer.save()
+            return Response(serializer.to_representation(rider), status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DriverRegisterView(APIView):
+    def post(self, request):
+        serializer = DriverRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            driver = serializer.save()
+            return Response(serializer.to_representation(driver), status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
