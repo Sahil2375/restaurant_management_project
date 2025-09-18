@@ -7,8 +7,6 @@ from .models import RestaurantInfo, MenuItem, Feedback, Chef
 class RestaurantInfoAdmin(admin.ModelAdmin):
     list_display = ('name', 'address', 'phone_number')
 
-admin.site.register(RestaurantInfo)
-
 @admin.register(MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):
     list_display = ('name', 'price')

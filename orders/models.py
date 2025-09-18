@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class Menu(models.Model):
     # Menu model representing a dish.
     name = models.CharField(max_length=100)
-    description = models.TestField()
+    description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2) # e.g. 9999.99 max
 
     def __str__(self):
@@ -16,10 +16,10 @@ class Order(models.Model):
     # Order model representing a customer order.
 
     STATUS_CHOICES = [
-        ('PENDING', Pending),
-        ('PREPARING', Preparing),
-        ('DELIVERED', Delivered),
-        ('CANCELLED', Cancelled),
+        ('PENDING', 'Pending'),
+        ('PREPARING', 'Preparing'),
+        ('DELIVERED', 'Delivered'),
+        ('CANCELLED', 'Cancelled'),
     ]
 
     customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
@@ -58,3 +58,12 @@ class RestaurantInfo(models.Model):
 
     def __str__(self):
         return "Restaurant Info"
+    
+
+class Restaurant(models.Model):
+    name = models.CharField(max_length=200)
+    address = models.TextField()
+    phone = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name

@@ -1,17 +1,13 @@
 from django.shortcuts import render
 from .models import Restaurant
 from datetime import datetime
-import requests
-
 from django.conf import settings
 from django.http import HttpResponseServerError
+import requests
 
-# Create your views here.
-
+# Homepage view that fetches menu items from API
 def homepage(request):
-    # Homepage view that fetches menu items from the API and renders them.
     try:
-        # Example API call (adjust URL to your setup)
         response = requests.get('http://localhost:8000/api/menu/')
         menu_items = response.json() if response.status_code == 200 else []
     except Exception:
@@ -19,8 +15,9 @@ def homepage(request):
 
     return render(request, 'homepage.html', {'menu_items': menu_items})
 
+
+# Hardcoded menu list
 def menu_list_view(request):
-    # harcoded list of menu items
     menu_items = [
         {'name': 'Margherita Pizza', 'price': 300},
         {'name': 'Paneer Tikka', 'price': 250},
@@ -29,6 +26,8 @@ def menu_list_view(request):
     ]
     return render(request, 'menu_list.html', {'menu_items': menu_items})
 
+
+# Contact page
 def contact_us_view(request):
     contact_info = {
         'phone': '+91-9987545643',
@@ -37,40 +36,45 @@ def contact_us_view(request):
     }
     return render(request, 'contact_us.html', {'contact': contact_info})
 
-def homepage_view(request):
-    phone_number = settings.RESTAURANT_PHONE
 
-    return render(request, 'home.html', {'phone': phone_number})
-
+# Homepage showing restaurant name from database
 def homepage_views(request):
-    """
-    Display the homepage with the restaurant name.
-
-    This view fetches the restaurant name from the database and renders it on the homepage.
-    If a database error or any unexpected issue occurs, it handles the error gratefully
-    and returns an error page or message.
-    """
     try:
-        # Assume there is only one Restaurant entry.
         restaurant = Restaurant.objects.first()
         restaurant_name = restaurant.name if restaurant else "Our Restaurant"
+    except Exception:
+        return HttpResponseServerError("An unexpected error occurred. Please try again later.")
 
-        return render(request, 'Home,html', {'restaurant_name': restaurant_name})
-
-    except Expection as e:
-        # Log the error if needed (e.g., using logging module)
-        # import logging
-        # logger = logging.getLogger(__name__)
-        # logger.error("Error loading homepage: %s", e)
-
-        return HttpResponseServerError("An unexpected error occured. Please try again later.")
-    
     context = {
-        'restaurant_name': 'Tasty Bites',
+        'restaurant_name': restaurant_name,
         'welcome_message': 'Welcome To Tasty Bites! Experience delicious food and warm hospitality',
         'current_year': datetime.now().year
     }
     return render(request, 'Home.html', context)
 
+
+# Homepage view that fetches restaurant info
+def homepage_view(request):
+    try:
+        # Assume only one Restaurant instance exists
+        restaurant = Restaurant.objects.first()
+        restaurant_name = restaurant.name if restaurant else "Our Restaurant"
+        context = {
+            'restaurant_name': restaurant_name,
+            'welcome_message': 'Welcome To {}! Enjoy our delicious food.'.format(restaurant_name),
+            'current_year': datetime.now().year
+        }
+        return render(request, 'home.html', context)
+
+    except Exception as e:
+        return HttpResponseServerError("An unexpected error occurred: {}".format(e))
+
+
+# About page
+def about_view(request):
+    return render(request, 'orders/about.html')
+
+
+# Reservations page
 def reservations_view(request):
     return render(request, 'reservations.html')

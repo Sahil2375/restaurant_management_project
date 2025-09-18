@@ -11,7 +11,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
     path('', views.homepage, name='homepage1'),
-    path('', views.home_view, name='home'),
+    # path('', views.home_view, name='home'),
     path('reservations/', views.reservations, name='reseravtions'),
     path('our_story/', views.our_story_view, name='our_story'),
     path('privacy-policy/', views.privacy_policy_view, name='privacy_policy'),
