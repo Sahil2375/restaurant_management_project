@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Rider, Driver
+from .models import Rider, Driver, MenuCategory
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -88,3 +88,9 @@ class DriverRegistrationSerializer(serializers.ModelSerializer):
             "number_plate": instance.number_plate,
             "availability_status": instance.availability_status,
         }
+
+
+class MenuCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MenuCategory
+        fields = ['id', 'name']  # Include 'id' if needed for frontend references

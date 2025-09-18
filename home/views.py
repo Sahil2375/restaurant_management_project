@@ -14,7 +14,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer
+from rest_framework.generics import ListAPIView
+from .models import MenuCategory
+
+from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer
 
 # Create your views here.
 
@@ -220,3 +223,11 @@ class DriverRegisterView(APIView):
             driver = serializer.save()
             return Response(serializer.to_representation(driver), status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MenuCategoryListAPIView(ListAPIView):
+    """
+    API endpoint that allows menu categories to be viewed.
+    """
+    queryset = MenuCategory.objects.all()
+    serializer_class = MenuCategorySerializer

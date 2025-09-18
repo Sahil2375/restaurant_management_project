@@ -2,7 +2,7 @@ from django.urls import path, include
 from django.contrib import admin
 from django.shortcuts import render
 from . import views
-from .views import RiderRegisterView, DriverRegisterView
+from .views import RiderRegisterView, DriverRegisterView, MenuCategoryListAPIView
 
 def custom_404_view(request, exception):
     return render(request, '404.html', status=404)
@@ -21,6 +21,7 @@ urlpatterns = [
     path("gallery/", views.gallery, name="gallery"),
     path("api/rider/register/", RiderRegisterView.as_view(), name="rider-register"),
     path("api/driver/register/", DriverRegisterView.as_view(), name="driver-register"),
+    path("api/menu-categories/", MenuCategoryListAPIView.as_view(), name="menu-categories-list"),
 ]
 
 handler404 = 'home.urls.custom_404_view'
