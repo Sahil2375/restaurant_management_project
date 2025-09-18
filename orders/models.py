@@ -3,6 +3,12 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+class OrderStatus(models.Model):
+    name = models.CharField(max_length=50, unique=True)  # e.g., Pending, Preparing, Delivered
+
+    def __str__(self):
+        return self.name
+
 class Menu(models.Model):
     # Menu model representing a dish.
     name = models.CharField(max_length=100)
@@ -13,28 +19,22 @@ class Menu(models.Model):
         return self.name
 
 class Order(models.Model):
-    # Order model representing a customer order.
-
-    STATUS_CHOICES = [
-        ('PENDING', 'Pending'),
-        ('PREPARING', 'Preparing'),
-        ('DELIVERED', 'Delivered'),
-        ('CANCELLED', 'Cancelled'),
-    ]
-
     customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
     order_items = models.ManyToManyField(Menu, related_name="orders")
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
+
+    # Link to OrderStatus model
+    status = models.ForeignKey(OrderStatus, on_delete=models.SET_NULL, null=True, blank=True, related_name="orders")
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Order #{self.id} - {self.customer.username}"
 
     def calculate_total(self):
-        # Recalculate the total amount from order items.
         self.total_amount = sum(item.price for item in self.order_items.all())
         self.save()
+
 
 class UserProfile(models.Model):
     # Extended home profile for storing additional information beyond Django's built-in User model.
@@ -64,6 +64,20 @@ class Restaurant(models.Model):
     name = models.CharField(max_length=200)
     address = models.TextField()
     phone = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+    
+class MenuCategory(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+    
+class OrderStatus(models.Model):
+    # Model to track the status of an order
+    name = models.CharField(max_length=50, unique=True)  # e.g. Pending, Preparing, Delivered
 
     def __str__(self):
         return self.name
