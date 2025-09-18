@@ -76,7 +76,7 @@ class MenuCategory(models.Model):
         return self.name
     
 class OrderStatus(models.Model):
-    # Model to track the status of an order
+    # Model to track status of the order
     name = models.CharField(max_length=50, unique=True)  # e.g. Pending, Preparing, Delivered
 
     def __str__(self):
