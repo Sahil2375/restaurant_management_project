@@ -6,7 +6,8 @@ from .views import (
     homepage_view,
     homepage_views,
     reservations_view,
-    about_view
+    about_view,
+    OrderHistoryView,
 )
 
 urlpatterns = [
@@ -17,4 +18,5 @@ urlpatterns = [
     path('home-db/', homepage_views, name='home-db-view'),
     path('reservations/', reservations_view, name='reservations'),
     path('about/', about_view, name='about'),
+    path('order-history/', OrderHistoryView.as_view(), name='order-history'),
 ]

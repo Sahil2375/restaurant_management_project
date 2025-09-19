@@ -1,9 +1,16 @@
 from django.shortcuts import render
-from .models import Restaurant
+from .models import Restaurant, Order
 from datetime import datetime
 from django.conf import settings
 from django.http import HttpResponseServerError
 import requests
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from .serializers import OrderSerializer
+
 
 # Homepage view that fetches menu items from API
 def homepage(request):
@@ -78,3 +85,13 @@ def about_view(request):
 # Reservations page
 def reservations_view(request):
     return render(request, 'reservations.html')
+
+
+class OrderHistoryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        orders = Order.objects.filter(user=user).order_by("-created_at")
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
