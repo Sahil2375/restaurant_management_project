@@ -12,12 +12,13 @@ from .models import MenuItem, RestaurantInfo, Restaurant, TodaysSpecial, Chef
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, viewsets, filters
+from rest_framework.pagination import PageNumberPagination
 
 from rest_framework.generics import ListAPIView
-from .models import MenuCategory
+from .models import MenuCategory, MenuItem, Rider, Driver
 
-from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer
+from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemSerializer
 
 # Create your views here.
 
@@ -231,3 +232,20 @@ class MenuCategoryListAPIView(ListAPIView):
     """
     queryset = MenuCategory.objects.all()
     serializer_class = MenuCategorySerializer
+
+class MenuItemPagination(PageNumberPagination):
+    page_size = 10 # Number of items per page
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+class MenuItemViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = MenuItem.objects.all()
+    serializer_class = MenuItemSerializer
+    pagination_class = MenuItemPagination
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.query_params.get('q', None)
+        if search_query:
+            queryset = queryset.filter(name__icontains=search_query)
+        return queryset
