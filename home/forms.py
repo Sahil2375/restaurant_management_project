@@ -1,5 +1,6 @@
 from django import forms
 from .models import Feedback, ContactMessage, Subscriber
+from utils.validation_utils import is_valid_email
 
 class FeedbackForm(forms.ModelForm):
     class Meta:
@@ -25,3 +26,12 @@ class SubscriberForm(forms.ModelForm):
                 'class': 'email-input'
             })
         }
+
+class UserRegistrationForm(forms.Form):
+    email = forms.CharField()
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if not is_valid_email(email):
+            raise forms.ValidationError("Please enter a valid email address.")
+        return email

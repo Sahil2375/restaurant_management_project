@@ -6,7 +6,8 @@ from django.contrib import messages
 from .forms import FeedbackForm, ContactForm
 from datetime import datetime
 
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, JsonResponse
+from utils.validation_utils import is_valid_email
 
 from .models import MenuItem, RestaurantInfo, Restaurant, TodaysSpecial, Chef
 
@@ -271,3 +272,11 @@ class MenuItemViewSet(viewsets.ReadOnlyModelViewSet):
     #     if search_query:
     #         queryset = queryset.filter(name__icontains=search_query)
     #     return queryset
+
+def register_user(request):
+    email = request.POST.get('email', '')
+    if not is_valid_email(email):
+        return JsonResponse({'error': 'Invalid email address'}, status=400)
+    
+    # Continue with registration.
+    return JsonResponse({'message': 'Email is valid'})
