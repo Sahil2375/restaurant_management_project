@@ -273,6 +273,34 @@ class MenuItemViewSet(viewsets.ReadOnlyModelViewSet):
     #         queryset = queryset.filter(name__icontains=search_query)
     #     return queryset
 
+
+class MenuItemsByCategoryView(APIView):
+    """
+    Retrieve menu items filtered by category name.
+    Example: /menu-items-by-category/?category=Pizza
+    """
+
+    def get(self, request, *args, **kwargs):
+        category_name = request.query_params.get("category", None)
+
+        if not category_name:
+            return Response(
+                {"error": "Category parameter is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        items = MenuItem.objects.filter(category__category_name__iexact=category_name)
+
+        if not items.exists():
+            return Response(
+                {"message": f"No items found for category '{category_name}'"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = MenuItemSerializer(items, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 def register_user(request):
     email = request.POST.get('email', '')
     if not is_valid_email(email):

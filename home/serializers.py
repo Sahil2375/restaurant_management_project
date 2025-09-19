@@ -96,6 +96,8 @@ class MenuCategorySerializer(serializers.ModelSerializer):
         fields = ['id', 'name']  # Include 'id' if needed for frontend references
 
 class MenuItemSerializer(serializers.ModelSerializer):
+    category = serializers.StringRelatedField()  # Shows category name instead of ID
+    
     class Meta:
         model = MenuItem
         fields = '__all__'  # Include all fields of MenuItem

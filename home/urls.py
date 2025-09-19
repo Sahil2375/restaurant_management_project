@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.shortcuts import render
 from rest_framework.routers import DefaultRouter
 from . import views
-from .views import RiderRegisterView, DriverRegisterView, MenuCategoryListAPIView, MenuItemViewSet
+from .views import RiderRegisterView, DriverRegisterView, MenuCategoryListAPIView, MenuItemViewSet, MenuItemsByCategoryView
 
 router = DefaultRouter()
 router.register(r'menu-items', MenuItemViewSet, basename='menuitem')
@@ -13,6 +13,7 @@ def custom_404_view(request, exception):
 
 urlpatterns = [
     path('', include(router.urls)),
+    path("menu-items-by-category/", MenuItemsByCategoryView.as_view(), name="menu-items-by-category"),
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
     path('', views.homepage, name='homepage1'),
