@@ -12,7 +12,8 @@ from .models import MenuItem, RestaurantInfo, Restaurant, TodaysSpecial, Chef
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, viewsets, filters
+from rest_framework import status
+from rest_framework import viewsets, filters, permissions
 from rest_framework.pagination import PageNumberPagination
 
 from rest_framework.generics import ListAPIView
@@ -241,11 +242,32 @@ class MenuItemPagination(PageNumberPagination):
 class MenuItemViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
-    pagination_class = MenuItemPagination
+    # pagination_class = MenuItemPagination
+    permission_classes = [permissions.IsAdminUser]  # Only admins can update
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        search_query = self.request.query_params.get('q', None)
-        if search_query:
-            queryset = queryset.filter(name__icontains=search_query)
-        return queryset
+    def update(self, request, pk=None):
+        menu_item = get_object_or_404(MenuItem, pk=pk)
+        serializer = self.get_serializer(menu_item, data=request.data, partial=False)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def partial_update(self, request, pk=None):
+        """Handle PATCH requests (partial updates)."""
+        menu_item = get_object_or_404(MenuItem, pk=pk)
+        serializer = self.get_serializer(menu_item, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     search_query = self.request.query_params.get('q', None)
+    #     if search_query:
+    #         queryset = queryset.filter(name__icontains=search_query)
+    #     return queryset

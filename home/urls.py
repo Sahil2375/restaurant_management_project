@@ -1,13 +1,18 @@
 from django.urls import path, include
 from django.contrib import admin
 from django.shortcuts import render
+from rest_framework.routers import DefaultRouter
 from . import views
-from .views import RiderRegisterView, DriverRegisterView, MenuCategoryListAPIView
+from .views import RiderRegisterView, DriverRegisterView, MenuCategoryListAPIView, MenuItemViewSet
+
+router = DefaultRouter()
+router.register(r'menu-items', MenuItemViewSet, basename='menuitem')
 
 def custom_404_view(request, exception):
     return render(request, '404.html', status=404)
 
 urlpatterns = [
+    path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
     path('', views.homepage, name='homepage1'),

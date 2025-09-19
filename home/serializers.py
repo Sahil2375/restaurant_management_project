@@ -99,3 +99,8 @@ class MenuItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuItem
         fields = '__all__'  # Include all fields of MenuItem
+
+    def validate_price(self, value):
+        if value < 0:
+            raise serializers.ValidationError("Price must be a positive number.")
+        return value
