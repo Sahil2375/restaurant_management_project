@@ -5,6 +5,8 @@ from django.conf import settings
 from django.http import HttpResponseServerError
 import requests
 
+from home.models import MenuItem
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -15,8 +17,7 @@ from .serializers import OrderSerializer
 # Homepage view that fetches menu items from API
 def homepage(request):
     try:
-        response = requests.get('http://localhost:8000/api/menu/')
-        menu_items = response.json() if response.status_code == 200 else []
+        menu_items = MenuItem.objects.all()
     except Exception:
         menu_items = []
 

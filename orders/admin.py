@@ -11,10 +11,14 @@ class MenuAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'customer', 'total_amount', 'status', 'created_at')
-    list_filter = ('status', 'created_at')
-    search_fields = ('customer__username')
+    list_display = ('id', 'user', 'created_at')
+    list_filter = ('created_at',)
+    search_fields = ('user__username',)
     filter_horizontal = ('order_items',) # For ManyToManyField Selection
+
+    def get_total_amount(self, obj):
+        return obj.total_price
+    get_total_amount.short_description = 'Total Amount'
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):

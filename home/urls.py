@@ -14,8 +14,6 @@ def custom_404_view(request, exception):
 urlpatterns = [
     path('', include(router.urls)),
     path("menu-items-by-category/", MenuItemsByCategoryView.as_view(), name="menu-items-by-category"),
-    path('admin/', admin.site.urls),
-    path('', include('home.urls')),
     path('', views.homepage, name='homepage1'),
     # path('', views.home_view, name='home'),
     path('reservations/', views.reservations, name='reseravtions'),
