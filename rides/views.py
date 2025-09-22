@@ -3,6 +3,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from .models import Ride, Driver
 from .serializers import UpdateLocationSerializer, TrackRideSerializer
 from .permissions import IsDriver, IsRideRiderOrAdmin
@@ -45,3 +47,46 @@ class TrackRide(APIView):
         }
         serializer = TrackRideSerializer(data)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def complete_ride(request, ride_id):
+    """Driver marks ride as completed."""
+    try:
+        ride = Ride.objects.get(id=ride_id)
+    except Ride.DoesNotExist:
+        return Response({"error": "Ride not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    # Rule 1: Only assigned driver can complete
+    if ride.driver != request.user:
+        return Response({"error": "You are not assigned to this ride."}, status=status.HTTP_403_FORBIDDEN)
+
+    # Rule 2: Ride must be ongoing
+    if ride.status != "ONGOING":
+        return Response({"error": "Ride can only be completed if it is ongoing."}, status=status.HTTP_400_BAD_REQUEST)
+
+    ride.status = "COMPLETED"
+    ride.save()
+    return Response({"message": "Ride marked as completed."}, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def cancel_ride(request, ride_id):
+    """Rider cancels ride if still requested."""
+    try:
+        ride = Ride.objects.get(id=ride_id)
+    except Ride.DoesNotExist:
+        return Response({"error": "Ride not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    # Rule 1: Only rider who booked can cancel
+    if ride.rider != request.user:
+        return Response({"error": "You are not the rider of this ride."}, status=status.HTTP_403_FORBIDDEN)
+
+    # Rule 2: Can only cancel if still requested
+    if ride.status != "REQUESTED":
+        return Response({"error": "Cannot cancel a ride that is already ongoing or completed."}, status=status.HTTP_400_BAD_REQUEST)
+
+    ride.status = "CANCELLED"
+    ride.save()
+    return Response({"message": "Ride cancelled successfully."}, status=status.HTTP_200_OK)
