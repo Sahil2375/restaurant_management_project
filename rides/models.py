@@ -2,6 +2,7 @@
 
 # models.py
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 
 class Driver(models.Model):
@@ -16,7 +17,13 @@ class Ride(models.Model):
         ('COMPLETED', 'Completed'),
         ('CANCELLED', 'Cancelled'),
     ]
-    rider = models.ForeignKey(User, on_delete=models.CASCADE, related_name='rides')
-    driver = models.ForeignKey(Driver, on_delete=models.SET_NULL, null=True, blank=True)
+    rider = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='rides', on_delete=models.CASCADE
+    )
+    driver = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='drives', on_delete=models.SET_NULL, null=True, blank=True
+    )
+    pickup = models.CharField(max_length=255)
+    drop = models.CharField(max_length=255)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='REQUESTED')
     created_at = models.DateTimeField(auto_now_add=True)

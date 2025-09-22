@@ -2,11 +2,11 @@
 # views.py
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import Ride, Driver
-from .serializers import UpdateLocationSerializer, TrackRideSerializer
+from .serializers import UpdateLocationSerializer, TrackRideSerializer, RideHistorySerializer
 from .permissions import IsDriver, IsRideRiderOrAdmin
 from django.shortcuts import get_object_or_404
 
@@ -90,3 +90,23 @@ def cancel_ride(request, ride_id):
     ride.status = "CANCELLED"
     ride.save()
     return Response({"message": "Ride cancelled successfully."}, status=status.HTTP_200_OK)
+
+class RiderHistoryView(generics.ListAPIView):
+    serializer_class = RideHistorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Ride.objects.filter(
+            rider=self.request.user,
+            status__in=['COMPLETED', 'CANCELLED']
+        ).order_by('-created_at')
+    
+class DriverHistoryView(generics.ListAPIView):
+    serializer_class = RideHistorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Ride.objects.filter(
+            driver=self.request.user,
+            status__in=['COMPLETED', 'CANCELLED']
+        ).order_by('-created_at')
