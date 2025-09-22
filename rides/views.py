@@ -6,7 +6,7 @@ from rest_framework import status, generics, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import Ride, Driver
-from .serializers import UpdateLocationSerializer, TrackRideSerializer, RideHistorySerializer
+from .serializers import UpdateLocationSerializer, TrackRideSerializer, RideHistorySerializer, RideFeedbackSerializer
 from .permissions import IsDriver, IsRideRiderOrAdmin
 from django.shortcuts import get_object_or_404
 
@@ -110,3 +110,20 @@ class DriverHistoryView(generics.ListAPIView):
             driver=self.request.user,
             status__in=['COMPLETED', 'CANCELLED']
         ).order_by('-created_at')
+    
+class RideFeedbackView(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, ride_id):
+        serializer = RideFeedbackSerializer(
+            data=request.data, 
+            context={"request": request, "ride_id": ride_id}
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"message": "Feedback submitted successfully."}, 
+                status=status.HTTP_201_CREATED
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
