@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import RetrieveAPIView
 from .serializers import OrderSerializer
 
 from orders.utils import send_order_confirmation_email
@@ -107,3 +108,8 @@ def place_order(request):
 
     result = send_order_confirmation_email(order_id, customer_email, customer_name)
     print(result)  # { "success": True, "message": "Email sent successfully." } or { "success": False, "message": "Error details..." }
+
+class OrderDetailView(RetrieveAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    lookup_field = 'id'  # URL will match by 'id'

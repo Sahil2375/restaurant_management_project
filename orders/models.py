@@ -103,6 +103,7 @@ class Order(models.Model):
 
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="orders", null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     order_items = models.ManyToManyField('home.MenuItem', blank=True, related_name="orders")
 
@@ -111,7 +112,7 @@ class Order(models.Model):
     objects = ActiveOrderManager()
 
     def __str__(self):
-        return f"Order #{self.id} - {self.status}"
+        return f"Order #{self.id} - {self.user.username}"
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
