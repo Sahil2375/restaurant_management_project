@@ -13,6 +13,8 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .serializers import OrderSerializer
 
+from orders.utils import send_order_confirmation_email
+
 
 # Homepage view that fetches menu items from API
 def homepage(request):
@@ -96,3 +98,12 @@ class OrderHistoryView(APIView):
         orders = Order.objects.filter(user=user).order_by("-created_at")
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+def place_order(request):
+    # Assume order created successfully
+    order_id = 123
+    customer_email = "customer@example.com"
+    customer_name = "Nathen Ruth"
+
+    result = send_order_confirmation_email(order_id, customer_email, customer_name)
+    print(result)  # { "success": True, "message": "Email sent successfully." } or { "success": False, "message": "Error details..." }
