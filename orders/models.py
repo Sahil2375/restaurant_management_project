@@ -103,7 +103,7 @@ class Order(models.Model):
 
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="orders", null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     created_at = models.DateTimeField(auto_now_add=True)
     order_items = models.ManyToManyField('home.MenuItem', blank=True, related_name="orders")
 

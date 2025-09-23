@@ -102,11 +102,20 @@ class ContactMessage(models.Model):
         return f"{self.name} - {self.email}"
     
 class Restaurant(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=100)
     address = models.TextField()
     phone = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    # New field for operating days
+    operating_days = models.CharField(
+        max_length=50, # enough for comma-separated days
+        default="Mon, Tue, Wed, Thurs, Fri, Sat, Sun",
+        help_text="Comma-separated days (e.g., Mon, Tue, Wed, Thurs, Fri, Sat, Sun)",
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return self.name
