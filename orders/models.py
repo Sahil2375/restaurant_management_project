@@ -103,12 +103,12 @@ class Order(models.Model):
     ]
 
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="orders", null=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     order_items = models.ManyToManyField('home.MenuItem', blank=True, related_name="orders")
     
-    customer_name = models.CharField(max_length=100)
+    customer_name = models.CharField(max_length=100, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
 
     def calculate_total(self):
         """Calculate total cost of the order by summing all order items."""
