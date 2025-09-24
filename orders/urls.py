@@ -1,4 +1,5 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 from .views import (
     homepage,
     menu_list_view,
@@ -8,10 +9,15 @@ from .views import (
     reservations_view,
     about_view,
     OrderHistoryView,
-    OrderDetailView
+    OrderDetailView,
+    OrderViewSet,
 )
 
-urlpatterns = [
+router = DefaultRouter()
+router.register(r'orders', OrderViewSet, basename='order')
+
+urlpatterns = router.urls
+[
     path('', homepage, name='homepage'),
     path('menu/', menu_list_view, name='menu-list'),
     path('contact/', contact_us_view, name='contact-us'),

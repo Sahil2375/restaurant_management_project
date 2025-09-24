@@ -23,9 +23,9 @@ class MenuItemSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "price", "description"]
 
 class OrderSerializer(serializers.ModelSerializer):
-    order_items = MenuItemSerializer(many=True, read_only=True)
-    user = serializers.StringRelatedField() # or 'UserSerializer' if want details
+    # order_items = MenuItemSerializer(many=True, read_only=True)
+    # user = serializers.StringRelatedField() # or 'UserSerializer' if want details
 
     class Meta:
         model = Order
-        fields = ['id', 'user', 'status', 'total_price', 'created_at', 'order_items']
+        fields = ['id', 'customer_name', 'status', 'created_at']

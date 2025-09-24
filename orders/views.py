@@ -3,18 +3,20 @@ from .models import Restaurant, Order
 from datetime import datetime
 from django.conf import settings
 from django.http import HttpResponseServerError
+from django.shortcuts import get_object_or_404
 import requests
 
 from home.models import MenuItem
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import RetrieveAPIView
 from .serializers import OrderSerializer
 
-from orders.utils import send_order_confirmation_email
+from orders.utils import send_order_confirmation_email, send_email
 
 
 # Homepage view that fetches menu items from API
@@ -113,3 +115,40 @@ class OrderDetailView(RetrieveAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     lookup_field = 'id'  # URL will match by 'id'
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    @action(detail=True, methods=["delete"], url_path="cancel")
+    def cancel_order(self, request, pk=None):
+        """Cancel an order by setting its status to 'Cancelled'."""
+        order = get_object_or_404(Order, pk=pk)
+
+        # (Optional) Add logic to check if the user owns the order
+        # if order.customer != request.user:
+        #     return Response({"error": "You can only cancel your own orders."}, status=403)
+
+        if order.status == "Cancelled":
+            return Response({"message": "Order is already cancelled."}, status=status.HTTP_400_BAD_REQUEST)
+
+        order.status = "Cancelled"
+        order.save()
+
+        serializer = self.get_serializer(order)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+class OrderConfirmationView(APIView):
+    def post(self, request, *args, **kwargs):
+        customer_email = request.data.get("email")
+        order_id = request.data.get("order_id")
+
+        subject = f"Order #{order_id} Confirmation"
+        body = f"Thank you for your order! Your order ID is {order_id}."
+
+        if send_email(customer_email, subject, body):
+            return Response({"message": "Confirmation email sent."}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Failed to send email."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

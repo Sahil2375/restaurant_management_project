@@ -88,3 +88,43 @@ def send_order_confirmation_email(order_id, customer_email, customer_name=None):
         error_message = f"Error sending email: {str(e)}"
         logger.error(error_message, exc_info=True)
         return {"success": False, "message": error_message}
+
+
+def send_email(recipient_email, subject, message_body, from_email=None):
+    """
+    Utility function to send an email.
+    
+    Args:
+        recipient_email (str): Recipient email address
+        subject (str): Subject of the email
+        message_body (str): Body of the email
+        from_email (str, optional): Sender email. Defaults to settings.DEFAULT_FROM_EMAIL.
+    
+    Returns:
+        bool: True if email sent successfully, False otherwise.
+    """
+    try:
+        # Validate email format
+        validate_email(recipient_email)
+
+        if not from_email:
+            from_email = settings.DEFAULT_FROM_EMAIL
+
+        send_mail(
+            subject=subject,
+            message=message_body,
+            from_email=from_email,
+            recipient_list=[recipient_email],
+            fail_silently=False,
+        )
+        return True
+
+    except ValidationError:
+        print(f"Invalid email address: {recipient_email}")
+        return False
+    except BadHeaderError:
+        print("Invalid header found.")
+        return False
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        return False
