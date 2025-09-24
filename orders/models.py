@@ -1,4 +1,5 @@
 from django.db import models
+from decimal import Decimal
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from home.models import MenuItem  # assuming MenuItem is in home app
@@ -104,8 +105,17 @@ class Order(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="orders", null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
-    created_at = models.DateTimeField(auto_now_add=True)
     order_items = models.ManyToManyField('home.MenuItem', blank=True, related_name="orders")
+    
+    customer_name = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def calculate_total(self):
+        """Calculate total cost of the order by summing all order items."""
+        total = Decimal('0.00')
+        for item in self.order_items.all():
+            total += item.price * item.quantity
+        return total
 
 
     # Attach the custom manager
@@ -118,10 +128,11 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
     menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"{self.menu_item.name} (x{self.quantity})"
+        return f"{self.menu_item.name} x {self.quantity}"
 
-    def calculate_total(self):
-        self.total_amount = sum(item.price for item in self.order_items.all())
-        self.save()
+    # def calculate_total(self):
+    #     self.total_amount = sum(item.price for item in self.order_items.all())
+    #     self.save()
