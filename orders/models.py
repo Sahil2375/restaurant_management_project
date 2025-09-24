@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from home.models import MenuItem  # assuming MenuItem is in home app
+from .utils import generate_unique_order_id
 
 # Create your models here.
 
@@ -95,21 +96,30 @@ class ActiveOrderManager(models.Manager):
         return super().get_queryset().filter(status__in=['pending', 'processing'])
     
 class Order(models.Model):
-    STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('processing', 'Processing'),
-        ('completed', 'Completed'),
-        ('cancelled', 'Cancelled'),
-    ]
+    order_id = models.CharField(max_length=12, unique=True, editable=False)
+    customer_name = models.CharField(max_length=100, blank=True, null=True)
+    status = models.CharField(
+        max_length=20, 
+        choices= [
+            ('pending', 'Pending'),
+            ('processing', 'Processing'),
+            ('completed', 'Completed'),
+            ('cancelled', 'Cancelled'),
+        ], 
+        default='pending'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="orders", null=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     order_items = models.ManyToManyField('home.MenuItem', blank=True, related_name="orders")
-    
-    customer_name = models.CharField(max_length=100, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
 
+    def save(self, *args, **kwargs):
+        if not self.order_id:
+            self.order_id = generate_unique_order_id()
+        super().save(*args, **kwargs)
+    
+    
     def calculate_total(self):
         """Calculate total cost of the order by summing all order items."""
         total = Decimal('0.00')
@@ -122,7 +132,7 @@ class Order(models.Model):
     objects = ActiveOrderManager()
 
     def __str__(self):
-        return f"Order #{self.id} - {self.user.username}"
+        return f"Order {self.order_id} ({self.status})"
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
@@ -132,7 +142,3 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.menu_item.name} x {self.quantity}"
-
-    # def calculate_total(self):
-    #     self.total_amount = sum(item.price for item in self.order_items.all())
-    #     self.save()

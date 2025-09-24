@@ -1,6 +1,6 @@
 import string
 import secrets
-from .models import Coupon  # Assuming you have a Coupon model to store codes
+from .models import Coupon, Order
 
 import logging
 from django.core.mail import send_mail, BadHeaderError
@@ -128,3 +128,17 @@ def send_email(recipient_email, subject, message_body, from_email=None):
     except Exception as e:
         print(f"Error sending email: {e}")
         return False
+    
+
+def generate_unique_order_id(length=8):
+    """
+    Generate a unique alphanumeric order ID.
+    Uses the secrets module for cryptographic randomness.
+    Ensures uniqueness by checking against the database.
+    """
+    characters = string.ascii_uppercase + string.digits
+
+    while True:
+        order_id = ''.join(secrets.choice(characters) for _ in range(length))
+        if not Order.objects.filter(order_id=order_id).exists():
+            return order_id
