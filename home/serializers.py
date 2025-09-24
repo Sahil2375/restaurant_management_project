@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Rider, Driver, MenuCategory, MenuItem
+from .models import Rider, Driver, MenuCategory, MenuItem, ContactFormSubmission
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -106,3 +106,9 @@ class MenuItemSerializer(serializers.ModelSerializer):
         if value < 0:
             raise serializers.ValidationError("Price must be a positive number.")
         return value
+    
+class ContactFormSubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactFormSubmission
+        fields = ['id', 'name', 'email', 'message', 'submitted_at']
+        read_only_fields = ['id', 'submitted_at']

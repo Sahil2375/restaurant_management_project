@@ -17,10 +17,10 @@ from rest_framework import status
 from rest_framework import viewsets, filters, permissions
 from rest_framework.pagination import PageNumberPagination
 
-from rest_framework.generics import ListAPIView
-from .models import MenuCategory, MenuItem, Rider, Driver
+from rest_framework.generics import ListAPIView, CreateAPIView
+from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission
 
-from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemSerializer
+from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemSerializer, ContactFormSubmissionSerializer
 
 # Create your views here.
 
@@ -308,3 +308,17 @@ def register_user(request):
     
     # Continue with registration.
     return JsonResponse({'message': 'Email is valid'})
+
+class ContactFormSubmissionView(CreateAPIView):
+    queryset = ContactFormSubmission.objects.all()
+    serializer_class = ContactFormSubmissionSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"message": "Contact form submitted successfully!"},
+                status=status.HTTP_201_CREATED
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
