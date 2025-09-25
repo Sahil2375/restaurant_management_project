@@ -31,5 +31,5 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ['id', 'customer_name', 'status', 'created_at']
 
 class UpdateOrderStatusSerializer(serializers.Serializer):
-    order_id = serializers.CharField()
+    order_id = serializers.IntegerField()
     status = serializers.ChoiceField(choices=Order.STATUS_CHOICES)

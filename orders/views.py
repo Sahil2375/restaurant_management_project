@@ -169,3 +169,30 @@ class UpdateOrderStatusView(APIView):
             order.save()
             return Response({"message": "Order status updated successfully.", "order_id": order.order_id, "new_status": order.status})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+class UpdateOrderStatusAPIView(APIView):
+    """
+    API view to update the status of an existing order.
+    """
+
+    def put(self, request):
+        serializer = UpdateOrderStatusSerializer(data=request.data)
+        if serializer.is_valid():
+            order_id = serializer.validated_data['order_id']
+            new_status = serializer.validated_data['status']
+
+            try:
+                order = Order.objects.get(id=order_id)
+            except Order.DoesNotExist:
+                return Response({'error': 'Order not found'}, status=status.HTTP_404_NOT_FOUND)
+
+            order.status = new_status
+            order.save()
+            return Response({
+                'message': 'Order status updated successfully',
+                'order_id': order.id,
+                'status': order.status
+            }, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
