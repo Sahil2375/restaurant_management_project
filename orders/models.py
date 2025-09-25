@@ -106,53 +106,35 @@ class OrderMAnager(models.Manager):
 
 
 class Order(models.Model):
-    order_id = models.CharField(max_length=20, unique=True, blank=True)
-    customer_name = models.CharField(max_length=100, blank=True, null=True)
-    status = models.CharField(
-        max_length=20, 
-        choices= [
-            ('pending', 'Pending'),
-            ('processing', 'Processing'),
-            ('completed', 'Completed'),
-            ('cancelled', 'Cancelled'),
-        ], 
-        default='pending'
-    )
+    STATUS_CHOICES = [
+            ('Pending', 'Pending'),
+            ('Processing', 'Processing'),
+            ('Completed', 'Completed'),
+            ('Cancelled', 'Cancelled'),
+        ]
+    
 
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="orders", null=True)
+    order_id = models.CharField(max_length=20, unique=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
-    def calculate_total(self):
-        """
-        Calculate the total cost of the order by suming all item prices,
-        taking into account quantity and applying discounts if applicable.
-        """
-        total = 0
-        order_items = self.items.all()  # Assuming a related_name of 'items' on OrderItem model
-        
-        for item in order_items:
-            # Apply discount if item has a discount.
-            discounted_price = calculate_discount(item.price, item.discount if hasattr(item, 'discount') else 0)
-            total += discounted_price * item.quantity
-        return total
-
-    # total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
-    # order_items = models.ManyToManyField('home.MenuItem', blank=True, related_name="orders")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    customer_name = models.CharField(max_length=100, blank=True, null=True)
 
     objects = models.Manager()  # The default manager.
     custom = OrderMAnager()  # Our custom manager.
 
     def save(self, *args, **kwargs):
         if not self.order_id:
+            from .utils import generate_unique_order_id
             self.order_id = generate_unique_order_id(Order)
         super().save(*args, **kwargs)
-    
+
     
     def calculate_total(self):
-        """Calculate total cost of the order by summing all order items."""
-        total = Decimal('0.00')
-        for item in self.order_items.all():
-            total += item.price * item.quantity
+        from .utils import calculate_discount
+        total = 0
+        for item in self.items.all():
+            total += calculate_discount(item.price, getattr(item, 'discount', 0)) * item.quantity
         return total
 
 

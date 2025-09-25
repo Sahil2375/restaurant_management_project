@@ -11,6 +11,7 @@ from .views import (
     OrderHistoryView,
     OrderDetailView,
     OrderViewSet,
+    UpdateOrderStatusView,
 )
 
 router = DefaultRouter()
@@ -27,4 +28,5 @@ urlpatterns = router.urls
     path('about/', about_view, name='about'),
     path('order-history/', OrderHistoryView.as_view(), name='order-history'),
     path('orders/<int:id>/', OrderDetailView.as_view(), name='order-detail'),  # New detail view
+    path('orders/update-status/', UpdateOrderStatusView.as_view(), name='update-order-status'),  # New status update view
 ]

@@ -14,7 +14,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import RetrieveAPIView
-from .serializers import OrderSerializer
+from .serializers import OrderSerializer, UpdateOrderStatusSerializer
 
 from orders.utils import send_order_confirmation_email, send_email
 
@@ -152,3 +152,20 @@ class OrderConfirmationView(APIView):
             return Response({"message": "Confirmation email sent."}, status=status.HTTP_200_OK)
         else:
             return Response({"error": "Failed to send email."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class UpdateOrderStatusView(APIView):
+    def post(self, request):
+        serializer = UpdateOrderStatusSerializer(data=request.data)
+        if serializer.is_valid():
+            order_id = serializer.validated_data['order_id']
+            new_status = serializer.validated_data['status']
+
+            try:
+                order = Order.objects.get(order_id=order_id)
+            except Order.DoesNotExist:
+                return Response({"error": "Order not found."}, status=status.HTTP_404_NOT_FOUND)
+            
+            order.status = new_status
+            order.save()
+            return Response({"message": "Order status updated successfully.", "order_id": order.order_id, "new_status": order.status})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
