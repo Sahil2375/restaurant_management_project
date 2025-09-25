@@ -3,7 +3,8 @@ from decimal import Decimal
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from home.models import MenuItem  # assuming MenuItem is in home app
-from .utils import generate_unique_order_id
+from .utils import generate_unique_order_id, calculate_discount
+
 
 # Create your models here.
 
@@ -105,7 +106,7 @@ class OrderMAnager(models.Manager):
 
 
 class Order(models.Model):
-    order_id = models.CharField(max_length=12, unique=True, blank=True, null=True, editable=False)
+    order_id = models.CharField(max_length=20, unique=True, blank=True)
     customer_name = models.CharField(max_length=100, blank=True, null=True)
     status = models.CharField(
         max_length=20, 
@@ -117,14 +118,29 @@ class Order(models.Model):
         ], 
         default='pending'
     )
+
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="orders", null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def calculate_total(self):
+        """
+        Calculate the total cost of the order by suming all item prices,
+        taking into account quantity and applying discounts if applicable.
+        """
+        total = 0
+        order_items = self.items.all()  # Assuming a related_name of 'items' on OrderItem model
+        
+        for item in order_items:
+            # Apply discount if item has a discount.
+            discounted_price = calculate_discount(item.price, item.discount if hasattr(item, 'discount') else 0)
+            total += discounted_price * item.quantity
+        return total
+
+    # total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    # order_items = models.ManyToManyField('home.MenuItem', blank=True, related_name="orders")
 
     objects = models.Manager()  # The default manager.
     custom = OrderMAnager()  # Our custom manager.
-
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="orders", null=True)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
-    order_items = models.ManyToManyField('home.MenuItem', blank=True, related_name="orders")
 
     def save(self, *args, **kwargs):
         if not self.order_id:
@@ -148,9 +164,11 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
+    product = models.CharField(max_length=100)
     menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     quantity = models.PositiveIntegerField(default=1)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    discount = models.DecimalField(max_digits=5, decimal_places=2, default=0)  # e.g., 10.00 for 10% discount
 
     def __str__(self):
         return f"{self.menu_item.name} x {self.quantity}"

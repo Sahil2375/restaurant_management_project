@@ -122,3 +122,13 @@ def send_email(recipient_email, subject, message_body, from_email=None):
     except Exception as e:
         print(f"Error sending email: {e}")
         return False
+
+def calculate_discount(price, discount_percent):
+    """
+    Calculate discounted price.
+    price: Decimal or float
+    discount_percent: number (0-100)
+    """
+    if discount_percent:
+        return price * (1 - discount_percent / 100)
+    return price
