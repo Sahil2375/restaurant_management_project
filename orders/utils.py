@@ -1,7 +1,5 @@
 import string
 import secrets
-from .models import Coupon, Order
-
 import logging
 from django.core.mail import send_mail, BadHeaderError
 from django.core.exceptions import ValidationError
@@ -10,45 +8,52 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
+
 def generate_coupon_code(length=10):
     """
-    Generate a unique alphanumeric coupon code.
-
-    Args:
-        length (int): Length of the coupon code. Default is 10.
-
-    Returns:
-        str: A unique alphanumeric coupon code.
+    Generate a random alphanumeric coupon code.
+    Does not check database uniqueness (model should handle if required).
     """
-    alphabet = string.ascii_uppercase + string.digits
+    characters = string.ascii_uppercase + string.digits
+    return ''.join(secrets.choice(characters) for _ in range(length))
+
+
+# def generate_order_code(length=8):
+#     """
+#     Generate a random alphanumeric string for order_id.
+#     This does NOT check database uniqueness — uniqueness must be enforced in the model.
+#     """
+#     characters = string.ascii_uppercase + string.digits
+#     return ''.join(secrets.choice(characters) for _ in range(length))
+
+
+def generate_unique_order_id(model_class, length=8):
+    """
+    Generate a unique alphanumeric order_id for a given model.
+    Avoids circular imports by passing the model_class explicitly.
+    
+    Args:
+        model_class (Django model): Model class that has an 'order_id' field.
+        length (int): Length of the generated order_id string.
+    
+    Returns:
+        str: Unique order_id string.
+    """
+    characters = string.ascii_uppercase + string.digits
 
     while True:
-        # Generate random code
-        code = ''.join(secrets.choice(alphabet) for _ in range(length))
-
-        # Check uniqueness in database
-        if not Coupon.objects.filter(code=code).exists():
-            return code
-        
+        order_id = ''.join(secrets.choice(characters) for _ in range(length))
+        if not model_class.objects.filter(order_id=order_id).exists():
+            return order_id
 
 
 def send_order_confirmation_email(order_id, customer_email, customer_name=None):
     """
     Sends an order confirmation email to the customer.
-
-    Args:
-        order_id (int/str): The ID of the order
-        customer_email (str): The customer's email address
-        customer_name (str, optional): The customer's name for personalization
-
-    Returns:
-        dict: { 'success': True/False, 'message': '...' }
     """
     try:
-        # Validate email
         validate_email(customer_email)
 
-        # Compose subject and body
         subject = f"Order Confirmation - #{order_id}"
         greeting = f"Hello {customer_name}," if customer_name else "Hello,"
         message = (
@@ -62,13 +67,12 @@ def send_order_confirmation_email(order_id, customer_email, customer_name=None):
         from_email = settings.DEFAULT_FROM_EMAIL
         recipient_list = [customer_email]
 
-        # Send the email
         send_mail(
             subject,
             message,
             from_email,
             recipient_list,
-            fail_silently=False,  # Raise error if email fails
+            fail_silently=False,
         )
 
         logger.info(f"Order confirmation email sent to {customer_email} for order #{order_id}")
@@ -93,18 +97,8 @@ def send_order_confirmation_email(order_id, customer_email, customer_name=None):
 def send_email(recipient_email, subject, message_body, from_email=None):
     """
     Utility function to send an email.
-    
-    Args:
-        recipient_email (str): Recipient email address
-        subject (str): Subject of the email
-        message_body (str): Body of the email
-        from_email (str, optional): Sender email. Defaults to settings.DEFAULT_FROM_EMAIL.
-    
-    Returns:
-        bool: True if email sent successfully, False otherwise.
     """
     try:
-        # Validate email format
         validate_email(recipient_email)
 
         if not from_email:
@@ -128,17 +122,3 @@ def send_email(recipient_email, subject, message_body, from_email=None):
     except Exception as e:
         print(f"Error sending email: {e}")
         return False
-    
-
-def generate_unique_order_id(length=8):
-    """
-    Generate a unique alphanumeric order ID.
-    Uses the secrets module for cryptographic randomness.
-    Ensures uniqueness by checking against the database.
-    """
-    characters = string.ascii_uppercase + string.digits
-
-    while True:
-        order_id = ''.join(secrets.choice(characters) for _ in range(length))
-        if not Order.objects.filter(order_id=order_id).exists():
-            return order_id

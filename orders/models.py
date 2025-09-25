@@ -22,19 +22,6 @@ class Menu(models.Model):
     def __str__(self):
         return self.name
 
-# class Order(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
-#     order_items = models.ManyToManyField(Menu, related_name="orders")
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     total_price = models.DecimalField(max_digits=10, decimal_places=2)
-
-#     # Link to OrderStatus model
-#     # status = models.ForeignKey(OrderStatus, on_delete=models.SET_NULL, null=True, blank=True, related_name="orders")
-
-#     def __str__(self):
-#         return f"Order #{self.id} - {self.user.username}"
-
-
 
 class UserProfile(models.Model):
     # Extended home profile for storing additional information beyond Django's built-in User model.
@@ -94,9 +81,31 @@ class ActiveOrderManager(models.Manager):
     def get_active_orders(self):
         # Only return orders with status 'pending' or 'processing'
         return super().get_queryset().filter(status__in=['pending', 'processing'])
+
+class OrderMAnager(models.Manager):
+    def with_status(self, status):
+        """Retrieve all orders with a given status."""
+        return self.filter(status=status)
+
+    def pending(self):
+        """Retrieve all pending orders."""
+        return self.with_status("pending")
     
+    def processing(self):
+        """Retrieve all processing orders."""
+        return self.with_status("processing")
+    
+    def completed(self):
+        """Retrieve all completed orders."""
+        return self.with_status("completed")
+    
+    def cancelled(self):
+        """Retrieve all cancelled orders."""
+        return self.with_status("cancelled")
+
+
 class Order(models.Model):
-    order_id = models.CharField(max_length=12, unique=True, editable=False)
+    order_id = models.CharField(max_length=12, unique=True, blank=True, null=True, editable=False)
     customer_name = models.CharField(max_length=100, blank=True, null=True)
     status = models.CharField(
         max_length=20, 
@@ -110,13 +119,16 @@ class Order(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
+    objects = models.Manager()  # The default manager.
+    custom = OrderMAnager()  # Our custom manager.
+
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="orders", null=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     order_items = models.ManyToManyField('home.MenuItem', blank=True, related_name="orders")
 
     def save(self, *args, **kwargs):
         if not self.order_id:
-            self.order_id = generate_unique_order_id()
+            self.order_id = generate_unique_order_id(Order)
         super().save(*args, **kwargs)
     
     
