@@ -176,7 +176,7 @@ class UpdateOrderStatusAPIView(APIView):
     API view to update the status of an existing order.
     """
 
-    def put(self, request):
+    def put(self, request, order_id):
         serializer = UpdateOrderStatusSerializer(data=request.data)
         if serializer.is_valid():
             order_id = serializer.validated_data['order_id']

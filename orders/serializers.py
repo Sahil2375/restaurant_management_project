@@ -33,3 +33,17 @@ class OrderSerializer(serializers.ModelSerializer):
 class UpdateOrderStatusSerializer(serializers.Serializer):
     order_id = serializers.IntegerField()
     status = serializers.ChoiceField(choices=Order.STATUS_CHOICES)
+
+from rest_framework import serializers
+from .models import Order
+
+class OrderStatusUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['id', 'status']
+
+    def validate_status(self, value):
+        allowed_statuses = [choice[0] for choice in Order.STATUS_CHOICES]
+        if value not in allowed_statuses:
+            raise serializers.ValidationError(f"Status must be one of {allowed_statuses}.")
+        return value
