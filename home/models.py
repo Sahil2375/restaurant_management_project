@@ -86,6 +86,7 @@ class MenuItem(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    is_daily_special = models.BooleanField(default=False)  # new field
     available = models.BooleanField(default=True)
     category = models.ForeignKey(MenuCategory, on_delete=models.CASCADE, related_name="menu_items")
 

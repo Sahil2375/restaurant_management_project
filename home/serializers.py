@@ -112,3 +112,8 @@ class ContactFormSubmissionSerializer(serializers.ModelSerializer):
         model = ContactFormSubmission
         fields = ['id', 'name', 'email', 'message', 'submitted_at']
         read_only_fields = ['id', 'submitted_at']
+
+class DailySpecialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MenuItem
+        fields = ['id', 'name', 'description', 'price']

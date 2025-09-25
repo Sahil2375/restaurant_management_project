@@ -13,14 +13,14 @@ from .models import MenuItem, RestaurantInfo, Restaurant, TodaysSpecial, Chef
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework import viewsets, filters, permissions
 from rest_framework.pagination import PageNumberPagination
 
 from rest_framework.generics import ListAPIView, CreateAPIView
 from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission
 
-from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemSerializer, ContactFormSubmissionSerializer
+from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer
 
 # Create your views here.
 
@@ -322,3 +322,10 @@ class ContactFormSubmissionView(CreateAPIView):
                 status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class DailySpecialListView(generics.ListAPIView):
+    serializer_class = DailySpecialSerializer
+
+    def get_queryset(self):
+        # Only return items marked as daily specials
+        return MenuItem.objects.filter(is_daily_special=True)
