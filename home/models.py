@@ -76,7 +76,7 @@ class Driver(models.Model):
         return f"Driver: {self.user.username}"
     
 class MenuCategory(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True, default="General")
     category_name = models.CharField(max_length=100,unique=True)
 
     def __str__(self):
@@ -140,3 +140,17 @@ class ContactFormSubmission(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.email}"
+    
+class UserReview(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
+    menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE, related_name="reviews")
+    rating = models.IntegerField()
+    comment = models.TextField()
+    review_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'menu_item')  # prevent duplicate reviews by the same user
+        ordering = ['-review_date']  # latest reviews first
+
+    def __str__(self):
+        return f"{self.user.username} - {self.menu_item.name} ({self.rating}/5)"
