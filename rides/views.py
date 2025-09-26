@@ -129,7 +129,43 @@ class RideFeedbackView(generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-class CalculateFareView(generics.UpdateAPIView):
-    queryset = Ride.objects.all()
-    serializer_class = FareCalculationSerializer
-    lookup_field = "id"
+class CalculateFareView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, ride_id):
+        # Get the ride
+        ride = get_object_or_404(Ride, id=ride_id)
+
+        # Ensure only rider, driver, or admin can access
+        if not (
+            request.user == ride.rider
+            or request.user == ride.driver
+            or request.user.is_staff
+        ):
+            return Response(
+                {"message": "You do not have permission to calculate fare for this ride."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        
+        # Ensure ride is completed
+        if ride.status != "COMPLETED":
+            return Response(
+                {"message": "Ride must be completed before fare calculation"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        # Prevent recalculation
+        if ride.fare is not None:
+            return Response(
+                {"message": "Fare already set.", "fare": float(ride.fare)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        # Use serializer to calculate and save fare
+        serializer = FareCalculationSerializer(ride, context={"request": request})
+        fare = serializer.save()
+
+        return Response(
+            {"fare": fare, "message": "Fare calculated and saved."},
+            status=status.HTTP_200_OK
+        )
