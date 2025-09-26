@@ -5,7 +5,6 @@ from django.core.mail import send_mail, BadHeaderError
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.validators import validate_email
 from django.conf import settings
-from .models import Order
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +36,7 @@ def generate_unique_order_id(model_class, length=8):
         order_id = ''.join(secrets.choice(characters) for _ in range(length))
         if not model_class.objects.filter(order_id=order_id).exists():
             return order_id
+        return secrets.token_hex(length // 2)
 
 
 def send_order_confirmation_email(order_id, customer_email, customer_name=None):
@@ -126,26 +126,17 @@ def calculate_discount(price, discount_percent):
     return price
 
 
+
 def update_order_status(order_id, new_status):
-    """
-    Update the status of an order by ID.
-
-    Args:
-        order_id (int): ID of the order to update
-        new_status (str): New status value (e.g., 'pending', 'processing', 'completed')
-
-    Returns:
-        tuple: (success: bool, message: str)
-    """
+    from .models import Order   # 👈 local import avoids circular import
+    
     try:
         order = Order.objects.get(id=order_id)
         old_status = order.status
         order.status = new_status
         order.save()
 
-        # Log the status change
         logger.info(f"Order {order_id} status updated from '{old_status}' to '{new_status}'")
-
         return True, f"Order {order_id} status updated to '{new_status}'."
 
     except ObjectDoesNotExist:

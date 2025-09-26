@@ -12,22 +12,30 @@ class Driver(models.Model):
     current_longitude = models.FloatField(null=True, blank=True)
 
 class Ride(models.Model):
-    STATUS_CHOICES = [
-        ('REQUESTED', 'Requested'),
-        ('ONGOING', 'Ongoing'),
-        ('COMPLETED', 'Completed'),
-        ('CANCELLED', 'Cancelled'),
-    ]
+    pickup_lat = models.FloatField()
+    pickup_lon = models.FloatField()
+    drop_lat = models.FloatField()
+    drop_lon = models.FloatField()
+    status = models.CharField(
+        max_length=20,
+        choices=[
+            ('PENDING', 'Pending'),
+            ('ONGOING', 'Ongoing'),
+            ('COMPLETED', 'Completed'),
+            ('CANCELLED', 'Cancelled'),
+        ]
+    )
+    fare = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
     rider = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='rides', on_delete=models.CASCADE
     )
     driver = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='drives', on_delete=models.SET_NULL, null=True, blank=True
     )
-    pickup = models.CharField(max_length=255)
-    drop = models.CharField(max_length=255)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='REQUESTED')
-    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"Ride {self.id} - {self.status}"
 
 class RideFeedback(models.Model):
     ride = models.ForeignKey('rides.Ride', on_delete=models.CASCADE)

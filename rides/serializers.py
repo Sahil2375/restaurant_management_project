@@ -1,6 +1,8 @@
 # serializers.py
 from rest_framework import serializers
 from .models import Ride, Driver, RideFeedback
+from .utils import calculate_distance
+from decimal import Decimal
 
 class UpdateLocationSerializer(serializers.Serializer):
     latitude = serializers.FloatField()
@@ -66,4 +68,47 @@ class RideFeedbackSerializer(serializers.ModelSerializer):
             **validated_data
         )
         return feedback
-    
+
+
+class FareCalculationSerializer(serializers.ModelSerializer):
+    surge_multiplier = serializers.FloatField(default=1.0, write_only=True)  # allow client to send surge
+
+    class Meta:
+        model = Ride
+        fields = ['id', 'pickup_lat', 'pickup_lon', 'drop_lat', 'drop_lon', 'status', 'fare', 'surge_multiplier']
+        read_only_fields = ['fare']
+
+    def validate(self, data):
+        """
+        Prevent fare calculation if ride not completed or already has fare.
+        """
+        ride = self.instance
+        if ride.status != "COMPLETED":
+            raise serializers.ValidationError("Fare can only be calculated for completed rides.")
+        if ride.fare is not None:
+            raise serializers.ValidationError("Fare already calculated for this ride.")
+        return data
+
+    def update(self, instance, validated_data):
+        """
+        Calculate and store fare for the ride.
+        """
+        # Constants
+        base_fare = Decimal(50)
+        per_km_rate = Decimal(10)
+
+        surge_multiplier = Decimal(str(validated_data.get('surge_multiplier', 1.0)))
+
+        # Distance
+        distance = Decimal(str(
+            calculate_distance(instance.pickup_lat, instance.pickup_lon, instance.drop_lat, instance.drop_lon)
+        )).quantize(Decimal("0.01"))
+
+        # Fare calculation
+        fare = base_fare + (distance * per_km_rate * surge_multiplier)
+
+        # Save fare
+        instance.fare = fare.quantize(Decimal("0.01"))
+        instance.save()
+
+        return instance

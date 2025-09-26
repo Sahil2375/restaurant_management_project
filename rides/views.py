@@ -6,7 +6,7 @@ from rest_framework import status, generics, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import Ride, Driver
-from .serializers import UpdateLocationSerializer, TrackRideSerializer, RideHistorySerializer, RideFeedbackSerializer
+from .serializers import UpdateLocationSerializer, TrackRideSerializer, RideHistorySerializer, RideFeedbackSerializer, FareCalculationSerializer
 from .permissions import IsDriver, IsRideRiderOrAdmin
 from django.shortcuts import get_object_or_404
 
@@ -127,3 +127,9 @@ class RideFeedbackView(generics.CreateAPIView):
                 status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class CalculateFareView(generics.UpdateAPIView):
+    queryset = Ride.objects.all()
+    serializer_class = FareCalculationSerializer
+    lookup_field = "id"
