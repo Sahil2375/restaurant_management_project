@@ -93,7 +93,7 @@ class DriverRegistrationSerializer(serializers.ModelSerializer):
 class MenuCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuCategory
-        fields = ['id', 'name']  # Include 'id' if needed for frontend references
+        fields = ['id', 'name']  # This class is added previously.
 
 class MenuItemSerializer(serializers.ModelSerializer):
     category = serializers.StringRelatedField()  # Shows category name instead of ID

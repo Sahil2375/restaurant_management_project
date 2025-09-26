@@ -76,11 +76,11 @@ class Driver(models.Model):
         return f"Driver: {self.user.username}"
     
 class MenuCategory(models.Model):
-    # name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     category_name = models.CharField(max_length=100,unique=True)
 
     def __str__(self):
-        return self.category_name
+        return self.name
     
 class MenuItem(models.Model):
     name = models.CharField(max_length=100)

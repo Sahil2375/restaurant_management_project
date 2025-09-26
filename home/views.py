@@ -24,41 +24,41 @@ from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializ
 
 # Create your views here.
 
-def homepage1(request):
-    restaurant = RestaurantInfo.objects.first()  # Assuming only one entry
-    specials = TodaysSpecial.objects.all()
-    opening_hours = {
-        "Monday": "9:00 AM - 10:00 PM",
-        "Tuesday": "9:00 AM - 10:00 PM",
-        "Wednesday": "9:00 AM - 10:00 PM",
-        "Thrusday": "9:00 AM - 10:00 PM",
-        "Friday": "9:00 AM - 11:00 PM",
-        "Saturday": "10:00 AM - 11:00 PM",
-        "Sunday": "Closed",
-    }
+# def homepage1(request):
+#     restaurant = RestaurantInfo.objects.first()  # Assuming only one entry
+#     specials = TodaysSpecial.objects.all()
+#     opening_hours = {
+#         "Monday": "9:00 AM - 10:00 PM",
+#         "Tuesday": "9:00 AM - 10:00 PM",
+#         "Wednesday": "9:00 AM - 10:00 PM",
+#         "Thrusday": "9:00 AM - 10:00 PM",
+#         "Friday": "9:00 AM - 11:00 PM",
+#         "Saturday": "10:00 AM - 11:00 PM",
+#         "Sunday": "Closed",
+#     }
 
-    context = {
-        "restaurant_info": restaurant,
-        "specials": specials,
-        "opening_hours": opening_hours,
-        "current_year": datetime.now().year,
-        "page_title": "Welcome to Tasty Bites Restaurant - Best Dining in Mumbai",
-    }
+#     context = {
+#         "restaurant_info": restaurant,
+#         "specials": specials,
+#         "opening_hours": opening_hours,
+#         "current_year": datetime.now().year,
+#         "page_title": "Welcome to Tasty Bites Restaurant - Best Dining in Mumbai",
+#     }
 
-    if request.method == 'POST':
-        form = SubscriberForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('homepage1')  # Reload page after success
-    else:
-        form = SubscriberForm()
+#     if request.method == 'POST':
+#         form = SubscriberForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('homepage1')  # Reload page after success
+#     else:
+#         form = SubscriberForm()
         
-    return render(request, 'homepage1.html', {
-        'restaurant_info': restaurant_info,
-        'specials': specials, 
-        "opening_hours": opening_hours,
-        "current_year": datetime.now().year
-    }, context)
+#     return render(request, 'homepage1.html', {
+#         'restaurant_info': restaurant_info,
+#         'specials': specials, 
+#         "opening_hours": opening_hours,
+#         "current_year": datetime.now().year
+#     }, context)
 
 def reservations(request):
     return render(request, "reservations.html", {
@@ -226,6 +226,10 @@ class DriverRegisterView(APIView):
             driver = serializer.save()
             return Response(serializer.to_representation(driver), status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class MenuCategoryViewSet(viewsets.ModelViewSet):
+    queryset = MenuCategory.objects.all()
+    serializer_class = MenuCategorySerializer
 
 
 class MenuCategoryListAPIView(ListAPIView):
