@@ -6,7 +6,7 @@ from rest_framework import status, generics, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import Ride, Driver
-from .serializers import UpdateLocationSerializer, TrackRideSerializer, RideHistorySerializer, RideFeedbackSerializer, FareCalculationSerializer
+from .serializers import UpdateLocationSerializer, TrackRideSerializer, RideHistorySerializer, RideFeedbackSerializer, FareCalculationSerializer, PaymentSerializer
 from .permissions import IsDriver, IsRideRiderOrAdmin
 from django.shortcuts import get_object_or_404
 
@@ -169,3 +169,34 @@ class CalculateFareView(APIView):
             {"fare": fare, "message": "Fare calculated and saved."},
             status=status.HTTP_200_OK
         )
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def mark_ride_payment(request, ride_id):
+    try:
+        ride = Ride.objects.get(id=ride_id)
+    except Ride.DoesNotExist:
+        return Response({"error": "Ride not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    # Ownership check (only rider, driver, or admin can mark payment)
+    if request.user != ride.rider and request.user != ride.driver and not request.user.is_staff:
+        return Response(
+            {"error": "You do not have permission to update payment for this ride."},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+
+    # Validate with serializer
+    serializer = PaymentSerializer(ride, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(
+            {
+                "message": "Payment marked as complete.",
+                "status": serializer.instance.payment_status,
+                "method": serializer.instance.payment_method,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
