@@ -2,9 +2,10 @@ import string
 import secrets
 import logging
 from django.core.mail import send_mail, BadHeaderError
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.validators import validate_email
 from django.conf import settings
+from .models import Order
 
 logger = logging.getLogger(__name__)
 
@@ -16,15 +17,6 @@ def generate_coupon_code(length=10):
     """
     characters = string.ascii_uppercase + string.digits
     return ''.join(secrets.choice(characters) for _ in range(length))
-
-
-# def generate_order_code(length=8):
-#     """
-#     Generate a random alphanumeric string for order_id.
-#     This does NOT check database uniqueness — uniqueness must be enforced in the model.
-#     """
-#     characters = string.ascii_uppercase + string.digits
-#     return ''.join(secrets.choice(characters) for _ in range(length))
 
 
 def generate_unique_order_id(model_class, length=8):
@@ -132,3 +124,34 @@ def calculate_discount(price, discount_percent):
     if discount_percent:
         return price * (1 - discount_percent / 100)
     return price
+
+
+def update_order_status(order_id, new_status):
+    """
+    Update the status of an order by ID.
+
+    Args:
+        order_id (int): ID of the order to update
+        new_status (str): New status value (e.g., 'pending', 'processing', 'completed')
+
+    Returns:
+        tuple: (success: bool, message: str)
+    """
+    try:
+        order = Order.objects.get(id=order_id)
+        old_status = order.status
+        order.status = new_status
+        order.save()
+
+        # Log the status change
+        logger.info(f"Order {order_id} status updated from '{old_status}' to '{new_status}'")
+
+        return True, f"Order {order_id} status updated to '{new_status}'."
+
+    except ObjectDoesNotExist:
+        logger.error(f"Order with ID {order_id} not found.")
+        return False, f"Order with ID {order_id} not found."
+
+    except Exception as e:
+        logger.exception(f"Unexpected error while updating order {order_id}: {str(e)}")
+        return False, f"Error updating order {order_id}: {str(e)}"
