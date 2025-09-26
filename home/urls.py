@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.shortcuts import render
 from rest_framework.routers import DefaultRouter
 from . import views
-from .views import RiderRegisterView, DriverRegisterView, MenuCategoryViewSet, MenuCategoryListAPIView, MenuItemViewSet, MenuItemsByCategoryView, ContactFormSubmissionView, DailySpecialListView
+from .views import RiderRegisterView, DriverRegisterView, MenuCategoryViewSet, MenuCategoryListAPIView, MenuItemViewSet, MenuItemsByCategoryView, ContactFormSubmissionView, DailySpecialListView, CreateReviewView, MenuItemReviewsView
 
 router = DefaultRouter()
 router.register(r'menu-items', MenuItemViewSet, basename='menuitem')
@@ -28,6 +28,8 @@ urlpatterns = [
     path("api/menu-categories/", MenuCategoryListAPIView.as_view(), name="menu-categories-list"),
     path("api/contact/", ContactFormSubmissionView.as_view(), name="contact-form"),
     path("api/daily-specials/", DailySpecialListView.as_view(), name="daily-specials"),
+    path("api/reviews/create", CreateReviewView.as_view(), name="create-review"),
+    path("api/reviews/menu-item/<int:menu_item_id>/", MenuItemReviewsView.as_view(), name='menu-item-reviews'),
 ]
 
 handler404 = 'home.urls.custom_404_view'

@@ -18,47 +18,11 @@ from rest_framework import viewsets, filters, permissions
 from rest_framework.pagination import PageNumberPagination
 
 from rest_framework.generics import ListAPIView, CreateAPIView
-from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission
+from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission, UserReview
 
-from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer
+from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer
 
 # Create your views here.
-
-# def homepage1(request):
-#     restaurant = RestaurantInfo.objects.first()  # Assuming only one entry
-#     specials = TodaysSpecial.objects.all()
-#     opening_hours = {
-#         "Monday": "9:00 AM - 10:00 PM",
-#         "Tuesday": "9:00 AM - 10:00 PM",
-#         "Wednesday": "9:00 AM - 10:00 PM",
-#         "Thrusday": "9:00 AM - 10:00 PM",
-#         "Friday": "9:00 AM - 11:00 PM",
-#         "Saturday": "10:00 AM - 11:00 PM",
-#         "Sunday": "Closed",
-#     }
-
-#     context = {
-#         "restaurant_info": restaurant,
-#         "specials": specials,
-#         "opening_hours": opening_hours,
-#         "current_year": datetime.now().year,
-#         "page_title": "Welcome to Tasty Bites Restaurant - Best Dining in Mumbai",
-#     }
-
-#     if request.method == 'POST':
-#         form = SubscriberForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('homepage1')  # Reload page after success
-#     else:
-#         form = SubscriberForm()
-        
-#     return render(request, 'homepage1.html', {
-#         'restaurant_info': restaurant_info,
-#         'specials': specials, 
-#         "opening_hours": opening_hours,
-#         "current_year": datetime.now().year
-#     }, context)
 
 def reservations(request):
     return render(request, "reservations.html", {
@@ -333,3 +297,22 @@ class DailySpecialListView(generics.ListAPIView):
     def get_queryset(self):
         # Only return items marked as daily specials
         return MenuItem.objects.filter(is_daily_special=True)
+    
+# Create new review
+class CreateReviewView(generics.CreateAPIView):
+    queryset = UserReview.objects.all()
+    serializer_class = UserReviewSerializer
+    permission_classes = [permissions.IsAuthenticated]  # only logged-in users can review
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)  # assign the logged-in user automatically
+
+
+# Retrieve reviews for a specific menu item
+class MenuItemReviewsView(generics.ListAPIView):
+    serializer_class = UserReviewSerializer
+    permission_classes = [permissions.AllowAny]  # anyone can view reviews
+
+    def get_queryset(self):
+        menu_item_id = self.kwargs['menu_item_id']  # from URL
+        return UserReview.objects.filter(menu_item_id=menu_item_id)

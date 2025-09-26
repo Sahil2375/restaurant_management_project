@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Rider, Driver, MenuCategory, MenuItem, ContactFormSubmission
+from .models import Rider, Driver, MenuCategory, MenuItem, ContactFormSubmission, UserReview
 
-
+    
 class UserSerializer(serializers.ModelSerializer):
     """Basic user serializer to embed in Rider/Driver responses."""
 
@@ -117,3 +117,15 @@ class DailySpecialSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuItem
         fields = ['id', 'name', 'description', 'price']
+
+class UserReviewSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.username')  # Diasplay username, not ID
+
+    class Meta:
+        model = UserReview
+        fields = ['id', 'user', 'menu_iten', 'rating', 'comment', 'review_date']
+
+    def validate_rating(self, value):
+        if value < 1 or value > 5:
+            raise serializers.ValidationError("Rating must be between 1 to 5.")
+        return value
