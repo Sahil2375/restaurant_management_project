@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import Ride, Driver, RideFeedback
 from .utils import calculate_distance
 from decimal import Decimal
+from django.utils import timezone
 
 class UpdateLocationSerializer(serializers.Serializer):
     latitude = serializers.FloatField()
@@ -111,4 +112,41 @@ class FareCalculationSerializer(serializers.ModelSerializer):
         instance.fare = fare.quantize(Decimal("0.01"))
         instance.save()
 
+        return instance
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ride
+        fields = ['payment_method', 'payment_status']
+
+    def validate(self, data):
+        ride = self.instance  # serializer is used with an existing Ride instance
+
+        # ✅ Ensure ride is completed
+        if ride.status != "COMPLETED":
+            raise serializers.ValidationError("Ride must be completed before payment.")
+
+        # ✅ Prevent double payment
+        if ride.payment_status == "PAID":
+            raise serializers.ValidationError("Payment already completed for this ride.")
+
+        # ✅ Only allow PAID or UNPAID
+        if data.get("payment_status") not in ["PAID", "UNPAID"]:
+            raise serializers.ValidationError("Invalid payment status.")
+
+        # ✅ If marking as PAID, payment_method is required
+        if data.get("payment_status") == "PAID" and not data.get("payment_method"):
+            raise serializers.ValidationError("Payment method is required when marking as PAID.")
+
+        return data
+
+    def update(self, instance, validated_data):
+        instance.payment_status = validated_data.get("payment_status", instance.payment_status)
+        instance.payment_method = validated_data.get("payment_method", instance.payment_method)
+
+        # ✅ If marked PAID, set paid_at timestamp
+        if instance.payment_status == "PAID" and not instance.paid_at:
+            instance.paid_at = timezone.now()
+
+        instance.save()
         return instance

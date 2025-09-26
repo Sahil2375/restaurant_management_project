@@ -27,6 +27,18 @@ class Ride(models.Model):
     )
     fare = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
+    payment_status = models.CharField(
+        choices=[('PAID', 'Paid'), ('UNPAID', 'Unpaid')],
+        default='UNPAID',
+        max_length=10
+    )
+    payment_method = models.CharField(
+        choices=[('CASH', 'Cash'), ('UPI', 'UPI'), ('CARD', 'Card')],
+        null=True, blank=True,
+        max_length=10
+    )
+    paid_at = models.DateTimeField(null=True, blank=True)
+
     rider = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='rides', on_delete=models.CASCADE
     )
