@@ -107,7 +107,9 @@ class Restaurant(models.Model):
     name = models.CharField(max_length=100)
     address = models.TextField()
     phone = models.CharField(max_length=15, blank=True, null=True)
+    opening_hours = models.CharField(max_length=100)
     email = models.EmailField(blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
     # New field for operating days

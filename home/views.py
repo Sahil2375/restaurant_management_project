@@ -18,9 +18,9 @@ from rest_framework import viewsets, filters, permissions
 from rest_framework.pagination import PageNumberPagination
 
 from rest_framework.generics import ListAPIView, CreateAPIView
-from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission, UserReview
+from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission, UserReview, Restaurant
 
-from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemAvailabilitySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer
+from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemAvailabilitySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer, RestaurantSerializer
 
 # Create your views here.
 
@@ -338,3 +338,17 @@ class UpdateMenuItemAvailability(APIView):
             )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RestaurantInfoView(APIView):
+    def get(self, request):
+        # Assuming there’s only ONE restaurant entry
+        restaurant = Restaurant.objects.first()
+        if not restaurant:
+            return Response(
+                {"error": "Restaurant information not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        serializer = RestaurantSerializer(restaurant)
+        return Response(serializer.data, status=status.HTTP_200_OK)
