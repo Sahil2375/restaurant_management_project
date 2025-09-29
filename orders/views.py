@@ -14,7 +14,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import RetrieveAPIView
-from .models import Order
+from .models import Order, Coupon
 from .serializers import OrderSerializer, UpdateOrderStatusSerializer
 
 from orders.utils import send_order_confirmation_email, send_email
@@ -214,4 +214,41 @@ def get_order_status(request, order_id):
         return Response(
             {"error": f"Order with ID {order_id} not found."},
             status=status.HTTP_404_NOT_FOUND
+        )
+
+
+class CouponValidationView(APIView):
+    """
+    Validate a coupon code.
+    """
+    def post(self, request):
+        code = request.data.get("code", "").strip()
+
+        if not code:
+            return Response(
+                {"error": "Coupon code is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            coupon = Coupon.objects.get(code=code)
+        except Coupon.DoesNotExist:
+            return Response(
+                {"error": "Invalid coupon code."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if not coupon.is_valid():
+            return Response(
+                {"error": "Coupon is inactive or expired."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        return Response(
+            {
+                "message": "Coupon is valid.",
+                "code": coupon.code,
+                "discount_percentage": float(coupon.discount_percentage)
+            },
+            status=status.HTTP_200_OK
         )
