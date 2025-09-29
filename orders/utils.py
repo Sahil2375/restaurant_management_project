@@ -146,3 +146,32 @@ def update_order_status(order_id, new_status):
     except Exception as e:
         logger.exception(f"Unexpected error while updating order {order_id}: {str(e)}")
         return False, f"Error updating order {order_id}: {str(e)}"
+
+def calculate_order_total(order_items):
+    """
+    Calculate the total price of an order.
+
+    Args:
+        order_items (list of dict): 
+        A list where each item is a dictionary containing 'quantity' (int/float) and 'price' (int/float).
+        Example: [{'quantity': 2, 'price': 50}, {'quantity': 1, 'price': 100}]
+
+    Returns:
+        float: The total cost of the order. Returns 0.0 if the list is empty.
+    """
+    if not order_items:  # Handle empty list gracefully
+        return 0.0
+
+    total = 0.0
+    for item in order_items:
+        # Safely get quantity and price with defaults
+        quantity = item.get("quantity", 0)
+        price = item.get("price", 0.0)
+
+        # Ensure values are valid numbers
+        try:
+            total += float(quantity) * float(price)
+        except (ValueError, TypeError):
+            continue  # skip invalid items instead of crashing
+
+    return round(total, 2)  # rounded to 2 decimal places for currency format
