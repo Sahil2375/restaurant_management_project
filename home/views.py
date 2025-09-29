@@ -20,7 +20,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import ListAPIView, CreateAPIView
 from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission, UserReview
 
-from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer
+from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemAvailabilitySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer
 
 # Create your views here.
 
@@ -316,3 +316,25 @@ class MenuItemReviewsView(generics.ListAPIView):
     def get_queryset(self):
         menu_item_id = self.kwargs['menu_item_id']  # from URL
         return UserReview.objects.filter(menu_item_id=menu_item_id)
+
+
+class UpdateMenuItemAvailability(APIView):
+    def patch(self, request, pk):
+        """
+        Update availability of a MenuItem by ID.
+        """
+        menu_item = get_object_or_404(MenuItem, pk=pk)
+        serializer = MenuItemAvailabilitySerializer(data=request.data)
+
+        if serializer.is_valid():
+            menu_item.is_available = serializer.validated_data["is_available"]
+            menu_item.save()
+            return Response(
+                {
+                    "message": f"Availability updated successfully for {menu_item.name}",
+                    "menu_item": MenuItemSerializer(menu_item).data
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -96,7 +96,7 @@ class MenuCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class MenuItemSerializer(serializers.ModelSerializer):
-    category = serializers.StringRelatedField()  # Shows category name instead of ID
+    # category = serializers.StringRelatedField()  # Shows category name instead of ID
     
     class Meta:
         model = MenuItem
@@ -106,6 +106,10 @@ class MenuItemSerializer(serializers.ModelSerializer):
         if value < 0:
             raise serializers.ValidationError("Price must be a positive number.")
         return value
+
+class MenuItemAvailabilitySerializer(serializers.Serializer):
+    """Serializer to update only availability status"""
+    available = serializers.BooleanField()
     
 class ContactFormSubmissionSerializer(serializers.ModelSerializer):
     class Meta:
