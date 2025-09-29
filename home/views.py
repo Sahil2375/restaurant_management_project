@@ -17,7 +17,7 @@ from rest_framework import status, generics
 from rest_framework import viewsets, filters, permissions
 from rest_framework.pagination import PageNumberPagination
 
-from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
 from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission, UserReview, Restaurant
 
 from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemAvailabilitySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer, RestaurantSerializer, TableSerializer
@@ -363,3 +363,8 @@ class AvailableTablesAPIView(ListAPIView):
     def get_queryset(self):
         # Only return tables that are available
         return Table.objects.filter(is_available=True)
+
+class TableDetailAPIView(RetrieveAPIView):
+    """Retrieve details of a single table by its ID (pk)."""
+    queryset = Table.objects.all()
+    serializer_class = TableSerializer
