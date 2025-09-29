@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+from datetime import timedelta
 from django.contrib.auth.models import User
 
 # Create your models here.
@@ -157,3 +159,51 @@ class UserReview(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.menu_item.name} ({self.rating}/5)"
+    
+
+class Reservation(models.Model):
+    customer_name = models.CharField(max_length=100)
+    customer_phone = models.CharField(max_length=15)
+    table_number = models.IntegerField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+
+    def __str__(self):
+        return f"Reservation for {self.customer_name} at {self.start_time}"
+
+    @classmethod
+    def get_available_slots(cls, start, end, slot_length=timedelta(hours=1), table_number=None):
+        """
+        Find available reservation slots between 'start' and 'end'.
+        
+        Args:
+            start (datetime): Start of the search window
+            end (datetime): End of the search window
+            slot_length (timedelta): Length of each slot (default: 1 hour)
+            table_number (int, optional): Filter for a specific table
+
+        Returns:
+            list of (datetime, datetime): List of available (start, end) slots
+        """
+        available_slots = []
+
+        # Build all possible slots in the given range
+        current = start
+        while current + slot_length <= end:
+            slot_start = current
+            slot_end = current + slot_length
+
+            # Query for overlapping reservations
+            reservations = cls.objects.filter(
+                start_time__lt=slot_end,
+                end_time__gt=slot_start
+            )
+            if table_number:
+                reservations = reservations.filter(table_number=table_number)
+
+            if not reservations.exists():  # slot is free
+                available_slots.append((slot_start, slot_end))
+
+            current += slot_length  # move to next slot
+
+        return available_slots
