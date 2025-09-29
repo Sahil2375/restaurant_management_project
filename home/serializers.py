@@ -93,7 +93,7 @@ class DriverRegistrationSerializer(serializers.ModelSerializer):
 class MenuCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuCategory
-        fields = ['id', 'name']  # This class is added previously.
+        fields = '__all__'
 
 class MenuItemSerializer(serializers.ModelSerializer):
     category = serializers.StringRelatedField()  # Shows category name instead of ID
