@@ -1,6 +1,9 @@
 import string
 import secrets
 import logging
+from datetime import date
+from django.db.models import Sum
+from .models import Order
 from django.core.mail import send_mail, BadHeaderError
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.validators import validate_email
@@ -175,3 +178,23 @@ def calculate_order_total(order_items):
             continue  # skip invalid items instead of crashing
 
     return round(total, 2)  # rounded to 2 decimal places for currency format
+
+
+def get_daily_sales_total(specific_date: date):
+    """
+    Calculate total sales for a specific date by summing total_price of all orders.
+
+    Args:
+        specific_date (date): The date for which to calculate total sales.
+
+    Returns:
+        Decimal or float: Total sales amount for the date. Returns 0 if no orders exist.
+    """
+    # Filter orders by the given date
+    orders = Order.objects.filter(created_at__date=specific_date)
+
+    # Aggregate total price
+    total = orders.aggregate(total_sum=Sum('total_price'))['total_sum']
+
+    # Return 0 if no orders exist
+    return total or 0
