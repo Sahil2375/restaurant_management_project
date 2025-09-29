@@ -9,7 +9,7 @@ from datetime import datetime
 from django.http import HttpResponseForbidden, JsonResponse
 from utils.validation_utils import is_valid_email
 
-from .models import MenuItem, RestaurantInfo, Restaurant, TodaysSpecial, Chef
+from .models import MenuItem, RestaurantInfo, Restaurant, TodaysSpecial, Chef, Table
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -20,7 +20,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import ListAPIView, CreateAPIView
 from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission, UserReview, Restaurant
 
-from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemAvailabilitySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer, RestaurantSerializer
+from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemAvailabilitySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer, RestaurantSerializer, TableSerializer
 
 # Create your views here.
 
@@ -352,3 +352,14 @@ class RestaurantInfoView(APIView):
         
         serializer = RestaurantSerializer(restaurant)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class AvailableTablesAPIView(ListAPIView):
+    """
+    Returns a list of tables that are currently available.
+    """
+    serializer_class = TableSerializer
+
+    def get_queryset(self):
+        # Only return tables that are available
+        return Table.objects.filter(is_available=True)
