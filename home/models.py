@@ -85,16 +85,34 @@ class MenuCategory(models.Model):
     def __str__(self):
         return self.name
     
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+    
 class MenuItem(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    discount_percentage = models.PositiveIntegerField(default=0, help_text="Discount in %")
     is_daily_special = models.BooleanField(default=False)  # new field
     available = models.BooleanField(default=True)
-    category = models.ForeignKey(MenuCategory, on_delete=models.CASCADE, related_name="menu_items")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+
+    def get_final_price(self) -> float:
+        """
+        Calculate final price considering discounr.
+        Returns float value.
+        """
+        if self.discount_percentage > 0:
+            discount_amount = (self.price * self.discount_percentage) / 100
+            final_price = self.price - discount_amount
+            return float(final_price)
+        return float(self.price)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - ${self.get_final_price()}"
     
 class ContactMessage(models.Model):
     name = models.CharField(max_length=100)
