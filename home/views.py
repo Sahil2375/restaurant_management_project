@@ -13,6 +13,7 @@ from .models import MenuItem, RestaurantInfo, Restaurant, TodaysSpecial, Chef, T
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status, generics
 from rest_framework import viewsets, filters, permissions
 from rest_framework.pagination import PageNumberPagination
@@ -302,7 +303,7 @@ class DailySpecialListView(generics.ListAPIView):
 class CreateReviewView(generics.CreateAPIView):
     queryset = UserReview.objects.all()
     serializer_class = UserReviewSerializer
-    permission_classes = [permissions.IsAuthenticated]  # only logged-in users can review
+    permission_classes = [IsAuthenticated]  # only logged-in users can review
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)  # assign the logged-in user automatically

@@ -167,8 +167,8 @@ class ContactFormSubmission(models.Model):
 class UserReview(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
     menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE, related_name="reviews")
-    rating = models.IntegerField()
-    comment = models.TextField()
+    rating = models.PositiveIntegerField()
+    text = models.TextField(default="")
     review_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -176,7 +176,7 @@ class UserReview(models.Model):
         ordering = ['-review_date']  # latest reviews first
 
     def __str__(self):
-        return f"{self.user.username} - {self.menu_item.name} ({self.rating}/5)"
+        return f"Review by {self.user.username} - ({self.rating}/5)"
     
 
 class Reservation(models.Model):
@@ -233,3 +233,13 @@ class Table(models.Model):
 
     def __str__(self):
         return f"Table {self.number} ({self.seats} seats)"
+
+
+# class Review(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
+#     rating = models.PositiveIntegerField()  # 1-5 rating
+#     text = models.TextField()
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return f"Review by {self.user.username} - {self.rating}"

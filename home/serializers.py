@@ -123,14 +123,13 @@ class DailySpecialSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'description', 'price']
 
 class UserReviewSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source='user.username')  # Diasplay username, not ID
-
     class Meta:
         model = UserReview
-        fields = ['id', 'user', 'menu_iten', 'rating', 'comment', 'review_date']
+        fields = ['id', 'user', 'menu_iten', 'rating', 'text', 'review_date']
+        read_only_fields = ['id', 'review_date']
 
     def validate_rating(self, value):
-        if value < 1 or value > 5:
+        if not 1 <= value <= 5:
             raise serializers.ValidationError("Rating must be between 1 to 5.")
         return value
     
