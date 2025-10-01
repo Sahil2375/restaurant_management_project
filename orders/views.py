@@ -13,9 +13,9 @@ from rest_framework.response import Response
 from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import RetrieveAPIView
-from .models import Order, Coupon
-from .serializers import OrderSerializer, UpdateOrderStatusSerializer
+from rest_framework.generics import RetrieveAPIView, ListAPIView
+from .models import Order, Coupon, MenuCategory
+from .serializers import OrderSerializer, UpdateOrderStatusSerializer, MenuCategorySerializer
 
 from orders.utils import send_order_confirmation_email, send_email
 
@@ -252,3 +252,7 @@ class CouponValidationView(APIView):
             },
             status=status.HTTP_200_OK
         )
+
+class MenuCategoryListView(ListAPIView):
+    queryset = MenuCategory.objects.all()
+    serializer_class = MenuCategorySerializer

@@ -4,7 +4,8 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from home.models import MenuItem  # assuming MenuItem is in home app
-from .utils import generate_unique_order_id, calculate_discount
+import secrets
+# from .utils import generate_unique_order_id, calculate_discount
 
 
 # Create your models here.
@@ -75,8 +76,8 @@ class Coupon(models.Model):
     code = models.CharField(max_length=50, unique=True)
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
     is_active = models.BooleanField(default=True)
-    valid_from = models.DateField()
-    valid_until = models.DateField()
+    valid_from = models.DateTimeField(default=timezone.now)
+    valid_until = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

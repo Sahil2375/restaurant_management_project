@@ -3,7 +3,7 @@ import secrets
 import logging
 from datetime import date
 from django.db.models import Sum
-from .models import Order
+# from .models import Order
 from django.core.mail import send_mail, BadHeaderError
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.validators import validate_email
@@ -22,6 +22,7 @@ def generate_coupon_code(length=10):
 
 
 def generate_unique_order_id(model_class, length=8):
+    from .models import Order
     """
     Generate a unique alphanumeric order_id for a given model.
     Avoids circular imports by passing the model_class explicitly.
@@ -119,6 +120,7 @@ def send_email(recipient_email, subject, message_body, from_email=None):
         return False
 
 def calculate_discount(price, discount_percent):
+    from .models import Order
     """
     Calculate discounted price.
     price: Decimal or float

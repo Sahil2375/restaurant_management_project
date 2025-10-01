@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Order, OrderItem
+from .models import Order, OrderItem, MenuCategory
 from home.models import MenuItem
 
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -47,3 +47,9 @@ class OrderStatusUpdateSerializer(serializers.ModelSerializer):
         if value not in allowed_statuses:
             raise serializers.ValidationError(f"Status must be one of {allowed_statuses}.")
         return value
+    
+
+class MenuCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MenuCategory
+        fields = ['id', 'name']   # include only name (id optional)

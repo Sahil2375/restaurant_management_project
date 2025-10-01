@@ -15,6 +15,7 @@ from .views import (
     UpdateOrderStatusAPIView,
     get_order_status,
     CouponValidationView,
+    MenuCategoryListView,
 )
 
 router = DefaultRouter()
@@ -35,4 +36,5 @@ urlpatterns = router.urls
     path('api/orders/update-status/', UpdateOrderStatusAPIView.as_view(), name='api-update-order-status'),  # New API view
     path('api/orders/<int:order_id>/status/', get_order_status, name='get-order-status'),  # New API endpoint
     path('api/coupons/validate/', CouponValidationView.as_view(), name='validate-coupon'),
+    path('api/categories/', MenuCategoryListView.as_view(), name='menu-categories'),
 ]

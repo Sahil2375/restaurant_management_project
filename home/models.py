@@ -109,7 +109,7 @@ class Restaurant(models.Model):
     name = models.CharField(max_length=100)
     address = models.TextField()
     phone = models.CharField(max_length=15, blank=True, null=True)
-    opening_hours = models.CharField(max_length=100)
+    opening_hours = models.CharField(max_length=100, null=True, blank=True)
     email = models.EmailField(blank=True, null=True)
     website = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -207,3 +207,11 @@ class Reservation(models.Model):
             current += slot_length  # move to next slot
 
         return available_slots
+
+
+class Table(models.Model):
+    number = models.IntegerField(unique=True)
+    seats = models.IntegerField()
+
+    def __str__(self):
+        return f"Table {self.number} ({self.seats} seats)"
