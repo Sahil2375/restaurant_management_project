@@ -40,3 +40,33 @@ def is_valid_email(email: str) -> bool:
         return True
     except ValidationError:
         return False
+
+def calculate_discount(original_price, discount_percentage):
+    """
+    Calculate the discounted price for a menu item.
+
+    Args:
+        original_price (float or int): The original price of the item.
+        discount_percentage (float or int): Discount percentage (0-100).
+
+    Returns:
+        float: Discounted price rounded to 2 decimal places.
+        str: Error message if inputs are invalid.
+    """
+    try:
+        # Convert inputs to float
+        price = float(original_price)
+        discount = float(discount_percentage)
+
+        # Check for invalid values
+        if price < 0:
+            return "Error: Original price cannot be negative."
+        if not (0 <= discount <= 100):
+            return "Error: Discount percentage must be between 0 and 100."
+
+        # Calculate discounted price
+        discounted_price = price * (1 - discount / 100)
+        return round(discounted_price, 2)
+
+    except (ValueError, TypeError):
+        return "Error: Invalid input. Please provide numeric values."
