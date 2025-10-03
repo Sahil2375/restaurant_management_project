@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.shortcuts import render
 from rest_framework.routers import DefaultRouter
 from . import views
-from .views import RiderRegisterView, DriverRegisterView, MenuCategoryViewSet, MenuCategoryListAPIView, MenuItemViewSet, MenuItemsByCategoryView, ContactFormSubmissionView, DailySpecialListView, CreateReviewView, MenuItemReviewsView, UpdateMenuItemAvailability, RestaurantInfoView, AvailableTablesAPIView, TableDetailAPIView, search_menu_items
+from .views import RiderRegisterView, DriverRegisterView, MenuCategoryViewSet, MenuCategoryListAPIView, MenuItemViewSet, MenuItemsByCategoryView, ContactFormSubmissionView, DailySpecialListView, CreateReviewView, MenuItemReviewsView, UpdateMenuItemAvailability, RestaurantInfoView, AvailableTablesAPIView, TableDetailAPIView, search_menu_items, OpeningHourListView
 
 router = DefaultRouter()
 router.register(r'menu-items', MenuItemViewSet, basename='menuitem')
@@ -35,6 +35,7 @@ urlpatterns = [
     path("api/tables/available/", AvailableTablesAPIView.as_view(), name="available_tables_api"),
     path("api/tables/<int:pk>/", TableDetailAPIView.as_view(), name="table-detail-api"),
     path("api/menu/search/", search_menu_items, name="menu-search"),
+    path("restaurant/opening-hours/", OpeningHourListView.as_view(), name="opening-hours"),
 ]
 
 handler404 = 'home.urls.custom_404_view'

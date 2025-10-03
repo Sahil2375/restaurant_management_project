@@ -242,11 +242,20 @@ class Table(models.Model):
         return f"Table {self.number} ({self.seats} seats)"
 
 
-# class Review(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
-#     rating = models.PositiveIntegerField()  # 1-5 rating
-#     text = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
+class OpeningHour(models.Model):
+    DAYS_OF_WEEK = [
+        ('monday', 'Monday'),
+        ('tuesday', 'Tuesday'),
+        ('wednesday', 'Wednesday'),
+        ('thursday', 'Thursday'),
+        ('friday', 'Friday'),
+        ('saturday', 'Saturday'),
+        ('sunday', 'Sunday'),
+    ]
 
-#     def __str__(self):
-#         return f"Review by {self.user.username} - {self.rating}"
+    day = models.CharField(max_length=10, choices=DAYS_OF_WEEK, unique=True)
+    opening_time = models.TimeField()
+    closing_time = models.TimeField()
+
+    def __str__(self):
+        return f"{self.get_day_display()}: {self.opening_time} - {self.closing_time}"
