@@ -125,6 +125,7 @@ class Order(models.Model):
     
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    short_id = models.CharField(max_length=20, unique=True)
     order_id = models.CharField(max_length=20, unique=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
@@ -152,7 +153,7 @@ class Order(models.Model):
     objects = ActiveOrderManager()
 
     def __str__(self):
-        return f"Order {self.id} - {self.status}"
+        return f"Order {self.short_id} - {self.status}"
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")

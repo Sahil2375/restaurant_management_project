@@ -14,6 +14,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import RetrieveAPIView, ListAPIView
+from rest_framework.exceptions import NotFound
 from .models import Order, Coupon, MenuCategory
 from .serializers import OrderSerializer, UpdateOrderStatusSerializer, MenuCategorySerializer
 
@@ -115,7 +116,14 @@ def place_order(request):
 class OrderDetailView(RetrieveAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    lookup_field = 'id'  # URL will match by 'id'
+    lookup_field = 'short_id'
+
+    def get_object(self):
+        short_id = self.kwargs.get('short_id')
+        try:
+            return Order.objects.get(short_id=short_id)
+        except Order.DoesNotExist:
+            raise NotFound(detail="Order not found")
 
 
 class OrderViewSet(viewsets.ModelViewSet):
