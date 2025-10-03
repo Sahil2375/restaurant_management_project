@@ -4,6 +4,8 @@ from .models import Ride, Driver, RideFeedback
 from .utils import calculate_distance
 from decimal import Decimal
 from django.utils import timezone
+from django.db.models import Sum, Count, Avg
+from datetime import timedelta
 
 class UpdateLocationSerializer(serializers.Serializer):
     latitude = serializers.FloatField()
@@ -150,3 +152,45 @@ class PaymentSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+    
+
+class DriverEarningsSummarySerializer(serializers.Serializer):
+    total_rides = serializers.IntegerField()
+    total_earnings = serializers.DecimalField(max_digits=10, decimal_places=2)
+    payment_breakdown = serializers.DictField(child=serializers.IntegerField())
+    average_fare = serializers.DecimalField(max_digits=10, decimal_places=2)
+
+    @classmethod
+    def from_driver(cls, driver):
+        now = timezone.now()
+        week_ago = now - timedelta(days=7)
+
+        # Filter relevant rides
+        rides = Ride.objects.filter(
+            driver=driver,
+            status="COMPLETED",
+            payment_status="PAID",
+            completed_at__gte=week_ago
+        )
+
+        # Aggregate
+        total_rides = rides.count()
+        total_earnings = rides.aggregate(total=Sum("fare"))["total"] or 0
+        average_fare = rides.aggregate(avg=Avg("fare"))["avg"] or 0
+
+        # Payment breakdown (by method)
+        breakdown = (
+            rides.values("payment_method")
+            .annotate(count=Count("id"))
+            .order_by()
+        )
+        payment_breakdown = {item["payment_method"]: item["count"] for item in breakdown}
+
+        # Build serializer instance
+        data = {
+            "total_rides": total_rides,
+            "total_earnings": total_earnings,
+            "payment_breakdown": payment_breakdown,
+            "average_fare": average_fare,
+        }
+        return cls(data).data
