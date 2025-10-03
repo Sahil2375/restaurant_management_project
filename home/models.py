@@ -145,6 +145,12 @@ class Restaurant(models.Model):
     def __str__(self):
         return self.name
     
+    def get_total_menu_items(self):
+        """
+        Returns the total number of menu items associated with this restaurant.
+        """
+        return self.menuitem_set.count
+    
 
 class TodaysSpecial(models.Model):
     name = models.CharField(max_length=200)
