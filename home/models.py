@@ -93,6 +93,7 @@ class Category(models.Model):
     
 class MenuItem(models.Model):
     name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='menu_images/', blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     discount_percentage = models.PositiveIntegerField(default=0, help_text="Discount in %")

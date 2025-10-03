@@ -14,6 +14,7 @@ from .models import MenuItem, RestaurantInfo, Restaurant, TodaysSpecial, Chef, T
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 from rest_framework import status, generics
 from rest_framework import viewsets, filters, permissions
 from rest_framework.pagination import PageNumberPagination
@@ -369,3 +370,15 @@ class TableDetailAPIView(RetrieveAPIView):
     """Retrieve details of a single table by its ID (pk)."""
     queryset = Table.objects.all()
     serializer_class = TableSerializer
+
+
+@api_view(['GET'])
+def search_menu_items(request):
+    query = request.GET.get('q', '')  # Get 'q' parameter from query string
+    if query:
+        items = MenuItem.objects.filter(name__icontains=query)
+    else:
+        items = MenuItem.objects.none()  # Return empty if no query
+    
+    serializer = MenuItemSerializer(items, many=True, context={'request': request})
+    return Response(serializer.data)
