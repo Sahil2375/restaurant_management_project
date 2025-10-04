@@ -436,3 +436,11 @@ class MenuByPriceRangeView(ListAPIView):
             return Response({"error": "Invalid price values provided."}, status=status.HTTP_400_BAD_REQUEST)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class RestaurantOpeningHoursView(APIView):
+    def get(self, request):
+        restaurant = Restaurant.objects.first()
+        if not restaurant:
+            return Response({"error": "Restaurant info not found."}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"opening_hours": restaurant.opening_hours})
