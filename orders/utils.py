@@ -119,16 +119,36 @@ def send_email(recipient_email, subject, message_body, from_email=None):
         print(f"Error sending email: {e}")
         return False
 
-def calculate_discount(price, discount_percent):
-    from .models import Order
+def calculate_discount(order_total, discount_percentage):
     """
-    Calculate discounted price.
-    price: Decimal or float
-    discount_percent: number (0-100)
+    Calculate the discount amount for an order.
+
+    Args:
+        order_total (float or int): The total amount of the order.
+        discount_percentage (float or int): Discount percentage (0-100).
+
+    Returns:
+        float: The discount amount.
+        str: Error message if input is invalid.
+
+    Usage:
+        >>> calculate_discount(500, 10)
+        50.0
+
+        >>> calculate_discount(100, 120)
+        'Error: Discount percentage must be between 0 and 100.'
     """
-    if discount_percent:
-        return price * (1 - discount_percent / 100)
-    return price
+    try:
+        order_total = float(order_total)
+        discount_percentage = float(discount_percentage)
+    except (ValueError, TypeError):
+        return "Error: Invalid input. Please provide numeric values."
+
+    if not (0 <= discount_percentage <= 100):
+        return "Error: Discount percentage must be between 0 and 100."
+
+    discount_amount = order_total * (discount_percentage / 100)
+    return round(discount_amount, 2)
 
 
 
