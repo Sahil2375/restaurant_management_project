@@ -96,7 +96,7 @@ class MenuCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class MenuItemSerializer(serializers.ModelSerializer):
-    # category = serializers.StringRelatedField()  # Shows category name instead of ID
+    category = serializers.CharField(source='category.name', read_only=True)  # Shows category name instead of ID
     
     class Meta:
         model = MenuItem
@@ -149,8 +149,8 @@ class OpeningHourSerializer(serializers.ModelSerializer):
         model = OpeningHour
         fields = ['day', 'opening_time', 'closing_time']
 
-class MenuItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Menu
-        fields = ['id', 'name', 'description', 'price', 'image', 'is_available']
+# class MenuItemSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Menu
+#         fields = ['id', 'name', 'description', 'price', 'category']
         

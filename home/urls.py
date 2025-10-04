@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.shortcuts import render
 from rest_framework.routers import DefaultRouter
 from . import views
-from .views import RiderRegisterView, DriverRegisterView, MenuCategoryViewSet, MenuCategoryListAPIView, MenuItemViewSet, MenuItemsByCategoryView, ContactFormSubmissionView, DailySpecialListView, CreateReviewView, MenuItemReviewsView, UpdateMenuItemAvailability, RestaurantInfoView, AvailableTablesAPIView, TableDetailAPIView, search_menu_items, OpeningHourListView, MenuItemDetailView, MenuByPriceRangeView
+from .views import RiderRegisterView, DriverRegisterView, MenuItemListView, MenuCategoryViewSet, MenuCategoryListAPIView, MenuItemViewSet, MenuItemsByCategoryView, ContactFormSubmissionView, DailySpecialListView, CreateReviewView, MenuItemReviewsView, UpdateMenuItemAvailability, RestaurantInfoView, AvailableTablesAPIView, TableDetailAPIView, search_menu_items, OpeningHourListView, MenuItemDetailView, MenuByPriceRangeView
 
 router = DefaultRouter()
 router.register(r'menu-items', MenuItemViewSet, basename='menuitem')
@@ -25,6 +25,7 @@ urlpatterns = [
     path("gallery/", views.gallery, name="gallery"),
     path("api/rider/register/", RiderRegisterView.as_view(), name="rider-register"),
     path("api/driver/register/", DriverRegisterView.as_view(), name="driver-register"),
+    path("api/menu/", MenuItemListView.as_view(), name="menu-list"),
     path("api/menu-categories/", MenuCategoryListAPIView.as_view(), name="menu-categories-list"),
     path("api/contact/", ContactFormSubmissionView.as_view(), name="contact-form"),
     path("api/daily-specials/", DailySpecialListView.as_view(), name="daily-specials"),

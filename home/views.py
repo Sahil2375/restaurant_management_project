@@ -194,6 +194,22 @@ class DriverRegisterView(APIView):
             return Response(serializer.to_representation(driver), status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+
+class MenuItemListView(ListAPIView):
+    serializer_class = MenuItemSerializer
+
+    def get_queryset(self):
+        return MenuItem.objects.all()
+    
+    def list(self, request, *args, **kwargs):
+        try:
+            queryset = self.get_queryset()
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    
 class MenuCategoryViewSet(viewsets.ModelViewSet):
     queryset = MenuCategory.objects.all()
     serializer_class = MenuCategorySerializer
@@ -237,13 +253,6 @@ class MenuItemViewSet(viewsets.ReadOnlyModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     search_query = self.request.query_params.get('q', None)
-    #     if search_query:
-    #         queryset = queryset.filter(name__icontains=search_query)
-    #     return queryset
-
 
 class MenuItemsByCategoryView(APIView):
     """
