@@ -21,9 +21,9 @@ from rest_framework import viewsets, filters, permissions
 from rest_framework.pagination import PageNumberPagination
 
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
-from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission, UserReview, Restaurant, OpeningHour
+from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission, UserReview, Restaurant, OpeningHour, Menu
 
-from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemAvailabilitySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer, RestaurantSerializer, TableSerializer, OpeningHourSerializer
+from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemAvailabilitySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer, RestaurantSerializer, TableSerializer, OpeningHourSerializer, MenuItemSerializer
 
 # Create your views here.
 
@@ -388,3 +388,13 @@ def search_menu_items(request):
 class OpeningHourListView(ListAPIView):
     queryset = OpeningHour.objects.all().order_by('id')
     serializer_class = OpeningHourSerializer
+
+class MenuItemDetailView(APIView):
+    def get(self, request, item_id):
+        try:
+            menu_item = Menu.objects.get(id=item_id)
+        except Menu.DoesNotExist:
+            return Response({"error": "Menu item not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = MenuItemSerializer(menu_item)
+        return Response(serializer.data)

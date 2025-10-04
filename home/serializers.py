@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Rider, Driver, MenuCategory, MenuItem, ContactFormSubmission, UserReview, Restaurant, Table, OpeningHour
+from .models import Rider, Driver, MenuCategory, MenuItem, ContactFormSubmission, UserReview, Restaurant, Table, OpeningHour, Menu
 
     
 class UserSerializer(serializers.ModelSerializer):
@@ -148,3 +148,9 @@ class OpeningHourSerializer(serializers.ModelSerializer):
     class Meta:
         model = OpeningHour
         fields = ['day', 'opening_time', 'closing_time']
+
+class MenuItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Menu
+        fields = ['id', 'name', 'description', 'price', 'image', 'is_available']
+        
