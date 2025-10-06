@@ -21,9 +21,9 @@ from rest_framework import viewsets, filters, permissions
 from rest_framework.pagination import PageNumberPagination
 
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
-from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission, UserReview, Restaurant, OpeningHour, Menu
+from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission, UserReview, Restaurant, OpeningHour, Menu, FAQ
 
-from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemAvailabilitySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer, RestaurantSerializer, TableSerializer, OpeningHourSerializer, MenuItemSerializer
+from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemAvailabilitySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer, RestaurantSerializer, TableSerializer, OpeningHourSerializer, MenuItemSerializer, FAQSerializer
 
 # Create your views here.
 
@@ -469,3 +469,29 @@ class RestaurantOpeningHoursView(APIView):
         if not restaurant:
             return Response({"error": "Restaurant info not found."}, status=status.HTTP_404_NOT_FOUND)
         return Response({"opening_hours": restaurant.opening_hours})
+
+
+class FAQPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 20
+
+
+class FAQListView(generics.ListAPIView):
+    """
+    API endpoint to retrieve a list of frequently asked questions (FAQs).
+    Supports pagination and handles empty datasets gracefully.
+    """
+    queryset = FAQ.objects.all()
+    serializer_class = FAQSerializer
+    permission_classes = [permissions.AllowAny]  # public endpoint
+    pagination_class = FAQPagination
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        if not queryset.exists():
+            return Response(
+                {"message": "No FAQs available at the moment."},
+                status=200
+            )
+        return super().list(request, *args, **kwargs)
