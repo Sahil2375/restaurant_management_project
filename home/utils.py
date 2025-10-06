@@ -1,3 +1,4 @@
+import re
 from datetime import datetime, time
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -70,3 +71,32 @@ def calculate_discount(original_price, discount_percentage):
 
     except (ValueError, TypeError):
         return "Error: Invalid input. Please provide numeric values."
+
+
+def format_phone_number(phone_number):
+    """
+    Format a phone number string into a standardized format: (XXX) XXX-XXXX.
+    Handles common input variations and errors gracefully.
+
+    :param phone_number: String input representing a phone number
+    :return: Formatted phone number as a string or 'Invalid phone number'
+    """
+    try:
+        # Remove all non-digit characters
+        digits = re.sub(r'\D', '', phone_number)
+
+        # Handle different lengths
+        if len(digits) == 10:
+            # e.g., 9876543210 → (987) 654-3210
+            formatted = f"({digits[:3]}) {digits[3:6]}-{digits[6:]}"
+        elif len(digits) == 11 and digits.startswith('1'):
+            # e.g., 19876543210 → +1 (987) 654-3210
+            formatted = f"+{digits[0]} ({digits[1:4]}) {digits[4:7]}-{digits[7:]}"
+        else:
+            return "Invalid phone number"
+
+        return formatted
+
+    except Exception as e:
+        print(f"Error formatting phone number: {e}")
+        return "Invalid phone number"
