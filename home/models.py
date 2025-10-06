@@ -96,10 +96,20 @@ class MenuItem(models.Model):
     # image = models.ImageField(upload_to='menu_images/', blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    cuisine_type = models.CharField(max_length=50)
     # discount_percentage = models.PositiveIntegerField(default=0, help_text="Discount in %")
     # is_daily_special = models.BooleanField(default=False)  # new field
     # available = models.BooleanField(default=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+
+    @classmethod
+    def get_items_by_cuisine(cls, cuisine_type):
+        """
+        Retrieve menu items filtered by the given cuisine type.
+        :param cuisine_type: String representing the cuisine (e.g., 'Italian', 'Indian')
+        :return: QuerySet of MenuItem objects matching the cuisine type
+        """
+        return cls.objects.filter(cuisine_type__iexact=cuisine_type)
 
     def get_final_price(self) -> float:
         """
