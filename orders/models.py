@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 from decimal import Decimal
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -123,6 +124,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
     customer_name = models.CharField(max_length=100, blank=True, null=True)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
 
     objects = models.Manager()  # The default manager.
     custom = OrderManager()  # Our custom manager.
@@ -133,6 +135,15 @@ class Order(models.Model):
             self.order_id = generate_unique_order_id(Order)
         super().save(*args, **kwargs)
 
+    @classmethod
+    def calculate_total_revenue(cls):
+        """
+        Calculates the total revenue from all completed orders.
+        Returns a Decimal value (0.0 if no completed orders exist).
+        """
+        result = cls.objects.filter(status='Completed').aggregate(total_revenue=Sum('total_amount'))
+        return result['total_revenue'] or 0.0
+
     
     def calculate_total(self):
         from .utils import calculate_discount
@@ -140,7 +151,6 @@ class Order(models.Model):
         for item in self.items.all():
             total += calculate_discount(item.price, getattr(item, 'discount', 0)) * item.quantity
         return total
-
 
     # Attach the custom manager
     objects = ActiveOrderManager()
