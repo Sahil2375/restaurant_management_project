@@ -10,11 +10,12 @@ from home.models import MenuItem
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics, permissions
 from rest_framework.decorators import action, api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import RetrieveAPIView, ListAPIView
 from rest_framework.exceptions import NotFound
+from rest_framework.pagination import PageNumberPagination
 from .models import Order, Coupon, MenuCategory
 from .serializers import OrderSerializer, UpdateOrderStatusSerializer, MenuCategorySerializer
 
@@ -264,3 +265,24 @@ class CouponValidationView(APIView):
 class MenuCategoryListView(ListAPIView):
     queryset = MenuCategory.objects.all()
     serializer_class = MenuCategorySerializer
+
+
+
+class OrderPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 20
+
+
+class UserOrderHistoryView(generics.ListAPIView):
+    """
+    API endpoint to retrieve the authenticated user's order history.
+    Includes pagination for large datasets.
+    """
+    serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = OrderPagination
+
+    def get_queryset(self):
+        # Return only the authenticated user's orders, latest first
+        return Order.objects.filter(user=self.request.user).order_by('-created_at')
