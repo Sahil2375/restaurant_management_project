@@ -7,14 +7,7 @@ from home.models import MenuItem  # assuming MenuItem is in home app
 import secrets
 # from .utils import generate_unique_order_id, calculate_discount
 
-
 # Create your models here.
-
-class OrderStatus(models.Model):
-    name = models.CharField(max_length=50, unique=True)  # e.g., Pending, Preparing, Delivered
-
-    def __str__(self):
-        return self.name
 
 class Menu(models.Model):
     # Menu model representing a dish.
@@ -93,7 +86,7 @@ class ActiveOrderManager(models.Manager):
         # Only return orders with status 'pending' or 'processing'
         return super().get_queryset().filter(status__in=['pending', 'processing'])
 
-class OrderMAnager(models.Manager):
+class OrderManager(models.Manager):
     def with_status(self, status):
         """Retrieve all orders with a given status."""
         return self.filter(status=status)
@@ -132,7 +125,7 @@ class Order(models.Model):
     customer_name = models.CharField(max_length=100, blank=True, null=True)
 
     objects = models.Manager()  # The default manager.
-    custom = OrderMAnager()  # Our custom manager.
+    custom = OrderManager()  # Our custom manager.
 
     def save(self, *args, **kwargs):
         if not self.order_id:
