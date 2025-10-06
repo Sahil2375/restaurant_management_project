@@ -220,3 +220,27 @@ def get_daily_sales_total(specific_date: date):
 
     # Return 0 if no orders exist
     return total or 0
+
+
+def calculate_average_rating(reviews_queryset):
+    """
+    Calculate the average rating from a queryset of reviews.
+
+    :param reviews_queryset: Django queryset of Review objects
+    :return: Float representing the average rating, or 0.0 if no reviews
+    """
+    try:
+        total_reviews = reviews_queryset.count()
+
+        # Handle case when there are no reviews
+        if total_reviews == 0:
+            return 0.0
+
+        total_rating = sum(review.rating for review in reviews_queryset)
+        average_rating = total_rating / total_reviews
+
+        return round(average_rating, 2)  # Rounded to 2 decimal places
+    except Exception as e:
+        # Log or handle unexpected errors gracefully
+        print(f"Error calculating average rating: {e}")
+        return 0.0
