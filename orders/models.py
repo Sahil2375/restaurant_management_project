@@ -154,6 +154,13 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.short_id} - {self.status}"
+    
+    def get_total_item_count(self):
+        """
+        Returns the total number of items in this order.
+        Sums the quantity of all related order items.
+        """
+        return sum(item.quantity for item in self.order_items.all())
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
