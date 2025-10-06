@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.shortcuts import render
 from rest_framework.routers import DefaultRouter
 from . import views
-from .views import RiderRegisterView, DriverRegisterView, MenuItemListView, MenuCategoryViewSet, MenuCategoryListAPIView, MenuItemViewSet, MenuItemsByCategoryView, ContactFormSubmissionView, DailySpecialListView, CreateReviewView, MenuItemReviewsView, UpdateMenuItemAvailability, RestaurantInfoView, AvailableTablesAPIView, TableDetailAPIView, search_menu_items, OpeningHourListView, MenuItemDetailView, MenuByPriceRangeView, RestaurantOpeningHoursView
+from .views import RiderRegisterView, DriverRegisterView, MenuItemListView, MenuCategoryViewSet, MenuCategoryListAPIView, MenuItemViewSet, MenuItemsByCategoryView, ContactFormSubmissionView, DailySpecialListView, CreateReviewView, MenuItemReviewsView, UpdateMenuItemAvailability, RestaurantInfoView, AvailableTablesAPIView, TableDetailAPIView, search_menu_items, OpeningHourListView, MenuItemDetailView, MenuByPriceRangeView, RestaurantOpeningHoursView, MenuItemAvailabilityView
 
 router = DefaultRouter()
 router.register(r'menu-items', MenuItemViewSet, basename='menuitem')
@@ -40,6 +40,7 @@ urlpatterns = [
     path("menu/<int:item_id>/", MenuItemDetailView.as_view(), name="menu-item-detail"),
     path("menu/price-range/", MenuByPriceRangeView.as_view(), name="menu-price-range"),
     path('restaurant/opening-hours/', RestaurantOpeningHoursView.as_view(), name='restaurant-opening-hours'),
+     path('menu-items/<int:pk>/availability/', MenuItemAvailabilityView.as_view(), name='menu-item-availability'),
 ]
 
 handler404 = 'home.urls.custom_404_view'

@@ -99,7 +99,7 @@ class MenuItem(models.Model):
     cuisine_type = models.CharField(max_length=50)
     # discount_percentage = models.PositiveIntegerField(default=0, help_text="Discount in %")
     # is_daily_special = models.BooleanField(default=False)  # new field
-    # available = models.BooleanField(default=True)
+    available = models.BooleanField(default=True) # Indicates if item is available
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
 
     @classmethod

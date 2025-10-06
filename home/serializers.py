@@ -107,9 +107,12 @@ class MenuItemSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Price must be a positive number.")
         return value
 
-class MenuItemAvailabilitySerializer(serializers.Serializer):
-    """Serializer to update only availability status"""
-    available = serializers.BooleanField()
+class MenuItemAvailabilitySerializer(serializers.ModelSerializer):
+    # """Serializer to update only availability status"""
+    # available = serializers.BooleanField()
+    class Meta:
+        model = MenuItem
+        fields = ['id', 'name', 'available']
     
 class ContactFormSubmissionSerializer(serializers.ModelSerializer):
     class Meta:

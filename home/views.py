@@ -281,6 +281,31 @@ class MenuItemsByCategoryView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class MenuItemAvailabilityView(APIView):
+    """
+    API endpoint to check the availability of a menu item by ID.
+    """
+
+    def get(self, request, pk):
+        try:
+            menu_item = MenuItem.objects.get(pk=pk)
+            serializer = MenuItemAvailabilitySerializer(menu_item)
+            return Response(
+                {"available": menu_item.available, "item": serializer.data},
+                status=status.HTTP_200_OK
+            )
+        except MenuItem.DoesNotExist:
+            return Response(
+                {"error": "Menu item not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {"error": f"An unexpected error occurred: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
 def register_user(request):
     email = request.POST.get('email', '')
     if not is_valid_email(email):
