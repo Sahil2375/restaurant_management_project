@@ -18,6 +18,7 @@ from .views import (
     MenuCategoryListView,
     UserOrderHistoryView,
     OrderStatusUpdateView,
+    OrderSummaryView,
 )
 
 router = DefaultRouter()
@@ -41,4 +42,5 @@ urlpatterns = router.urls
     path('api/categories/', MenuCategoryListView.as_view(), name='menu-categories'),
     path('orders/history/', UserOrderHistoryView.as_view(), name='user-order-history'),
     path('orders/<int:order_id>/update-status/', OrderStatusUpdateView.as_view(), name='order-status-update'),
+    path('orders/<int:order_id>/summary/', OrderSummaryView.as_view(), name='order-summary'),
 ]

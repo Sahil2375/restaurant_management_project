@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from home.models import MenuItem  # assuming MenuItem is in home app
 import secrets
-# from .utils import generate_unique_order_id, calculate_discount
+
 
 # Create your models here.
 

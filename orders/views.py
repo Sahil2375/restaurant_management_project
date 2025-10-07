@@ -17,7 +17,7 @@ from rest_framework.generics import RetrieveAPIView, ListAPIView
 from rest_framework.exceptions import NotFound
 from rest_framework.pagination import PageNumberPagination
 from .models import Order, Coupon, MenuCategory
-from .serializers import OrderSerializer, UpdateOrderStatusSerializer, MenuCategorySerializer, OrderStatusUpdateSerializer
+from .serializers import OrderSerializer, UpdateOrderStatusSerializer, MenuCategorySerializer, OrderStatusUpdateSerializer, OrderSummarySerializer
 
 from orders.utils import send_order_confirmation_email, send_email
 
@@ -310,3 +310,16 @@ class OrderStatusUpdateView(APIView):
                 status=status.HTTP_200_OK
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class OrderSummaryView(APIView):
+    """
+    API endpoint to retrieve summary of a specific order.
+    """
+
+    def get(self, request, order_id):
+        # Retrieve order or return 404
+        order = get_object_or_404(Order, id=order_id)
+
+        serializer = OrderSummarySerializer(order)
+        return Response(serializer.data, status=status.HTTP_200_OK)
