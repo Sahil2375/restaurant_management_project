@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Restaurant, Order
 from datetime import datetime
 from django.conf import settings
@@ -17,7 +17,7 @@ from rest_framework.generics import RetrieveAPIView, ListAPIView
 from rest_framework.exceptions import NotFound
 from rest_framework.pagination import PageNumberPagination
 from .models import Order, Coupon, MenuCategory
-from .serializers import OrderSerializer, UpdateOrderStatusSerializer, MenuCategorySerializer
+from .serializers import OrderSerializer, UpdateOrderStatusSerializer, MenuCategorySerializer, OrderStatusUpdateSerializer
 
 from orders.utils import send_order_confirmation_email, send_email
 
@@ -286,3 +286,27 @@ class UserOrderHistoryView(generics.ListAPIView):
     def get_queryset(self):
         # Return only the authenticated user's orders, latest first
         return Order.objects.filter(user=self.request.user).order_by('-created_at')
+
+
+class OrderStatusUpdateView(APIView):
+    """
+    API endpoint to update order status.
+    Example PUT body:
+    {
+        "status": "Delivered"
+    }
+    """
+
+    def put(self, request, order_id):
+        order = get_object_or_404(Order, id=order_id)
+        serializer = OrderStatusUpdateSerializer(data=request.data)
+
+        if serializer.is_valid():
+            new_status = serializer.validated_data['status']
+            order.status = new_status
+            order.save()
+            return Response(
+                {"message": f"Order #{order.id} status updated to '{new_status}'."},
+                status=status.HTTP_200_OK
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
