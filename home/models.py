@@ -109,7 +109,7 @@ class MenuItem(models.Model):
         :param cuisine_type: String representing the cuisine (e.g., 'Italian', 'Indian')
         :return: QuerySet of MenuItem objects matching the cuisine type
         """
-        return cls.objects.filter(cuisine_type__iexact=cuisine_type)
+        return cls.objects.filter(cuisine_type__iexact=cuisine_type, available=True)
 
     def get_final_price(self) -> float:
         """

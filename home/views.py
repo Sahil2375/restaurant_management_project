@@ -314,6 +314,14 @@ def register_user(request):
     # Continue with registration.
     return JsonResponse({'message': 'Email is valid'})
 
+
+class MenuItemsByCuisineView(APIView):
+    def get(self, request, cuisine_type):
+        items = MenuItem.get_items_by_cuisine(cuisine_type)
+        data = [{"id": item.id, "name": item.name, "price": item.price} for item in items]
+        return Response({"cuisine": cuisine_type, "menu_items": data})
+
+
 class ContactFormSubmissionView(CreateAPIView):
     queryset = ContactFormSubmission.objects.all()
     serializer_class = ContactFormSubmissionSerializer

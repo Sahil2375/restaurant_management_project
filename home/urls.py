@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.shortcuts import render
 from rest_framework.routers import DefaultRouter
 from . import views
-from .views import RiderRegisterView, DriverRegisterView, MenuItemListView, MenuCategoryViewSet, MenuCategoryListAPIView, MenuItemViewSet, MenuItemsByCategoryView, ContactFormSubmissionView, DailySpecialListView, CreateReviewView, MenuItemReviewsView, UpdateMenuItemAvailability, RestaurantInfoView, AvailableTablesAPIView, TableDetailAPIView, search_menu_items, OpeningHourListView, MenuItemDetailView, MenuByPriceRangeView, RestaurantOpeningHoursView, MenuItemAvailabilityView, FAQListView, MenuItemCountView
+from .views import RiderRegisterView, DriverRegisterView, MenuItemListView, MenuCategoryViewSet, MenuCategoryListAPIView, MenuItemViewSet, MenuItemsByCategoryView, ContactFormSubmissionView, DailySpecialListView, CreateReviewView, MenuItemReviewsView, UpdateMenuItemAvailability, RestaurantInfoView, AvailableTablesAPIView, TableDetailAPIView, search_menu_items, OpeningHourListView, MenuItemDetailView, MenuByPriceRangeView, RestaurantOpeningHoursView, MenuItemAvailabilityView, FAQListView, MenuItemCountView, MenuItemsByCuisineView
 
 router = DefaultRouter()
 router.register(r'menu-items', MenuItemViewSet, basename='menuitem')
@@ -43,6 +43,7 @@ urlpatterns = [
     path('menu-items/<int:pk>/availability/', MenuItemAvailabilityView.as_view(), name='menu-item-availability'),
     path('faqs/', FAQListView.as_view(), name='faq-list'),
     path('menu-items/count/', MenuItemCountView.as_view(), name='menu-item-count'),
+    path('menu-items/cuisine/<str:cuisine_type>/', MenuItemsByCuisineView.as_view(), name='menu-items-by-cuisine'),
 ]
 
 handler404 = 'home.urls.custom_404_view'
