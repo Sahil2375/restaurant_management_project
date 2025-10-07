@@ -495,3 +495,17 @@ class FAQListView(generics.ListAPIView):
                 status=200
             )
         return super().list(request, *args, **kwargs)
+
+
+class MenuItemCountView(APIView):
+    """
+    API endpoint to get total count of available menu items.
+    """
+
+    def get(self, request):
+        # Count only available items
+        total_items = MenuItem.objects.filter(is_available=True).count()
+        return Response(
+            {"total_menu_items": total_items},
+            status=status.HTTP_200_OK
+        )
