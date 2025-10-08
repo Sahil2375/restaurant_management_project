@@ -245,11 +245,12 @@ class Reservation(models.Model):
 
 
 class Table(models.Model):
-    number = models.IntegerField(unique=True)
-    seats = models.IntegerField()
+    number = models.PositiveIntegerField(unique=True)
+    capacity = models.PositiveIntegerField()
+    is_available = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"Table {self.number} ({self.seats} seats)"
+        return f"Table {self.number} (Capacity: {self.capacity})"
 
 
 class OpeningHour(models.Model):
