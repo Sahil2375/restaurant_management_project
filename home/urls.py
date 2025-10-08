@@ -44,6 +44,7 @@ urlpatterns = [
     path('faqs/', FAQListView.as_view(), name='faq-list'),
     path('menu-items/count/', MenuItemCountView.as_view(), name='menu-item-count'),
     path('menu-items/cuisine/<str:cuisine_type>/', MenuItemsByCuisineView.as_view(), name='menu-items-by-cuisine'),
+    path('menu-items/', MenuItemListView.as_view(), name='menu-item-list'),
 ]
 
 handler404 = 'home.urls.custom_404_view'

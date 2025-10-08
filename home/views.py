@@ -231,17 +231,14 @@ class MenuItemViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
     # pagination_class = MenuItemPagination
-    permission_classes = [permissions.IsAdminUser]  # Only admins can update
+    # permission_classes = [permissions.IsAdminUser]  # Only admins can update
 
-    def update(self, request, pk=None):
-        menu_item = get_object_or_404(MenuItem, pk=pk)
-        serializer = self.get_serializer(menu_item, data=request.data, partial=False)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        category_name = self.request.query_params.get('category')
+        if category_name:
+            queryset = queryset.filter(category__name__iexact=category_name)
+            return queryset
 
     def partial_update(self, request, pk=None):
         """Handle PATCH requests (partial updates)."""

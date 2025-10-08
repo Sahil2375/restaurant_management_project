@@ -100,7 +100,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = MenuItem
-        fields = '__all__'  # Include all fields of MenuItem
+        fields = ['id', 'name', 'description', 'price', 'category']  # Include all fields of MenuItem
 
     def validate_price(self, value):
         if value < 0:
