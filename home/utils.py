@@ -56,21 +56,24 @@ def calculate_discount(original_price, discount_percentage):
     """
     try:
         # Convert inputs to float
-        price = float(original_price)
-        discount = float(discount_percentage)
+        price = float(price)
+        discount_percentage = float(discount_percentage)
 
         # Check for invalid values
         if price < 0:
-            return "Error: Original price cannot be negative."
-        if not (0 <= discount <= 100):
-            return "Error: Discount percentage must be between 0 and 100."
+            raise ValueError("Price cannot be negative.")
+        if not (0 <= discount_percentage <= 100):
+            raise ValueError("Discount percentage must be between 0 and 100.")
 
         # Calculate discounted price
-        discounted_price = price * (1 - discount / 100)
+        discounted_price = price * (1 - discount_percentage / 100)
+
+        # Return rounded result (2 decimal places)
         return round(discounted_price, 2)
 
-    except (ValueError, TypeError):
-        return "Error: Invalid input. Please provide numeric values."
+    except (ValueError, TypeError) as e:
+        print(f"Error calculating discount: {e}")
+        return None
 
 
 def format_phone_number(phone_number):
