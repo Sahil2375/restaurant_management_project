@@ -1,4 +1,5 @@
 from rest_framework import generics, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
@@ -32,3 +33,10 @@ class RestaurantReviewListView(ListAPIView):
                 {"error": "Database error occured while fetching reviews."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
+class ReviewListView(APIView):
+    def get(self, request):
+        reviews = Review.objects.all()
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
