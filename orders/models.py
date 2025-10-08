@@ -118,7 +118,7 @@ class Order(models.Model):
         ]
     
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     short_id = models.CharField(max_length=20, unique=True)
     order_id = models.CharField(max_length=20, unique=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
