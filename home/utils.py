@@ -3,32 +3,42 @@ from datetime import datetime, time
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
+from datetime import datetime, time
+
 def is_restaurant_open():
     """
-    Check if the restaurant is currently open based on hardcoded opening hours.
-
-    Returns:
-        bool: True if open, False if closed
+    Returns True if the restaurant is currently open based on its operating hours,
+    otherwise returns False.
     """
+
+    # Define opening hours (Monday-Friday: 9 AM - 10 PM)
+    opening_hours = {
+        0: (time(9, 0), time(22, 0)),  # Monday
+        1: (time(9, 0), time(22, 0)),  # Tuesday
+        2: (time(9, 0), time(22, 0)),  # Wednesday
+        3: (time(9, 0), time(22, 0)),  # Thursday
+        4: (time(9, 0), time(22, 0)),  # Friday
+        5: (time(10, 0), time(20, 0)), # Saturday (optional)
+        6: None                        # Sunday (Closed)
+    }
 
     # Get current day and time
     now = datetime.now()
+    current_day = now.weekday()  # Monday=0, Sunday=6
     current_time = now.time()
-    current_weekday = now.weekday()  # Monday=0, Sunday=6
 
-    # Define opening hours
-    # Example: Weekdays 9 AM - 10 PM, Weekends 10 AM - 11 PM
-    if current_weekday < 5:  # Monday to Friday
-        opening_time = time(9, 0)   # 9:00 AM
-        closing_time = time(22, 0)  # 10:00 PM
-    else:  # Saturday & Sunday
-        opening_time = time(10, 0)  # 10:00 AM
-        closing_time = time(23, 0)  # 11:00 PM
+    # Check if today is a working day
+    if current_day not in opening_hours or opening_hours[current_day] is None:
+        return False  # Closed today
 
-    # Check if current time is within opening hours
+    opening_time, closing_time = opening_hours[current_day]
+
+    # Compare times
     if opening_time <= current_time <= closing_time:
         return True
-    return False
+    else:
+        return False
+
 
 
 def is_valid_email(email: str) -> bool:
