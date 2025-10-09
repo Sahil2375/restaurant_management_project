@@ -78,7 +78,7 @@ class Driver(models.Model):
         return f"Driver: {self.user.username}"
     
 class MenuCategory(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     # description = models.TextField(blank=True, null=True)
     # category_name = models.CharField(max_length=100,unique=True)
 
