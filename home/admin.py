@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import RestaurantInfo, MenuItem, Feedback, Chef
+from .models import RestaurantInfo, MenuItem, Feedback, Chef, Table
 
 # Register your models here.
 
@@ -18,3 +18,5 @@ class FeedbackAdmin(admin.ModelAdmin):
 @admin.register(Chef)
 class ChefAdmin(admin.ModelAdmin):
     list_display = ("name",)
+
+admin.site.register(Table)
