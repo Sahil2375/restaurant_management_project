@@ -22,3 +22,5 @@ class ChefAdmin(admin.ModelAdmin):
 admin.site.register(Table)
 
 admin.site.register(MenuCategory)
+
+admin.site.register(MenuItem)
