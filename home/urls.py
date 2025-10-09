@@ -7,7 +7,7 @@ from .views import RiderRegisterView, DriverRegisterView, MenuItemListView, Menu
 
 router = DefaultRouter()
 router.register(r'menu-items', MenuItemViewSet, basename='menuitem')
-router.register(r'menu-categories', MenuCategoryViewSet, basename='menu-category')
+router.register(r'categories', MenuCategoryViewSet, basename='menucategory')
 
 def custom_404_view(request, exception):
     return render(request, '404.html', status=404)

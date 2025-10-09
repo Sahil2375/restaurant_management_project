@@ -210,9 +210,16 @@ class MenuItemListView(ListAPIView):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     
-class MenuCategoryViewSet(viewsets.ModelViewSet):
-    queryset = MenuCategory.objects.all()
-    serializer_class = MenuCategorySerializer
+class MenuCategoryViewSet(viewsets.ViewSet):
+    # queryset = MenuCategory.objects.all()
+    # serializer_class = MenuCategorySerializer
+    """
+    A simple ViewSet for listing all menu categories.
+    """
+    def list(self, request):
+        categories = MenuCategory.objects.all()
+        serializer = MenuCategorySerializer(categories, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class MenuCategoryListAPIView(ListAPIView):
