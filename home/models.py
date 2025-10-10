@@ -100,7 +100,11 @@ class MenuItem(models.Model):
     # discount_percentage = models.PositiveIntegerField(default=0, help_text="Discount in %")
     # is_daily_special = models.BooleanField(default=False)  # new field
     # available = models.BooleanField(default=True) # Indicates if item is available
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    category = models.ForeignKey('MenuCategory', on_delete=models.CASCADE, blank=True, null=True)
+    allergens = models.TextField(blank=True, null=True, help_text="List any allergens (e.g., gluten, nuts, dairy)")
+
+    def __str__(self):
+        return f"{self.name} ({self.allergens})" if self.allergens else self.name
 
     @classmethod
     def get_items_by_cuisine(cls, cuisine_type):
@@ -122,8 +126,6 @@ class MenuItem(models.Model):
             return float(final_price)
         return float(self.price)
 
-    def __str__(self):
-        return f"{self.name} - ${self.get_final_price()}"
     
 class ContactMessage(models.Model):
     name = models.CharField(max_length=100)
