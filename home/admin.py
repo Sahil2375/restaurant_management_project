@@ -19,6 +19,10 @@ class FeedbackAdmin(admin.ModelAdmin):
 class ChefAdmin(admin.ModelAdmin):
     list_display = ("name",)
 
-admin.site.register(Table)
-
 admin.site.register(MenuCategory)
+
+@admin.register(Table)
+class TableAdmin(admin.ModelAdmin):
+    list_display = ('number', 'capacity', 'is_available')
+    list_filter = ('is_available',)
+    search_fields = ('number',)
