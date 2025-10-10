@@ -245,7 +245,7 @@ class Reservation(models.Model):
 
 
 class Table(models.Model):
-    number = models.PositiveIntegerField(unique=True)
+    number = models.CharField(max_length=10, unique=True)
     capacity = models.PositiveIntegerField()
     is_available = models.BooleanField(default=True)
 

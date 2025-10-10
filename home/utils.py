@@ -4,6 +4,7 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
 from datetime import datetime, time
+from .models import Table
 
 def is_restaurant_open():
     """
@@ -113,3 +114,14 @@ def format_phone_number(phone_number):
     except Exception as e:
         print(f"Error formatting phone number: {e}")
         return "Invalid phone number"
+
+def get_available_tables_by_capacity(num_guests):
+    """
+    Returns a QuerySet of available tables that can accommodate
+    the given number of guests.
+    
+    Filters:
+    - is_available is True
+    - capacity >= num_guests
+    """
+    return Table.objects.filter(is_available=True, capacity__gte=num_guests)
