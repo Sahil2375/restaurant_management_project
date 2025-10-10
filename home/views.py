@@ -21,7 +21,7 @@ from rest_framework import viewsets, filters, permissions
 from rest_framework.pagination import PageNumberPagination
 
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
-from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission, UserReview, Restaurant, OpeningHour, Menu, FAQ
+from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission, UserReview, Restaurant, OpeningHour, Menu, FAQ, Table
 
 from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemAvailabilitySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer, RestaurantSerializer, TableSerializer, OpeningHourSerializer, MenuItemSerializer, FAQSerializer
 
@@ -521,3 +521,11 @@ class MenuItemCountView(APIView):
             {"total_menu_items": total_items},
             status=status.HTTP_200_OK
         )
+
+
+class TableListAPIView(generics.ListAPIView):
+    """
+    API endpoint to list all tables.
+    """
+    queryset = Table.objects.all()
+    serializer_class = TableSerializer

@@ -144,7 +144,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
 class TableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Table
-        fields = ['table_number', 'capacity', 'is_available']
+        fields = "__all__"
 
 
 class OpeningHourSerializer(serializers.ModelSerializer):
