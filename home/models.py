@@ -28,7 +28,8 @@ class RestaurantInfo(models.Model):
     name = models.CharField(max_length=100, default="My Restaurant")
     # address = models.TextField()
     description = models.TextField(blank=True, null=True)
- 
+    capacity = models.IntegerField(default=0, null=True, blank=True)
+
     def __str__(self):
         return self.name
 
