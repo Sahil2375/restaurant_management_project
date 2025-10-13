@@ -255,7 +255,7 @@ class Table(models.Model):
     location = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"Table {self.number} {self.location} (Capacity: {self.capacity})"
+        return f"Table {self.number} (Capacity: {self.capacity})"
 
 
 class OpeningHour(models.Model):
