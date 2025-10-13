@@ -119,12 +119,14 @@ class Order(models.Model):
     
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    short_id = models.CharField(max_length=20, unique=True)
-    order_id = models.CharField(max_length=20, unique=True, blank=True)
+    # short_id = models.CharField(max_length=20, unique=True)
+    # order_id = models.CharField(max_length=20, unique=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
     customer_name = models.CharField(max_length=100, blank=True, null=True)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+
+    customer_notes = models.TextField(blank=True, null=True)  # New field for customer notes
 
     objects = models.Manager()  # The default manager.
     custom = OrderManager()  # Our custom manager.
