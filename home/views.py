@@ -21,9 +21,9 @@ from rest_framework import viewsets, filters, permissions
 from rest_framework.pagination import PageNumberPagination
 
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
-from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission, UserReview, Restaurant, OpeningHour, Menu, FAQ, Table, Cuisine
+from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission, UserReview, Restaurant, OpeningHour, Menu, FAQ, Table, Cuisine, UserReview
 
-from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemAvailabilitySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer, RestaurantSerializer, TableSerializer, OpeningHourSerializer, MenuItemSerializer, FAQSerializer, CuisineSerializer
+from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemAvailabilitySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer, RestaurantSerializer, TableSerializer, OpeningHourSerializer, MenuItemSerializer, FAQSerializer, CuisineSerializer, UserReviewSerializer
 
 # Create your views here.
 
@@ -536,3 +536,19 @@ class CuisineListView(generics.ListAPIView):
     """
     queryset = Cuisine.objects.all()
     serializer_class = CuisineSerializer
+
+
+class MenuItemReviewCreateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, menu_item_id):
+        # Get menu item by ID
+        menu_item = get_object_or_404(MenuItem, id=menu_item_id)
+
+        # Validate input
+        serializer = UserReviewSerializer(data=request.data)
+        if serializer.is_valid():
+            # Save review linked to user and menu item
+            serializer.save(user=request.user, menu_item=menu_item)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -199,12 +199,12 @@ class UserReview(models.Model):
     text = models.TextField(default="")
     review_date = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        unique_together = ('user', 'menu_item')  # prevent duplicate reviews by the same user
-        ordering = ['-review_date']  # latest reviews first
+    # class Meta:
+    #     unique_together = ('user', 'menu_item')  # prevent duplicate reviews by the same user
+    #     ordering = ['-review_date']  # latest reviews first
 
     def __str__(self):
-        return f"Review by {self.user.username} - ({self.rating}/5)"
+        return f"Review by {self.user.username} - {self.menu_item.name} ({self.rating}/5)"
     
 
 class Reservation(models.Model):
