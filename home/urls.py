@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.shortcuts import render
 from rest_framework.routers import DefaultRouter
 from . import views
-from .views import RiderRegisterView, DriverRegisterView, MenuItemListView, MenuCategoryViewSet, MenuCategoryListAPIView, MenuItemViewSet, MenuItemsByCategoryView, ContactFormSubmissionView, DailySpecialListView, CreateReviewView, MenuItemReviewsView, UpdateMenuItemAvailability, RestaurantInfoView, AvailableTablesAPIView, TableDetailAPIView, search_menu_items, OpeningHourListView, MenuItemDetailView, MenuByPriceRangeView, RestaurantOpeningHoursView, MenuItemAvailabilityView, FAQListView, MenuItemCountView, MenuItemsByCuisineView, TableListAPIView
+from .views import RiderRegisterView, DriverRegisterView, MenuItemListView, MenuCategoryViewSet, MenuCategoryListAPIView, MenuItemViewSet, MenuItemsByCategoryView, ContactFormSubmissionView, DailySpecialListView, CreateReviewView, MenuItemReviewsView, UpdateMenuItemAvailability, RestaurantInfoView, AvailableTablesAPIView, TableDetailAPIView, search_menu_items, OpeningHourListView, MenuItemDetailView, MenuByPriceRangeView, RestaurantOpeningHoursView, MenuItemAvailabilityView, FAQListView, MenuItemCountView, MenuItemsByCuisineView, TableListAPIView, CuisineListView
 
 router = DefaultRouter()
 router.register(r'menu-items', MenuItemViewSet, basename='menuitem')
@@ -46,6 +46,7 @@ urlpatterns = [
     path('menu-items/cuisine/<str:cuisine_type>/', MenuItemsByCuisineView.as_view(), name='menu-items-by-cuisine'),
     path('menu-items/', MenuItemListView.as_view(), name='menu-item-list'),
     path('api/tables/', TableListAPIView.as_view(), name='table-list'),
+    path('api/cuisines/', views.CuisineListView.as_view(), name='cuisine-list'),
 ]
 
 handler404 = 'home.urls.custom_404_view'

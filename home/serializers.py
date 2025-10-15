@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Rider, Driver, MenuCategory, MenuItem, ContactFormSubmission, UserReview, Restaurant, Table, OpeningHour, Menu, FAQ
+from .models import Rider, Driver, MenuCategory, MenuItem, ContactFormSubmission, UserReview, Restaurant, Table, OpeningHour, Menu, FAQ, Cuisine
 
     
 class UserSerializer(serializers.ModelSerializer):
@@ -162,3 +162,9 @@ class FAQSerializer(serializers.ModelSerializer):
     class Meta:
         model = FAQ
         fields = ['id', 'question', 'answer']
+
+
+class CuisineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cuisine
+        fields = ['id', 'name']

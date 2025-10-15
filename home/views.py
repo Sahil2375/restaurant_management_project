@@ -21,9 +21,9 @@ from rest_framework import viewsets, filters, permissions
 from rest_framework.pagination import PageNumberPagination
 
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
-from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission, UserReview, Restaurant, OpeningHour, Menu, FAQ, Table
+from .models import MenuCategory, MenuItem, Rider, Driver, ContactFormSubmission, UserReview, Restaurant, OpeningHour, Menu, FAQ, Table, Cuisine
 
-from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemAvailabilitySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer, RestaurantSerializer, TableSerializer, OpeningHourSerializer, MenuItemSerializer, FAQSerializer
+from .serializers import RiderRegistrationSerializer, DriverRegistrationSerializer, MenuCategorySerializer, MenuItemAvailabilitySerializer, MenuItemSerializer, ContactFormSubmissionSerializer, DailySpecialSerializer, UserReviewSerializer, RestaurantSerializer, TableSerializer, OpeningHourSerializer, MenuItemSerializer, FAQSerializer, CuisineSerializer
 
 # Create your views here.
 
@@ -529,3 +529,10 @@ class TableListAPIView(generics.ListAPIView):
     """
     queryset = Table.objects.all()
     serializer_class = TableSerializer
+
+class CuisineListView(generics.ListAPIView):
+    """
+    API endpoint to list all cuisine types.
+    """
+    queryset = Cuisine.objects.all()
+    serializer_class = CuisineSerializer
