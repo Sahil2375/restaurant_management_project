@@ -93,15 +93,22 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
+class Cuisine(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+    
 class MenuItem(models.Model):
     name = models.CharField(max_length=100)
     image = models.ImageField(upload_to='menu_images/', blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    # cuisine_type = models.CharField(max_length=50)
-    # discount_percentage = models.PositiveIntegerField(default=0, help_text="Discount in %")
-    # is_daily_special = models.BooleanField(default=False)  # new field
-    # available = models.BooleanField(default=True) # Indicates if item is available
+    cuisine = models.ForeignKey('Cuisine', on_delete=models.SET_NULL, blank=True, null=True)
+    discount_percentage = models.PositiveIntegerField(default=0, help_text="Discount in %")
+    is_daily_special = models.BooleanField(default=False)  # new field
+    available = models.BooleanField(default=True) # Indicates if item is available
     category = models.ForeignKey('MenuCategory', on_delete=models.CASCADE, blank=True, null=True)
     allergens = models.TextField(blank=True, null=True, help_text="List any allergens (e.g., gluten, nuts, dairy)")
 
