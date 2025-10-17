@@ -177,3 +177,13 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.menu_item.name} x {self.quantity}"
+    
+class Discount(models.Model):
+    code = models.CharField(max_length=50, unique=True)
+    percentage = models.DecimalField(max_digits=5, decimal_places=2)  # e.g. 15.00 for 15%
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.code} - {self.percentage}%"
