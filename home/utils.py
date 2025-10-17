@@ -4,7 +4,7 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
 from datetime import datetime, time
-from .models import Table
+from .models import Table, DailyOperatingHours
 
 def is_restaurant_open():
     """
@@ -125,3 +125,24 @@ def get_available_tables_by_capacity(num_guests):
     - capacity >= num_guests
     """
     return Table.objects.filter(is_available=True, capacity__gte=num_guests)
+
+
+def is_restaurant_open_v2():
+    """
+    Returns True if the restaurant is currently open, False otherwise.
+    """
+    now = datetime.now()
+    current_day = now.strftime('%A')  # e.g., 'Monday', 'Tuesday'
+    current_time = now.time()
+
+    try:
+        hours = DailyOperatingHours.objects.get(day=current_day)
+    except DailyOperatingHours.DoesNotExist:
+        # If no hours are set for today, assume closed
+        return False
+
+    # Compare current time with opening and closing times
+    if hours.opening_time <= current_time <= hours.closing_time:
+        return True
+    else:
+        return False
