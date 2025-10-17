@@ -19,6 +19,7 @@ from .views import (
     UserOrderHistoryView,
     OrderStatusUpdateView,
     OrderSummaryView,
+    TableListView,
 )
 
 router = DefaultRouter()
@@ -43,4 +44,5 @@ urlpatterns = router.urls
     path('orders/history/', UserOrderHistoryView.as_view(), name='user-order-history'),
     path('orders/<int:order_id>/update-status/', OrderStatusUpdateView.as_view(), name='order-status-update'),
     path('orders/<int:order_id>/summary/', OrderSummaryView.as_view(), name='order-summary'),
+    path('tables/', TableListView.as_view(), name='table-list'),  # New table list view
 ]

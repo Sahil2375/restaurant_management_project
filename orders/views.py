@@ -16,8 +16,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import RetrieveAPIView, ListAPIView
 from rest_framework.exceptions import NotFound
 from rest_framework.pagination import PageNumberPagination
-from .models import Order, Coupon, MenuCategory
-from .serializers import OrderSerializer, UpdateOrderStatusSerializer, MenuCategorySerializer, OrderStatusUpdateSerializer, OrderSummarySerializer
+from .models import Order, Coupon, MenuCategory, Table
+from .serializers import OrderSerializer, UpdateOrderStatusSerializer, MenuCategorySerializer, OrderStatusUpdateSerializer, OrderSummarySerializer, TableSerializer
 
 from orders.utils import send_order_confirmation_email, send_email
 
@@ -323,3 +323,10 @@ class OrderSummaryView(APIView):
 
         serializer = OrderSummarySerializer(order)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class TableListView(generics.ListAPIView):
+    """
+    API endpoint to list all tables.
+    """
+    queryset = Table.objects.all()
+    serializer_class = TableSerializer
