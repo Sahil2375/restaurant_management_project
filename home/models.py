@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from datetime import timedelta
+from datetime import timedelta, date
 from django.contrib.auth.models import User
 
 # Create your models here.
@@ -112,6 +112,10 @@ class MenuItem(models.Model):
     category = models.ForeignKey('MenuCategory', on_delete=models.CASCADE, blank=True, null=True)
     allergens = models.TextField(blank=True, null=True, help_text="List any allergens (e.g., gluten, nuts, dairy)")
 
+    def is_daily_special(self):
+        today = date.today()
+        return DailySpecial.objects.filter(menu_item=self, date=today).exists()
+
     def __str__(self):
         return f"{self.name} ({self.allergens})" if self.allergens else self.name
 
@@ -182,6 +186,23 @@ class TodaysSpecial(models.Model):
 
     def __str__(self):
         return self.name
+    
+class DailySpecial(models.Model):
+    menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
+    date = models.DateField(default=timezone.now)
+
+    class Meta:
+        unique_together = (('menu_item', 'date'),)  # prevent duplicate specials for same item on same day
+
+    def __str__(self):
+        return f"{self.menu_item.name} - Special on {self.date}"
+
+    class Meta:
+        unique_together = ('menu_item', 'date')  # prevent duplicate specials for same item on same day
+        ordering = ['-date']  # latest specials first
+
+    def __str__(self):
+        return f"{self.menu_item.name} - {self.date}"
     
 class ContactFormSubmission(models.Model):
     name = models.CharField(max_length=100)
