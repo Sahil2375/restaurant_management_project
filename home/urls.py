@@ -3,11 +3,12 @@ from django.contrib import admin
 from django.shortcuts import render
 from rest_framework.routers import DefaultRouter
 from . import views
-from .views import RiderRegisterView, DriverRegisterView, MenuItemListView, MenuCategoryViewSet, MenuCategoryListAPIView, MenuItemViewSet, MenuItemsByCategoryView, ContactFormSubmissionView, DailySpecialListView, CreateReviewView, MenuItemReviewsView, UpdateMenuItemAvailability, RestaurantInfoView, AvailableTablesAPIView, TableDetailAPIView, search_menu_items, OpeningHourListView, MenuItemDetailView, MenuByPriceRangeView, RestaurantOpeningHoursView, MenuItemAvailabilityView, FAQListView, MenuItemCountView, MenuItemsByCuisineView, TableListAPIView, CuisineListView, MenuItemReviewCreateView
+from .views import RiderRegisterView, DriverRegisterView, MenuItemListView, MenuCategoryViewSet, MenuCategoryListAPIView, MenuItemViewSet, MenuItemsByCategoryView, ContactFormSubmissionView, DailySpecialListView, CreateReviewView, MenuItemReviewsView, UpdateMenuItemAvailability, RestaurantInfoView, AvailableTablesAPIView, TableDetailAPIView, search_menu_items, OpeningHourListView, MenuItemDetailView, MenuByPriceRangeView, RestaurantOpeningHoursView, MenuItemAvailabilityView, FAQListView, MenuItemCountView, MenuItemsByCuisineView, TableListAPIView, CuisineListView, MenuItemReviewCreateView, IngredientViewSet
 
 router = DefaultRouter()
 router.register(r'menu-items', MenuItemViewSet, basename='menuitem')
 router.register(r'categories', MenuCategoryViewSet, basename='menucategory')
+router.register(r'ingredients', IngredientViewSet, basename='ingredient')
 
 def custom_404_view(request, exception):
     return render(request, '404.html', status=404)
@@ -48,6 +49,7 @@ urlpatterns = [
     path('api/tables/', TableListAPIView.as_view(), name='table-list'),
     path('api/cuisines/', views.CuisineListView.as_view(), name='cuisine-list'),
     path('menu-items/<int:menu_item_id>/reviews/', MenuItemReviewCreateView.as_view(), name='menuitem-review-create'),
+    path('api/', include(router.urls)),
 ]
 
 handler404 = 'home.urls.custom_404_view'
