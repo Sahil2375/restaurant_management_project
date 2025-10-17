@@ -337,3 +337,10 @@ class DailyOperatingHours(models.Model):
 
     def __str__(self):
         return f"{self.day}: {self.opening_time} - {self.closing_time}"
+
+class Ingredient(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    unit_of_measure = models.CharField(max_length=50)  # e.g., grams, liters
+
+    def __str__(self):
+        return self.name
