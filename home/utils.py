@@ -146,3 +146,13 @@ def is_restaurant_open_v2():
         return True
     else:
         return False
+
+def format_currency(amount):
+    """
+    Formats a decimal or float amount as currency with a dollar sign
+    and two decimal places.
+
+    Example:
+        12.5 -> "$12.50"
+    """
+    return f"${amount:.2f}"
