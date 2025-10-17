@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import RestaurantInfo, MenuItem, Feedback, Chef, Table, MenuCategory
+from .models import RestaurantInfo, MenuItem, Feedback, Chef, Table, MenuCategory, DailyOperatingHours
 
 # Register your models here.
 
@@ -26,3 +26,5 @@ class TableAdmin(admin.ModelAdmin):
     list_display = ('number', 'capacity', 'is_available')
     list_filter = ('is_available',)
     search_fields = ('number',)
+
+admin.site.register(DailyOperatingHours)

@@ -328,3 +328,12 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
+    
+
+class DailyOperatingHours(models.Model):
+    day = models.CharField(max_length=20)  # e.g., Monday, Tuesday
+    opening_time = models.TimeField()
+    closing_time = models.TimeField()
+
+    def __str__(self):
+        return f"{self.day}: {self.opening_time} - {self.closing_time}"
