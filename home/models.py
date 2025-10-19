@@ -100,6 +100,14 @@ class Cuisine(models.Model):
     def __str__(self):
         return self.name
     
+# --- Custom Manager ---
+class MenuItemManager(models.Manager):
+    def get_budget_items(self, max_price):
+        """
+        Return all menu items priced below the given max_price.
+        """
+        return self.filter(price__lte=max_price, available=True)
+    
 class MenuItem(models.Model):
     name = models.CharField(max_length=100)
     image = models.ImageField(upload_to='menu_images/', blank=True, null=True)
@@ -111,6 +119,9 @@ class MenuItem(models.Model):
     available = models.BooleanField(default=True) # Indicates if item is available
     category = models.ForeignKey('MenuCategory', on_delete=models.CASCADE, blank=True, null=True)
     allergens = models.TextField(blank=True, null=True, help_text="List any allergens (e.g., gluten, nuts, dairy)")
+
+    # Attach custom manager
+    objects = MenuItemManager()
 
     def is_daily_special(self):
         today = date.today()
