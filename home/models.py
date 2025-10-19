@@ -154,21 +154,36 @@ class Restaurant(models.Model):
     address = models.TextField()
     phone = models.CharField(max_length=15, blank=True, null=True)
     opening_hours = models.CharField(max_length=100, null=True, blank=True)
-    # email = models.EmailField(blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
     website = models.URLField(blank=True, null=True)
-    # created_at = models.DateTimeField(auto_now_add=True)
-    
-    # New field for operating days
-    operating_days = models.CharField(
-        max_length=50, # enough for comma-separated days
-        default="Mon, Tue, Wed, Thurs, Fri, Sat, Sun",
-        help_text="Comma-separated days (e.g., Mon, Tue, Wed, Thurs, Fri, Sat, Sun)",
-        blank=True,
-        null=True
-    )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
+    
+class DailyOperatingHours(models.Model):
+    # Choices for days of the week
+    DAYS_OF_WEEK = [
+        ('monday', 'Monday'),
+        ('tuesday', 'Tuesday'),
+        ('wednesday', 'Wednesday'),
+        ('thursday', 'Thursday'),
+        ('friday', 'Friday'),
+        ('saturday', 'Saturday'),
+        ('sunday', 'Sunday'),
+    ]
+
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="operating_hours")
+    day_of_week = models.CharField(max_length=10, choices=DAYS_OF_WEEK)
+    opening_time = models.TimeField()
+    closing_time = models.TimeField()
+
+    class Meta:
+        unique_together = ('restaurant', 'day_of_week')  # Ensure one entry per day per restaurant
+        ordering = ['day_of_week']
+
+    def __str__(self):
+        return f"{self.restaurant.name} - {self.day_of_week}: {self.opening_time} to {self.closing_time}"
     
     def get_total_menu_items(self):
         """
