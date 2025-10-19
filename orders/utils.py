@@ -244,3 +244,35 @@ def calculate_average_rating(reviews_queryset):
         # Log or handle unexpected errors gracefully
         print(f"Error calculating average rating: {e}")
         return 0.0
+
+
+def calculate_estimated_prep_time(order_items):
+    """
+    Calculate the total estimated preparation time for an order.
+
+    Args:
+        order_items (list): A list of dictionaries, where each dictionary contains:
+            - 'menu_item_id' (int): The ID of the menu item.
+            - 'quantity' (int): The number of that item ordered.
+            - 'prep_time_minutes' (int): The preparation time for one unit of the item.
+
+            Example:
+            [
+                {'menu_item_id': 1, 'quantity': 2, 'prep_time_minutes': 10},
+                {'menu_item_id': 5, 'quantity': 1, 'prep_time_minutes': 15}
+            ]
+
+    Returns:
+        int: The total estimated preparation time in minutes.
+    """
+
+    total_prep_time = 0
+
+    for item in order_items:
+        # Safely extract fields with defaults to handle missing keys
+        quantity = item.get('quantity', 1)
+        prep_time = item.get('prep_time_minutes', 0)
+
+        total_prep_time += quantity * prep_time
+
+    return int(total_prep_time)

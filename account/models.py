@@ -21,24 +21,18 @@ CUISINE_CHOICES = (
     ('Vegetarian', 'Vegetarian'),
 )
 
-# Step 1–3: Create the UserProfile model
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    preferred_cuisine = models.CharField(
-        max_length=50,
-        choices=CUISINE_CHOICES,
-        blank=True,
-        null=True
-    )
-
-    def __str__(self):
-        return f"{self.user.username}'s Profile"
     
 class CustomerProfile(models.Model):
     # Link each profile to a Django user account
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='customer_profile')
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     delivery_address = models.TextField(blank=True, null=True)
+    preferred_cuisine = models.CharField(
+        max_length=50,
+        choices=CUISINE_CHOICES,
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return f"{self.user.username}'s Customer Profile"
