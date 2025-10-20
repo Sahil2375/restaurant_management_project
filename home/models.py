@@ -125,6 +125,7 @@ class MenuItem(models.Model):
 
     # Many-to-Many relationship with Ingredient
     ingredients = models.ManyToManyField('Ingredient', related_name='menu_items', blank=True)
+    is_vegetarian = models.BooleanField(default=False)
 
     # Attach custom manager
     objects = MenuItemManager()
