@@ -225,14 +225,21 @@ class TodaysSpecial(models.Model):
         return self.name
     
 class DailySpecial(models.Model):
+    """
+    Represents a daily special item offered by the restaurant.
+    """
     menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, default="Default Special")
+    description = models.TextField(blank=True, null=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    is_available = models.BooleanField(default=True)
     date = models.DateField(default=timezone.now)
 
     class Meta:
         unique_together = (('menu_item', 'date'),)  # prevent duplicate specials for same item on same day
 
     def __str__(self):
-        return f"{self.menu_item.name} - Special on {self.date}"
+        return f"{self.name} ({self.date})"
 
     class Meta:
         unique_together = ('menu_item', 'date')  # prevent duplicate specials for same item on same day
