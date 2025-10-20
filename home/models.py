@@ -119,6 +119,7 @@ class MenuItem(models.Model):
     available = models.BooleanField(default=True) # Indicates if item is available
     category = models.ForeignKey('MenuCategory', on_delete=models.CASCADE, blank=True, null=True)
     allergens = models.TextField(blank=True, null=True, help_text="List any allergens (e.g., gluten, nuts, dairy)")
+    is_active = models.BooleanField(default=True) # New field added
 
     # Attach custom manager
     objects = MenuItemManager()
