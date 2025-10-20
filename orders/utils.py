@@ -8,6 +8,7 @@ from django.core.mail import send_mail, BadHeaderError
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.validators import validate_email
 from django.conf import settings
+from decimal import Decimal, ROUND_HALF_UP
 
 logger = logging.getLogger(__name__)
 
@@ -276,3 +277,27 @@ def calculate_estimated_prep_time(order_items):
         total_prep_time += quantity * prep_time
 
     return int(total_prep_time)
+
+
+def calculate_sales_tax(amount: Decimal, tax_rate: Decimal) -> Decimal:
+    """
+    Calculate the sales tax amount based on subtotal and tax rate.
+
+    Args:
+        amount (Decimal): The subtotal before tax.
+        tax_rate (Decimal): The tax rate as a decimal (e.g., 0.05 for 5%).
+
+    Returns:
+        Decimal: The calculated tax amount, rounded to 2 decimal places.
+    """
+    if not isinstance(amount, Decimal):
+        amount = Decimal(str(amount))
+    if not isinstance(tax_rate, Decimal):
+        tax_rate = Decimal(str(tax_rate))
+
+    tax_amount = amount * tax_rate
+
+    # Round to 2 decimal places (typical for currency)
+    tax_amount = tax_amount.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+
+    return tax_amount
