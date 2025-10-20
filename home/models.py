@@ -116,13 +116,17 @@ class MenuItem(models.Model):
     cuisine = models.ForeignKey('Cuisine', on_delete=models.SET_NULL, blank=True, null=True)
     discount_percentage = models.PositiveIntegerField(default=0, help_text="Discount in %")
     is_daily_special = models.BooleanField(default=False)  # new field
-    available = models.BooleanField(default=True) # Indicates if item is available
+    is_available = models.BooleanField(default=True) # Indicates if item is available
     category = models.ForeignKey('MenuCategory', on_delete=models.CASCADE, blank=True, null=True)
     allergens = models.TextField(blank=True, null=True, help_text="List any allergens (e.g., gluten, nuts, dairy)")
     is_active = models.BooleanField(default=True) # New field added
 
     # Attach custom manager
     objects = MenuItemManager()
+
+    @classmethod
+    def get_available_items(cls):
+        return cls.objects.filter(is_available=True)
 
     def is_daily_special(self):
         today = date.today()
