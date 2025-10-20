@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 
 from datetime import datetime, time
 from .models import Table, DailyOperatingHours
+from decimal import Decimal, ROUND_HALF_UP
 
 def is_restaurant_open():
     """
@@ -147,12 +148,22 @@ def is_restaurant_open_v2():
     else:
         return False
 
-def format_currency(amount):
-    """
-    Formats a decimal or float amount as currency with a dollar sign
-    and two decimal places.
 
-    Example:
-        12.5 -> "$12.50"
+def format_currency(amount, currency_symbol: str = '$') -> str:
     """
-    return f"${amount:.2f}"
+    Format a numeric value into a currency string with two decimal places.
+
+    Args:
+        amount (float | Decimal | int): The monetary amount to format.
+        currency_symbol (str): The symbol to prepend (default is '$').
+
+    Returns:
+        str: Formatted currency string, e.g., '$15.50'
+    """
+    if amount is None:
+        return f"{currency_symbol}0.00"
+
+    # Convert to Decimal for accurate rounding
+    amount = Decimal(str(amount)).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+
+    return f"{currency_symbol}{amount:.2f}"
