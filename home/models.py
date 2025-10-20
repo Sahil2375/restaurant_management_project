@@ -173,6 +173,7 @@ class Restaurant(models.Model):
     email = models.EmailField(blank=True, null=True)
     website = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    max_capacity = models.IntegerField(default=0, null=True, blank=True)
 
     def __str__(self):
         return self.name
