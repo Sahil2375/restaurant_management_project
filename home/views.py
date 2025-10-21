@@ -556,3 +556,14 @@ class MenuItemReviewCreateView(APIView):
 class IngredientViewSet(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
+
+
+class ActiveMenuItemsView(generics.ListAPIView):
+    """
+    API view to list only active menu items.
+    """
+    serializer_class = MenuItemSerializer
+
+    def get_queryset(self):
+        # Return only menu items where is_active is True
+        return MenuItem.objects.filter(is_active=True)
