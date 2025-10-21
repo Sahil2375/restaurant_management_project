@@ -322,13 +322,13 @@ class Reservation(models.Model):
 
 
 class Table(models.Model):
-    number = models.CharField(max_length=10, unique=True)
+    table_number = models.CharField(max_length=10, unique=True)
     capacity = models.PositiveIntegerField()
     is_available = models.BooleanField(default=True)
     location = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"Table {self.number} (Capacity: {self.capacity})"
+        return f"Table {self.table_number} (Capacity: {self.capacity})"
 
 
 class OpeningHour(models.Model):
