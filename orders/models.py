@@ -4,6 +4,7 @@ from decimal import Decimal
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+from django.db.models.signals import post_save
 from home.models import MenuItem  # assuming MenuItem is in home app
 import secrets
 
@@ -195,3 +196,21 @@ class Table(models.Model):
 
     def __str__(self):
         return f"Table {self.table_number} (Capacity: {self.capacity})"
+    
+class Reservation(models.Model):
+    customer_name = models.CharField(max_length=100)
+    time = models.DateTimeField()
+    guests = models.IntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.customer_name} - {self.time}"
+    
+# --- Signal Receiver Functions ---
+def log_new_reservation(sender, instance, created, **kwargs):
+    """
+    Log when a new reservation is created.
+    """
+    if created:
+        print(
+            f"New reservation created: ID #{instance.id} for {instance.customer_name} at {instance.time}"
+        )
