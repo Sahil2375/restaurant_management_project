@@ -297,13 +297,25 @@ class UserReview(models.Model):
     def __str__(self):
         return f"Review by {self.user.username} - {self.menu_item.name} ({self.rating}/5)"
     
+STATUS_CHOICES = [
+    ('pending', 'Pending'),
+    ('confirmed', 'Confirmed'),
+    ('cancelled', 'Cancelled'),
+    ('completed', 'Completed'),
+    ('unconfirmed', 'Unconfirmed'),  # if needed
+]
+
 
 class Reservation(models.Model):
     customer_name = models.CharField(max_length=100)
     customer_phone = models.CharField(max_length=15)
-    table_number = models.IntegerField()
+    table_number = models.ForeignKey('Table', on_delete=models.CASCADE)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Reservation for {self.customer_name} at {self.start_time}"
