@@ -114,6 +114,16 @@ class Allergen(models.Model):
     def __str__(self):
         return self.name
     
+
+DIETARY_CHOICES = [
+    ('VEGAN', 'Vegan'),
+    ('VEGETARIAN', 'Vegetarian'),
+    ('GLUTEN_FREE', 'Gluten-Free'),
+    ('HALAL', 'Halal'),
+    ('NONE', 'None'),
+]
+
+    
 class MenuItem(models.Model):
     """
     Represents a menu item (e.g., Pizza, Burger) in the restaurant."""
@@ -134,6 +144,13 @@ class MenuItem(models.Model):
     # Many-to-Many relationship with Ingredient
     ingredients = models.ManyToManyField('Ingredient', related_name='menu_items', blank=True)
     is_vegetarian = models.BooleanField(default=False)
+
+    dietary_preferences = models.CharField(
+        max_length=20, 
+        choices=DIETARY_CHOICES, default='NONE',
+        blank=True,
+        null=True
+    )
 
     # Attach custom manager
     objects = MenuItemManager()

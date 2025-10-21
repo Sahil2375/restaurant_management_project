@@ -9,7 +9,8 @@ class RestaurantInfoAdmin(admin.ModelAdmin):
 
 @admin.register(MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price')
+    list_display = ('name', 'price', 'is_active', 'dietary_preferences')
+    list_filter = ('is_active', 'dietary_preferences')
 
 @admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
