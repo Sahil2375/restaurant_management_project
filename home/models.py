@@ -108,6 +108,12 @@ class MenuItemManager(models.Manager):
         """
         return self.filter(price__lte=max_price, available=True)
     
+class Allergen(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+    
 class MenuItem(models.Model):
     """
     Represents a menu item (e.g., Pizza, Burger) in the restaurant."""
@@ -120,7 +126,9 @@ class MenuItem(models.Model):
     is_daily_special = models.BooleanField(default=False)  # new field
     is_available = models.BooleanField(default=True) # Indicates if item is available
     category = models.ForeignKey('MenuCategory', on_delete=models.CASCADE, blank=True, null=True)
-    allergens = models.TextField(blank=True, null=True, help_text="List any allergens (e.g., gluten, nuts, dairy)")
+    
+    allergens = models.ManyToManyField(Allergen, related_name='menu_items', blank=True)
+    
     is_active = models.BooleanField(default=True) # New field added
 
     # Many-to-Many relationship with Ingredient
