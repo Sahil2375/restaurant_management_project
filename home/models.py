@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from datetime import timedelta, date
 from django.contrib.auth.models import User
+from django.db.models import Count
 
 # Create your models here.
 
@@ -102,11 +103,23 @@ class Cuisine(models.Model):
     
 # --- Custom Manager ---
 class MenuItemManager(models.Manager):
+    def get_top_selling_items(self, num_items=5):
+        """
+        Returns the top-selling menu items based on how many times
+        they've been ordered (via OrderItem).
+        """
+        return (
+            self.get_queryset()
+            .annotate(order_count=Count('order_items'))  # Count related OrderItem objects
+            .order_by('-order_count')[:num_items]        # Sort and limit
+        )
+    
     def get_budget_items(self, max_price):
         """
         Return all menu items priced below the given max_price.
         """
         return self.filter(price__lte=max_price, available=True)
+
     
 class Allergen(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -137,6 +150,8 @@ class MenuItem(models.Model):
     is_daily_special = models.BooleanField(default=False)  # new field
     is_available = models.BooleanField(default=True) # Indicates if item is available
     category = models.ForeignKey('MenuCategory', on_delete=models.CASCADE, blank=True, null=True)
+    is_featured = models.BooleanField(default=False)  # Indicates if item is featured
+    top_items = models.BooleanField(default=False)  # Indicates if item is a top item
     
     allergens = models.ManyToManyField(Allergen, related_name='menu_items', blank=True)
     
@@ -453,3 +468,22 @@ class Staff(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.role})"
+    
+class Order(models.Model):
+    customer_name = models.CharField(max_length=100)
+    customer_phone = models.CharField(max_length=15)
+    order_items = models.ManyToManyField(MenuItem, through='OrderItem')
+    total_price = models.DecimalField(max_digits=8, decimal_places=2)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Order #{self.id} for {self.customer_name}"
+    
+class OrderItem(models.Model):
+    order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='home_order_items')
+    menu_item = models.ForeignKey('home.MenuItem', on_delete=models.CASCADE, related_name='home_order_items')
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.menu_item.name} for Order #{self.order.id}"
