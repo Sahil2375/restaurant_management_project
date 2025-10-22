@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import RestaurantInfo, MenuItem, Feedback, Chef, Table, MenuCategory, DailyOperatingHours, Staff, Allergen
+from .models import RestaurantInfo, MenuItem, Feedback, Chef, Table, MenuCategory, DailyOperatingHours, Staff, Allergen, Restaurant
 
 # Register your models here.
 
@@ -37,3 +37,20 @@ class StaffAdmin(admin.ModelAdmin):
     search_fields = ('first_name', 'last_name', 'contact_email')
 
 admin.site.register(Allergen)
+
+@admin.register(Restaurant)
+class RestaurantAdmin(admin.ModelAdmin):
+    # Show key details in the admin list view
+    list_display = ('name', 'address', 'phone', 'email','is_active',)
+
+    # Enable search by name or address
+    search_fields = ('name', 'address',)
+
+    # Add filters for open status
+    list_filter = ('is_active',)
+
+    # Default ordering by name
+    ordering = ('name',)
+
+    # Pagination control
+    list_per_page = 20
