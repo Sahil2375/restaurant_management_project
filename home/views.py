@@ -575,3 +575,13 @@ class FeaturedMenuItemsView(generics.ListAPIView):
     """
     queryset = MenuItem.objects.filter(is_featured=True)
     serializer_class = MenuItemSerializer
+
+
+class MenuItemIngredientsView(generics.RetrieveAPIView):
+    queryset = MenuItem.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        menu_item = self.get_object()
+        ingredients = menu_item.ingredients.all()
+        serializer = IngredientSerializer(ingredients, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

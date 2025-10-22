@@ -180,4 +180,4 @@ class CuisineSerializer(serializers.ModelSerializer):
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ['id', 'name', 'unit_of_measure']
+        fields = ['id', 'name', 'unit_of_measure', 'is_allergen', 'description']

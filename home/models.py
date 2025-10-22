@@ -442,6 +442,7 @@ class Ingredient(models.Model):
     """
     Represents an ingredient used in menu items."""
     name = models.CharField(max_length=100, unique=True)
+    is_allergen = models.BooleanField(default=False)
     unit_of_measure = models.CharField(max_length=50)  # e.g., grams, liters
     description = models.TextField(blank=True, null=True)
 

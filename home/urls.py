@@ -52,6 +52,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/menu/active/', views.ActiveMenuItemsView.as_view(), name='active-menu-items'),
     path('menu/featured/', views.FeaturedMenuItemsView.as_view(), name='featured-menu-items'),
+    path('api/menu-items/<int:pk>/ingredients/', views.MenuItemIngredientsView.as_view(), name='menuitem-ingredients'),
 ]
 
 handler404 = 'home.urls.custom_404_view'
