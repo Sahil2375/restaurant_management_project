@@ -3,6 +3,7 @@ from django.utils import timezone
 from datetime import timedelta, date
 from django.contrib.auth.models import User
 from django.db.models import Count
+import random
 
 # Create your models here.
 
@@ -272,18 +273,32 @@ class DailySpecial(models.Model):
     """
     Represents a daily special item offered by the restaurant.
     """
+    title = models.CharField(max_length=100, default="Daily Special")
     menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, default="Default Special")
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     is_available = models.BooleanField(default=True)
     date = models.DateField(default=timezone.now)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         unique_together = (('menu_item', 'date'),)  # prevent duplicate specials for same item on same day
 
     def __str__(self):
         return f"{self.name} ({self.date})"
+    
+    # Static method to fetch a random daily special
+    @staticmethod
+    def get_random_special():
+        """
+        Returns a single random DailySpecial instance that is active.
+        Returns None if no active specials exist.
+        """
+        specials = DailySpecial.objects.filter(is_active=True)
+        if specials.exists():
+            return specials.order_by('?').first()
+        return None
 
     class Meta:
         unique_together = ('menu_item', 'date')  # prevent duplicate specials for same item on same day
