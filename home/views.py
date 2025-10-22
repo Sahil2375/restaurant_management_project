@@ -567,3 +567,11 @@ class ActiveMenuItemsView(generics.ListAPIView):
     def get_queryset(self):
         # Return only menu items where is_active is True
         return MenuItem.objects.filter(is_active=True)
+
+# API view to list featured menu items
+class FeaturedMenuItemsView(generics.ListAPIView):
+    """
+    API view to list featured menu items.
+    """
+    queryset = MenuItem.objects.filter(is_featured=True)
+    serializer_class = MenuItemSerializer

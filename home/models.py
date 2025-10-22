@@ -126,7 +126,8 @@ DIETARY_CHOICES = [
     
 class MenuItem(models.Model):
     """
-    Represents a menu item (e.g., Pizza, Burger) in the restaurant."""
+    Represents a menu item (e.g., Pizza, Burger) in the restaurant.
+    """
     name = models.CharField(max_length=100)
     image = models.ImageField(upload_to='menu_images/', blank=True, null=True)
     description = models.TextField(blank=True, null=True)
@@ -139,7 +140,8 @@ class MenuItem(models.Model):
     
     allergens = models.ManyToManyField(Allergen, related_name='menu_items', blank=True)
     
-    is_active = models.BooleanField(default=True) # New field added
+    is_active = models.BooleanField(default=True)
+    is_featured = models.BooleanField(default=False) # New field added
 
     # Many-to-Many relationship with Ingredient
     ingredients = models.ManyToManyField('Ingredient', related_name='menu_items', blank=True)
