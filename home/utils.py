@@ -167,3 +167,20 @@ def format_currency(amount, currency_symbol: str = '$') -> str:
     amount = Decimal(str(amount)).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
     return f"{currency_symbol}{amount:.2f}"
+
+def estimate_table_turnover_time(table_capacity):
+    """
+    Estimate the dinning duration (in minutes) based on the table's seating capacity.
+    
+    Args: 
+        table_capacity (int): The seating capacity of the table.
+        
+    Returns:
+        int: Estimated turnover time in minutes.
+    """
+    if table_capacity <= 2:
+        return 60  # 1 hour for small tables
+    elif 3 <= table_capacity <= 4:
+        return 90  # 1.5 hours for medium tables
+    else:
+        return 120  # 2 hours for large tables
