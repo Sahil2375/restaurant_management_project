@@ -151,7 +151,10 @@ class MenuItem(models.Model):
     is_daily_special = models.BooleanField(default=False)  # new field
     is_available = models.BooleanField(default=True) # Indicates if item is available
     category = models.ForeignKey('MenuCategory', on_delete=models.CASCADE, blank=True, null=True)
-    is_featured = models.BooleanField(default=False)  # Indicates if item is featured
+    is_featured = models.BooleanField(
+        default=False,
+        help_text="Mark this menu item as featured for special display or promotions."
+    )  # Indicates if item is featured
     top_items = models.BooleanField(default=False)  # Indicates if item is a top item
     
     allergens = models.ManyToManyField(Allergen, related_name='menu_items', blank=True)
