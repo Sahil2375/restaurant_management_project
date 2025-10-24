@@ -1,4 +1,5 @@
 import re
+import random, string
 from datetime import datetime, time
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -6,6 +7,7 @@ from django.core.exceptions import ValidationError
 from datetime import datetime, time
 from .models import Table, DailyOperatingHours
 from decimal import Decimal, ROUND_HALF_UP
+from home.models import Reservation
 
 def is_restaurant_open():
     """
@@ -184,3 +186,18 @@ def estimate_table_turnover_time(table_capacity):
         return 90  # 1.5 hours for medium tables
     else:
         return 120  # 2 hours for large tables
+    
+def generate_reservation_confirmation_code():
+    """
+    Generate a unique, human-readable reservation confirmation number.
+    
+    Returns:
+        str: A unique alphanumeric confirmation number (8 - 10 characters).
+    """
+    while True:
+        # Generate a random alphanumeric string (uppercase letters + digits)
+        confirmation_number = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+
+        # Check for uniqueness in the Reservation model
+        if not Reservation.objects.filter(confirmation_number=confirmation_number).exists():
+            return confirmation_number

@@ -350,11 +350,18 @@ class Reservation(models.Model):
     end_time = models.DateTimeField()
 
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    
     created = models.DateTimeField(auto_now_add=True)
 
+    confirmation_number = models.CharField(max_length=20, unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        # Automatically assign confirmation number if not set
+        if not self.confirmation_number:
+            self.confirmation_number = generate_reservation_confirmation_number()
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"Reservation for {self.customer_name} at {self.start_time}"
+        return f"Reservation for {self.customer_name} ({self.confirmation_number})"
 
     @classmethod
     def get_available_slots(cls, start, end, slot_length=timedelta(hours=1), table_number=None):
