@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from datetime import datetime, time
 from .models import Table, DailyOperatingHours
 from decimal import Decimal, ROUND_HALF_UP
-from home.models import Reservation
+from home.models import Reservation, MenuItem, Cuisine
 
 def is_restaurant_open():
     """
@@ -201,3 +201,19 @@ def generate_reservation_confirmation_code():
         # Check for uniqueness in the Reservation model
         if not Reservation.objects.filter(confirmation_number=confirmation_number).exists():
             return confirmation_number
+        
+def get_distinct_cuisines():
+    """
+    Retrieve a list of all unique cuisine names available
+    across all menu items in the system.
+    
+    Returns:
+        List[str]: A list of unique cuisine names (strings).
+    """
+    # Query unique cuisines names from MenuItem model
+    cuisines = (
+        MenuItem.objects.values_list('cusine__name', flat=True)
+        .distinct()
+        .order_by('cusine__name')
+    )
+    return list(cuisines)
